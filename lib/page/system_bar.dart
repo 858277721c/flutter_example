@@ -10,7 +10,9 @@ class _SystemBarPageState extends State<SystemBarPage> {
   @override
   Widget build(BuildContext context) {
     return FSystemUiOverlay(
-      topColor: Colors.green,
+      style: FSystemUiOverlayStyle(
+        topColor: Colors.green,
+      ),
       child: FSafeArea(
         child: Scaffold(
           appBar: AppBar(
