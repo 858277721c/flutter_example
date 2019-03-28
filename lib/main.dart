@@ -94,7 +94,7 @@ class _MyHomePageState extends FState<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildImpl(BuildContext context) {
     print('MyHomePage build');
 
     final String titleBarPage = (TitleBarPage as Type).toString();
