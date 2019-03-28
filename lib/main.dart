@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends FState<MyHomePage> {
   @override
   void initState() {
     super.initState();
@@ -79,6 +79,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     super.dispose();
     print('MyHomePage dispose');
+  }
+
+  @override
+  void onPause() {
+    super.onPause();
+    print('MyHomePage onPause');
+  }
+
+  @override
+  void onResume() {
+    super.onResume();
+    print('MyHomePage onResume');
   }
 
   @override
