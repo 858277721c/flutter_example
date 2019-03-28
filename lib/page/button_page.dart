@@ -14,7 +14,35 @@ class _ButtonPageState extends State<ButtonPage> {
         appBar: AppBar(
           title: Text(widget.runtimeType.toString()),
         ),
-        body: Container(),
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                /// RaisedButton
+                RaisedButton(
+                  onPressed: null,
+                  child: Text('RaisedButton'),
+                ),
+                RaisedButton(
+                  onPressed: () {},
+                  child: Text('RaisedButton'),
+                ),
+
+                /// FlatButton
+                FlatButton(
+                  onPressed: null,
+                  child: Text('FlatButton'),
+                ),
+                FlatButton(
+                  onPressed: () {},
+                  child: Text('FlatButton'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
