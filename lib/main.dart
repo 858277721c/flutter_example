@@ -16,7 +16,9 @@ void main() {
     ),
   );
 
-  runApp(MyApp());
+  runApp(FSystemUiOverlay(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
