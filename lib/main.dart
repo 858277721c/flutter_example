@@ -91,18 +91,12 @@ class _MyHomePageState extends FState<MyHomePage> {
   Widget buildImpl(BuildContext context) {
     print('MyHomePage build');
 
-    final String titleBarPage = (TitleBarPage as Type).toString();
-    final String mainPage = (MainPage as Type).toString();
-    final String textFieldPage = (TextFieldPage as Type).toString();
-    final String systemBarPage = (SystemBarPage as Type).toString();
-    final String buttonPage = (ButtonPage as Type).toString();
-
     final List<Widget> children = [
-      _getButton(titleBarPage, context),
-      _getButton(mainPage, context),
-      _getButton(textFieldPage, context),
-      _getButton(systemBarPage, context),
-      _getButton(buttonPage, context),
+      _getButton((TitleBarPage).toString(), context),
+      _getButton((MainPage).toString(), context),
+      _getButton((TextFieldPage).toString(), context),
+      _getButton((SystemBarPage).toString(), context),
+      _getButton((ButtonPage).toString(), context),
     ];
 
     return FSafeArea(
