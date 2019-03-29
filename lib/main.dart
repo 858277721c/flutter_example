@@ -118,12 +118,18 @@ class _MyHomePageState extends FState<MyHomePage> {
     );
   }
 
-  MaterialButton _getButton(String routeName, BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed(routeName);
-      },
-      child: Text(routeName),
+  Widget _getButton(String routeName, BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: 5,
+        bottom: 5,
+      ),
+      child: RaisedButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(routeName);
+        },
+        child: Text(routeName),
+      ),
     );
   }
 }

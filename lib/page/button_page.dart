@@ -50,42 +50,40 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
 
                 FDivider(size: 1),
-                SizedBox(height: 5),
 
                 /// RaisedButton
                 FButton.raised(
                   onPressed: null,
                   child: Text('RaisedButton'),
                 ),
-                SizedBox(height: 5),
                 FButton.raised(
                   onPressed: () {},
                   child: Text('RaisedButton'),
                 ),
-                SizedBox(height: 5),
 
                 /// FlatButton
                 FButton.flat(
                   onPressed: null,
                   child: Text('FlatButton'),
                 ),
-                SizedBox(height: 5),
                 FButton.flat(
                   onPressed: () {},
                   child: Text('FlatButton'),
                 ),
-                SizedBox(height: 5),
 
                 /// OutlineButton
                 FButton.outline(
                   onPressed: null,
                   child: Text('OutlineButton'),
                 ),
-                SizedBox(height: 5),
                 FButton.outline(
                   onPressed: () {},
                   child: Text('OutlineButton'),
                 ),
+
+                SizedBox(
+                  height: 5,
+                )
               ],
             ),
           ),
