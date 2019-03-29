@@ -17,9 +17,7 @@ class _ButtonPageState extends State<ButtonPage> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            width: double.infinity,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 /// RaisedButton
                 RaisedButton(
