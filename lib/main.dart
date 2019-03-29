@@ -97,6 +97,14 @@ class _MyHomePageState extends FState<MyHomePage> {
     final String systemBarPage = (SystemBarPage as Type).toString();
     final String buttonPage = (ButtonPage as Type).toString();
 
+    final List<Widget> children = [
+      _getButton(titleBarPage, context),
+      _getButton(mainPage, context),
+      _getButton(textFieldPage, context),
+      _getButton(systemBarPage, context),
+      _getButton(buttonPage, context),
+    ];
+
     return FSafeArea(
       child: Scaffold(
         appBar: AppBar(),
@@ -104,13 +112,7 @@ class _MyHomePageState extends FState<MyHomePage> {
           child: Container(
             width: double.infinity,
             child: Column(
-              children: <Widget>[
-                _getButton(titleBarPage, context),
-                _getButton(mainPage, context),
-                _getButton(textFieldPage, context),
-                _getButton(systemBarPage, context),
-                _getButton(buttonPage, context),
-              ],
+              children: children,
             ),
           ),
         ),
