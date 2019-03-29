@@ -41,24 +41,46 @@ class _ButtonPageState extends State<ButtonPage> {
                   child: Text('FlatButton'),
                 ),
 
-                /// FRaisedButton
-                FRaisedButton(
+                /// OutlineButton
+                OutlineButton(
                   onPressed: null,
-                  child: Text('FRaisedButton'),
+                  child: Text('OutlineButton'),
                 ),
-                FRaisedButton(
+                OutlineButton(
                   onPressed: () {},
-                  child: Text('FRaisedButton'),
+                  child: Text('OutlineButton'),
                 ),
 
-                /// FRaisedButton
-                FFlatButton(
+                FDivider(size: 1),
+
+                /// RaisedButton
+                FButton.raised(
                   onPressed: null,
-                  child: Text('FFlatButton'),
+                  child: Text('RaisedButton'),
                 ),
-                FFlatButton(
+                FButton.raised(
                   onPressed: () {},
-                  child: Text('FFlatButton'),
+                  child: Text('RaisedButton'),
+                ),
+
+                /// FlatButton
+                FButton.flat(
+                  onPressed: null,
+                  child: Text('FlatButton'),
+                ),
+                FButton.flat(
+                  onPressed: () {},
+                  child: Text('FlatButton'),
+                ),
+
+                /// OutlineButton
+                FButton.outline(
+                  onPressed: null,
+                  child: Text('OutlineButton'),
+                ),
+                FButton.outline(
+                  onPressed: () {},
+                  child: Text('OutlineButton'),
                 ),
               ],
             ),

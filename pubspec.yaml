@@ -27,7 +27,7 @@ dependencies:
   flib_core:
     git:
       url: git://github.com/zj565061763/flib_core
-      ref: c6c7da88894ab1fe438b02daa51bff664786502d
+      ref: 79d3d4bd34f124fc47b137516c544bd66d491482
 
 dev_dependencies:
   flutter_test:
