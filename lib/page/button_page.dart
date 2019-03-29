@@ -1,4 +1,5 @@
 import 'package:flib_core/flib_core.dart';
+import 'package:flib_core/src/button.dart';
 import 'package:flutter/material.dart';
 
 class ButtonPage extends StatefulWidget {
@@ -38,6 +39,26 @@ class _ButtonPageState extends State<ButtonPage> {
                 FlatButton(
                   onPressed: () {},
                   child: Text('FlatButton'),
+                ),
+
+                /// FRaisedButton
+                FRaisedButton(
+                  onPressed: null,
+                  child: Text('FRaisedButton'),
+                ),
+                FRaisedButton(
+                  onPressed: () {},
+                  child: Text('FRaisedButton'),
+                ),
+
+                /// FRaisedButton
+                FFlatButton(
+                  onPressed: null,
+                  child: Text('FFlatButton'),
+                ),
+                FFlatButton(
+                  onPressed: () {},
+                  child: Text('FFlatButton'),
                 ),
               ],
             ),

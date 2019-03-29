@@ -25,16 +25,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final Color mainColor = FRes.colors().mainColor;
-
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: mainColor,
-        accentColor: mainColor,
-        scaffoldBackgroundColor: FRes.colors().bgPage,
-        buttonTheme: FButtonThemeData(),
-        appBarTheme: FAppBarTheme(),
-      ),
+      theme: FTheme.themeData(),
       routes: {
         (TitleBarPage as Type).toString(): (_) => TitleBarPage(),
         (MainPage as Type).toString(): (_) => MainPage(),
