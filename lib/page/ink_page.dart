@@ -11,7 +11,9 @@ class _InkPageState extends State<InkPage> {
   Widget build(BuildContext context) {
     return FSafeArea(
         child: Scaffold(
-      appBar: FSimpleTitleBar(),
+      appBar: AppBar(
+        title: Text(widget.runtimeType.toString()),
+      ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(

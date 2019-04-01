@@ -6,6 +6,7 @@ import 'package:my_flutter/page/main_page.dart';
 import 'package:my_flutter/page/system_bar_page.dart';
 import 'package:my_flutter/page/text_field_page.dart';
 import 'package:my_flutter/page/title_bar_page.dart';
+import 'package:my_flutter/page/stepper_page.dart';
 
 void main() {
   FRes.getInstance().init(
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         (SystemBarPage as Type).toString(): (_) => SystemBarPage(),
         (ButtonPage as Type).toString(): (_) => ButtonPage(),
         (InkPage as Type).toString(): (_) => InkPage(),
+        (StepperPage as Type).toString(): (_) => StepperPage(),
       },
       home: MyHomePage(),
     );
@@ -100,6 +102,7 @@ class _MyHomePageState extends FState<MyHomePage> {
       _getButton((SystemBarPage).toString(), context),
       _getButton((ButtonPage).toString(), context),
       _getButton((InkPage).toString(), context),
+      _getButton((StepperPage).toString(), context),
     ];
 
     return FSafeArea(
