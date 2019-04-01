@@ -1,6 +1,7 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/page/button_page.dart';
+import 'package:my_flutter/page/ink.dart';
 import 'package:my_flutter/page/main_page.dart';
 import 'package:my_flutter/page/system_bar.dart';
 import 'package:my_flutter/page/text_field.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         (TextFieldPage as Type).toString(): (_) => TextFieldPage(),
         (SystemBarPage as Type).toString(): (_) => SystemBarPage(),
         (ButtonPage as Type).toString(): (_) => ButtonPage(),
+        (InkPage as Type).toString(): (_) => InkPage(),
       },
       home: MyHomePage(),
     );
@@ -97,6 +99,7 @@ class _MyHomePageState extends FState<MyHomePage> {
       _getButton((TextFieldPage).toString(), context),
       _getButton((SystemBarPage).toString(), context),
       _getButton((ButtonPage).toString(), context),
+      _getButton((InkPage).toString(), context),
     ];
 
     return FSafeArea(
