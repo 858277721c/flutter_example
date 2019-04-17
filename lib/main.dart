@@ -1,12 +1,13 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/page/button_page.dart';
+import 'package:my_flutter/page/dialog_page.dart';
 import 'package:my_flutter/page/ink_page.dart';
 import 'package:my_flutter/page/main_page.dart';
+import 'package:my_flutter/page/stepper_page.dart';
 import 'package:my_flutter/page/system_bar_page.dart';
 import 'package:my_flutter/page/text_field_page.dart';
 import 'package:my_flutter/page/title_bar_page.dart';
-import 'package:my_flutter/page/stepper_page.dart';
 
 void main() {
   FRes.getInstance().init(
@@ -24,20 +25,23 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static final Map<String, WidgetBuilder> routes = {
+    (TitleBarPage as Type).toString(): (_) => TitleBarPage(),
+    (MainPage as Type).toString(): (_) => MainPage(),
+    (TextFieldPage as Type).toString(): (_) => TextFieldPage(),
+    (SystemBarPage as Type).toString(): (_) => SystemBarPage(),
+    (ButtonPage as Type).toString(): (_) => ButtonPage(),
+    (InkPage as Type).toString(): (_) => InkPage(),
+    (StepperPage as Type).toString(): (_) => StepperPage(),
+    (DialogPage as Type).toString(): (_) => DialogPage(),
+  };
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: FTheme.themeData(),
-      routes: {
-        (TitleBarPage as Type).toString(): (_) => TitleBarPage(),
-        (MainPage as Type).toString(): (_) => MainPage(),
-        (TextFieldPage as Type).toString(): (_) => TextFieldPage(),
-        (SystemBarPage as Type).toString(): (_) => SystemBarPage(),
-        (ButtonPage as Type).toString(): (_) => ButtonPage(),
-        (InkPage as Type).toString(): (_) => InkPage(),
-        (StepperPage as Type).toString(): (_) => StepperPage(),
-      },
+      routes: routes,
       home: MyHomePage(),
     );
   }
@@ -95,15 +99,10 @@ class _MyHomePageState extends FState<MyHomePage> {
   Widget buildImpl(BuildContext context) {
     print('MyHomePage build');
 
-    final List<Widget> children = [
-      _getButton((TitleBarPage).toString(), context),
-      _getButton((MainPage).toString(), context),
-      _getButton((TextFieldPage).toString(), context),
-      _getButton((SystemBarPage).toString(), context),
-      _getButton((ButtonPage).toString(), context),
-      _getButton((InkPage).toString(), context),
-      _getButton((StepperPage).toString(), context),
-    ];
+    final List<Widget> children = [];
+    MyApp.routes.forEach((key, value) {
+      children.add(_getButton(key, context));
+    });
 
     return FSafeArea(
       child: Scaffold(
