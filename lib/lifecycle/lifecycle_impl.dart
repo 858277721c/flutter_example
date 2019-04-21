@@ -9,11 +9,12 @@ class SimpleLifecycle implements FLifecycle {
 
   @override
   void addObserver(FLifecycleObserver observer) {
+    assert(observer != null);
+
     if (_state == FLifecycleState.destroyed) {
       return;
     }
 
-    assert(observer != null);
     for (_ObserverWrapper item in _listObserver) {
       if (item.observer == observer) {
         return;
@@ -36,6 +37,8 @@ class SimpleLifecycle implements FLifecycle {
 
   @override
   void removeObserver(FLifecycleObserver observer) {
+    assert(observer != null);
+
     final int index = _listObserver.indexWhere((item) {
       return item.observer == observer;
     });
