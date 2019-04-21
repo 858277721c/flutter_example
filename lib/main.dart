@@ -52,7 +52,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends FState<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
@@ -84,19 +84,7 @@ class _MyHomePageState extends FState<MyHomePage> {
   }
 
   @override
-  void onPause() {
-    super.onPause();
-    print('MyHomePage onPause');
-  }
-
-  @override
-  void onResume() {
-    super.onResume();
-    print('MyHomePage onResume');
-  }
-
-  @override
-  Widget buildImpl(BuildContext context) {
+  Widget build(BuildContext context) {
     print('MyHomePage build');
 
     final List<Widget> children = [];
