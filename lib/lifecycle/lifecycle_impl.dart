@@ -82,12 +82,12 @@ class SimpleLifecycle implements FLifecycle {
           List.from(_listObserver, growable: false);
 
       for (_ObserverWrapper item in listCopy) {
-        final bool synced = item.sync(
+        item.sync(
           getLifecycle: () => this,
           isCancel: () => _needResync,
         );
 
-        if (_needResync || !synced) {
+        if (_needResync) {
           break;
         }
       }
@@ -162,7 +162,7 @@ class _ObserverWrapper {
         assert(state == FLifecycleState.initialized ||
             state == FLifecycleState.destroyed);
 
-  bool sync({
+  void sync({
     _getLifecycle getLifecycle,
     _isCancel isCancel,
   }) {
@@ -175,7 +175,7 @@ class _ObserverWrapper {
       }
 
       if (isCancel != null && isCancel()) {
-        return false;
+        break;
       }
 
       final FLifecycleEvent nextEvent = this.state.index < outState.index
@@ -186,6 +186,5 @@ class _ObserverWrapper {
       observer(nextEvent, getLifecycle());
       this.state = nextState;
     }
-    return true;
   }
 }
