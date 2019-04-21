@@ -26,9 +26,10 @@ class SimpleLifecycle implements FLifecycle {
     );
 
     final bool willResync = _checkWillResync();
-
     _listObserver.add(wrapper);
-    if (!willResync) {
+    if (willResync) {
+      // 不做任何处理
+    } else {
       _sync();
     }
   }
@@ -66,11 +67,12 @@ class SimpleLifecycle implements FLifecycle {
 
     _state = next;
 
-    if (_checkWillResync()) {
-      return;
+    final bool willResync = _checkWillResync();
+    if (willResync) {
+      // 不做任何处理
+    } else {
+      _sync();
     }
-
-    _sync();
   }
 
   void _sync() {
