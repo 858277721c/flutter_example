@@ -1,5 +1,4 @@
 import 'package:flib_core/flib_core.dart';
-import 'package:flib_lifecycle/flib_lifecycle.dart';
 import 'package:flutter/material.dart';
 
 class LifecyclePage extends StatefulWidget {
@@ -15,7 +14,7 @@ class _LifecyclePageState extends FState<LifecyclePage> {
   }
 
   void _onLifecycleEvent(FLifecycleEvent event, FLifecycle lifecycle) {
-    print('LifecyclePage onEvent: ${event} ${lifecycle.getCurrentState()}');
+    print('LifecyclePage onEvent: ${event}');
   }
 
   @override
