@@ -44,7 +44,8 @@ class SimpleLifecycle implements FLifecycle {
     });
 
     if (index >= 0) {
-      _listObserver.removeAt(index);
+      final _ObserverWrapper wrapper = _listObserver.removeAt(index);
+      wrapper.removed = true;
     }
   }
 
@@ -157,6 +158,7 @@ typedef bool _isCancel();
 class _ObserverWrapper {
   final FLifecycleObserver observer;
   FLifecycleState state;
+  bool removed = false;
 
   _ObserverWrapper({
     this.observer,
@@ -174,6 +176,10 @@ class _ObserverWrapper {
     while (true) {
       final FLifecycleState outState = getLifecycle().getCurrentState();
       if (this.state == outState) {
+        break;
+      }
+
+      if (removed) {
         break;
       }
 
