@@ -4,8 +4,8 @@ class SimpleLifecycle implements FLifecycle {
   final List<_ObserverWrapper> _listObserver = [];
   FLifecycleState _state = FLifecycleState.initialized;
 
-  bool _handlingEvent = false;
-  bool _newEventOccurred = false;
+  bool _syncing = false;
+  bool _needResync = false;
 
   @override
   void addObserver(FLifecycleObserver observer) {
@@ -25,11 +25,12 @@ class SimpleLifecycle implements FLifecycle {
       state: FLifecycleState.initialized,
     );
 
-    wrapper.sync(
-      getLifecycle: () => this,
-    );
+    final bool willResync = _checkWillResync();
 
     _listObserver.add(wrapper);
+    if (!willResync) {
+      _sync();
+    }
   }
 
   @override
@@ -59,39 +60,45 @@ class SimpleLifecycle implements FLifecycle {
     if (_state == next) {
       return;
     }
-
     if (_state == FLifecycleState.destroyed) {
       return;
     }
 
     _state = next;
 
-    if (_handlingEvent) {
-      _newEventOccurred = true;
+    if (_checkWillResync()) {
       return;
     }
 
-    _handlingEvent = true;
     _sync();
-    _handlingEvent = false;
   }
 
   void _sync() {
+    _syncing = true;
     while (!_isSynced()) {
-      _newEventOccurred = false;
+      _needResync = false;
 
       for (_ObserverWrapper item in _listObserver) {
         final bool synced = item.sync(
           getLifecycle: () => this,
-          isCancel: () => _newEventOccurred,
+          isCancel: () => _needResync,
         );
 
-        if (!synced) {
+        if (_needResync || !synced) {
           break;
         }
       }
     }
-    _newEventOccurred = false;
+    _needResync = false;
+    _syncing = false;
+  }
+
+  bool _checkWillResync() {
+    if (_syncing) {
+      _needResync = true;
+      return true;
+    }
+    return false;
   }
 
   bool _isSynced() {
