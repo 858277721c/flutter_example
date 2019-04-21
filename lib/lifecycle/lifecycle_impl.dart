@@ -50,6 +50,7 @@ class SimpleLifecycle implements FLifecycle {
     return _state;
   }
 
+  /// 通知生命周期事件
   void handleLifecycleEvent(FLifecycleEvent event) {
     assert(event != null);
 
