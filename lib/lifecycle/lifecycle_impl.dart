@@ -21,12 +21,9 @@ class SimpleLifecycle implements FLifecycle {
       }
     }
 
-    final _ObserverWrapper wrapper = _ObserverWrapper(
-      observer: observer,
-      state: FLifecycleState.initialized,
-    );
-
+    final _ObserverWrapper wrapper = _ObserverWrapper(observer: observer);
     _listObserver.add(wrapper);
+
     final bool willResync = _checkWillResync();
     if (willResync) {
       // 不做任何处理
@@ -54,6 +51,11 @@ class SimpleLifecycle implements FLifecycle {
     return _state;
   }
 
+  /// 标注当前状态
+  void markState(FLifecycleState state) {
+    _moveToState(state);
+  }
+
   /// 通知生命周期事件
   void handleLifecycleEvent(FLifecycleEvent event) {
     assert(event != null);
@@ -63,6 +65,7 @@ class SimpleLifecycle implements FLifecycle {
   }
 
   void _moveToState(FLifecycleState next) {
+    assert(next != null);
     if (_state == next || _state == FLifecycleState.destroyed) {
       return;
     }
@@ -127,7 +130,10 @@ class SimpleLifecycle implements FLifecycle {
 FLifecycleState _getStateAfter(FLifecycleEvent event) {
   switch (event) {
     case FLifecycleEvent.onCreate:
+    case FLifecycleEvent.onStop:
       return FLifecycleState.created;
+    case FLifecycleEvent.onStart:
+      return FLifecycleState.started;
     case FLifecycleEvent.onDestroy:
       return FLifecycleState.destroyed;
     default:
@@ -135,21 +141,33 @@ FLifecycleState _getStateAfter(FLifecycleEvent event) {
   }
 }
 
-FLifecycleEvent _highEvent(FLifecycleState state) {
+FLifecycleEvent _upEvent(FLifecycleState state) {
   switch (state) {
+    case FLifecycleState.destroyed:
+      throw Exception('${state} state doesn\'t have a up event');
     case FLifecycleState.initialized:
       return FLifecycleEvent.onCreate;
     case FLifecycleState.created:
-      return FLifecycleEvent.onDestroy;
-    case FLifecycleState.destroyed:
-      throw Exception('destroyed state doesn\'t have a high event');
+      return FLifecycleEvent.onStart;
+    case FLifecycleState.started:
+      throw Exception('${state} state doesn\'t have a up event');
     default:
       throw Exception('Unexpected state value ${state}');
   }
 }
 
-FLifecycleEvent _lowEvent(FLifecycleState state) {
-  throw Exception('Unexpected state value ${state}');
+FLifecycleEvent _downEvent(FLifecycleState state) {
+  switch (state) {
+    case FLifecycleState.destroyed:
+    case FLifecycleState.initialized:
+      throw Exception('${state} state doesn\'t have a down event');
+    case FLifecycleState.created:
+      return FLifecycleEvent.onDestroy;
+    case FLifecycleState.started:
+      return FLifecycleEvent.onStop;
+    default:
+      throw Exception('Unexpected state value ${state}');
+  }
 }
 
 typedef FLifecycle _getLifecycle();
@@ -157,15 +175,12 @@ typedef bool _isCancel();
 
 class _ObserverWrapper {
   final FLifecycleObserver observer;
-  FLifecycleState state;
+  FLifecycleState state = FLifecycleState.initialized;
   bool removed = false;
 
   _ObserverWrapper({
     this.observer,
-    this.state,
-  })  : assert(observer != null),
-        assert(state == FLifecycleState.initialized ||
-            state == FLifecycleState.destroyed);
+  }) : assert(observer != null);
 
   void sync({
     _getLifecycle getLifecycle,
@@ -188,8 +203,8 @@ class _ObserverWrapper {
       }
 
       final FLifecycleEvent nextEvent = this.state.index < outState.index
-          ? _highEvent(state)
-          : _lowEvent(state);
+          ? _upEvent(state)
+          : _downEvent(state);
 
       final FLifecycleState nextState = _getStateAfter(nextEvent);
       observer(nextEvent, getLifecycle());

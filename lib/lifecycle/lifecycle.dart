@@ -16,12 +16,15 @@ abstract class FLifecycleOwner {
 }
 
 enum FLifecycleState {
+  destroyed,
   initialized,
   created,
-  destroyed,
+  started,
 }
 
 enum FLifecycleEvent {
   onCreate,
+  onStart,
+  onStop,
   onDestroy,
 }
