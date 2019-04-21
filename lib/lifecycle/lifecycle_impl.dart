@@ -59,10 +59,7 @@ class SimpleLifecycle implements FLifecycle {
   }
 
   void _moveToState(FLifecycleState next) {
-    if (_state == next) {
-      return;
-    }
-    if (_state == FLifecycleState.destroyed) {
+    if (_state == next || _state == FLifecycleState.destroyed) {
       return;
     }
 
