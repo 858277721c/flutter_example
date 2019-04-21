@@ -10,18 +10,21 @@ class SimpleLifecycle implements FLifecycle {
   @override
   void addObserver(FLifecycleObserver observer) {
     assert(observer != null);
-
-    if (_state == FLifecycleState.destroyed) {
-      return;
-    }
-
     for (_ObserverWrapper item in _listObserver) {
       if (item.observer == observer) {
         return;
       }
     }
 
-    final _ObserverWrapper wrapper = _ObserverWrapper(observer: observer);
+    final FLifecycleState state = _state == FLifecycleState.destroyed
+        ? FLifecycleState.destroyed
+        : FLifecycleState.initialized;
+
+    final _ObserverWrapper wrapper = _ObserverWrapper(
+      observer: observer,
+      state: state,
+    );
+
     _listObserver.add(wrapper);
 
     final bool willResync = _checkWillResync();
@@ -66,7 +69,7 @@ class SimpleLifecycle implements FLifecycle {
 
   void _moveToState(FLifecycleState next) {
     assert(next != null);
-    if (_state == next || _state == FLifecycleState.destroyed) {
+    if (_state == next) {
       return;
     }
 
@@ -144,7 +147,6 @@ FLifecycleState _getStateAfter(FLifecycleEvent event) {
 FLifecycleEvent _upEvent(FLifecycleState state) {
   switch (state) {
     case FLifecycleState.destroyed:
-      throw Exception('${state} state doesn\'t have a up event');
     case FLifecycleState.initialized:
       return FLifecycleEvent.onCreate;
     case FLifecycleState.created:
@@ -175,12 +177,15 @@ typedef bool _isCancel();
 
 class _ObserverWrapper {
   final FLifecycleObserver observer;
-  FLifecycleState state = FLifecycleState.initialized;
+  FLifecycleState state;
   bool removed = false;
 
   _ObserverWrapper({
     this.observer,
-  }) : assert(observer != null);
+    this.state,
+  })  : assert(observer != null),
+        assert(state == FLifecycleState.initialized ||
+            state == FLifecycleState.destroyed);
 
   void sync({
     _getLifecycle getLifecycle,
