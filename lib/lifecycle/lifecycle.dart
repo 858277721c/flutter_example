@@ -1,4 +1,4 @@
-typedef void FLifecycleObserver(FLifecycleEvent event, FLifecycleOwner owner);
+typedef void FLifecycleObserver(FLifecycleEvent event, FLifecycle lifecycle);
 
 abstract class FLifecycle {
   void addObserver(FLifecycleObserver observer);

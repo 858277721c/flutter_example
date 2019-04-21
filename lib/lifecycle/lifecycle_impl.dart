@@ -1,16 +1,11 @@
 import 'package:my_flutter/lifecycle/lifecycle.dart';
 
 class SimpleLifecycle implements FLifecycle {
-  final FLifecycleOwner _lifecycleOwner;
   final List<_ObserverWrapper> _listObserver = [];
   FLifecycleState _state = FLifecycleState.initialized;
 
   bool _handlingEvent = false;
   bool _newEventOccurred = false;
-
-  SimpleLifecycle(FLifecycleOwner lifecycleOwner)
-      : assert(lifecycleOwner != null),
-        this._lifecycleOwner = lifecycleOwner;
 
   @override
   void addObserver(FLifecycleObserver observer) {
@@ -31,8 +26,7 @@ class SimpleLifecycle implements FLifecycle {
     );
 
     wrapper.sync(
-      getState: getCurrentState,
-      getLifecycleOwner: () => _lifecycleOwner,
+      getLifecycle: () => this,
     );
 
     _listObserver.add(wrapper);
@@ -88,8 +82,7 @@ class SimpleLifecycle implements FLifecycle {
 
       for (_ObserverWrapper item in _listObserver) {
         final bool synced = item.sync(
-          getState: getCurrentState,
-          getLifecycleOwner: () => _lifecycleOwner,
+          getLifecycle: () => this,
           isCancel: () => _newEventOccurred,
         );
 
@@ -109,7 +102,7 @@ class SimpleLifecycle implements FLifecycle {
     final List<_ObserverWrapper> listCopy =
         List.from(_listObserver, growable: false);
 
-    for (int i = listCopy.length - 1; i >= 0; i++) {
+    for (int i = listCopy.length - 1; i >= 0; i--) {
       final _ObserverWrapper item = listCopy[i];
       if (item.state != _state) {
         return false;
@@ -148,8 +141,7 @@ FLifecycleEvent _lowEvent(FLifecycleState state) {
   throw Exception('Unexpected state value ${state}');
 }
 
-typedef FLifecycleState _getState();
-typedef FLifecycleOwner _getLifecycleOwner();
+typedef FLifecycle _getLifecycle();
 typedef bool _isCancel();
 
 class _ObserverWrapper {
@@ -164,15 +156,13 @@ class _ObserverWrapper {
             state == FLifecycleState.destroyed);
 
   bool sync({
-    _getState getState,
-    _getLifecycleOwner getLifecycleOwner,
+    _getLifecycle getLifecycle,
     _isCancel isCancel,
   }) {
-    assert(getState != null);
-    assert(getLifecycleOwner != null);
+    assert(getLifecycle != null);
 
     while (true) {
-      final FLifecycleState outState = getState();
+      final FLifecycleState outState = getLifecycle().getCurrentState();
       if (this.state == outState) {
         break;
       }
@@ -186,7 +176,7 @@ class _ObserverWrapper {
           : _lowEvent(state);
 
       final FLifecycleState nextState = _getStateAfter(nextEvent);
-      observer(nextEvent, getLifecycleOwner());
+      observer(nextEvent, getLifecycle());
       this.state = nextState;
     }
     return true;
