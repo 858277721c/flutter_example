@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter/page/button_page.dart';
 import 'package:my_flutter/page/dialog_page.dart';
 import 'package:my_flutter/page/ink_page.dart';
+import 'package:my_flutter/page/lifecycle_page.dart';
 import 'package:my_flutter/page/main_page.dart';
 import 'package:my_flutter/page/stepper_page.dart';
 import 'package:my_flutter/page/system_bar_page.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
     (InkPage as Type).toString(): (_) => InkPage(),
     (StepperPage as Type).toString(): (_) => StepperPage(),
     (DialogPage as Type).toString(): (_) => DialogPage(),
+    (LifecyclePage as Type).toString(): (_) => LifecyclePage(),
   };
 
   // This widget is the root of your application.
