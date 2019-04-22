@@ -68,27 +68,19 @@ class _TestStateView extends StatefulWidget {
   _TestStateViewState createState() => _TestStateViewState();
 }
 
-class _TestStateViewState extends FState<_TestStateView> {
-  _LifecyclePageState _lifecyclePageState;
-  int number;
-
+class _TestStateViewState
+    extends FAccessTargetState<_TestStateView, _LifecyclePageState> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_lifecyclePageState == null) {
-      _lifecyclePageState = getState<_LifecyclePageState>();
-      _lifecyclePageState.number.addObserver((value) {
-        number = value;
-        setState(() {});
-      }, this);
-    }
+  void onTargetState(_LifecyclePageState state) {
+    state.number.addObserver((value) {
+      setState(() {});
+    }, this);
   }
 
   @override
   Widget buildImpl(BuildContext context) {
     return Container(
-      child: Text('TestStateView: ${number}'),
+      child: Text('TestStateView: ${targetState.number.value}'),
     );
   }
 }
