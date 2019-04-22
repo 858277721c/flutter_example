@@ -10,10 +10,10 @@ class _LifecyclePageState extends FState<LifecyclePage> {
   @override
   void initState() {
     super.initState();
-    getLifecycle().addObserver(_onLifecycleEvent);
+    getLifecycle().addObserver(_lifecycleObserver);
   }
 
-  void _onLifecycleEvent(FLifecycleEvent event, FLifecycle lifecycle) {
+  void _lifecycleObserver(FLifecycleEvent event, FLifecycle lifecycle) {
     print('LifecyclePage onEvent: ${event}');
   }
 
