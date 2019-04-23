@@ -1,4 +1,5 @@
 import 'package:flib_core/flib_core.dart';
+import 'package:flib_lifecycle_ext/flib_lifecycle_ext.dart';
 import 'package:flutter/material.dart';
 
 class LifecyclePage extends StatefulWidget {
@@ -7,7 +8,7 @@ class LifecyclePage extends StatefulWidget {
 }
 
 class _LifecyclePageState extends FState<LifecyclePage> {
-  final FValueNotifier<int> number = FValueNotifier(0);
+  final FLiveData<int> number = FLiveData(0);
   bool _addTestView = false;
 
   @override
