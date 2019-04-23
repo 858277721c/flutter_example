@@ -7,7 +7,7 @@ class LifecyclePage extends StatefulWidget {
 }
 
 class _LifecyclePageState extends FState<LifecyclePage> {
-  final FLiveData<int> number = FLiveData(0);
+  final FValueNotifier<int> number = FValueNotifier(0);
   bool _addTestView = false;
 
   @override
