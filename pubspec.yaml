@@ -27,7 +27,7 @@ dependencies:
   flib_core:
     git:
       url: git://github.com/zj565061763/flib_core
-      ref: c11a860b27f701c219e6abefda72727df013a567
+      ref: 6f05f4b00d693c0e516b7bf31dfb9bd420ae21f6
 
   flib_lifecycle_ext:
     git:
