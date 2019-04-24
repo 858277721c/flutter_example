@@ -19,7 +19,7 @@ class _ChangeNumberPageState
   void initState() {
     super.initState();
     business.addTestView.addObserver((value) {
-      setState(() {});
+      reBuild();
     }, this);
   }
 
@@ -67,7 +67,7 @@ class _NumberViewState
   @override
   void onTargetState(_ChangeNumberPageState state) {
     state.business.number.addObserver((value) {
-      setState(() {});
+      reBuild();
     }, this);
   }
 

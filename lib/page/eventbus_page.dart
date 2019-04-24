@@ -51,27 +51,20 @@ class _TestView extends StatefulWidget {
   _TestViewState createState() => _TestViewState();
 }
 
-class _TestViewState extends State<_TestView> {
+class _TestViewState extends FState<_TestView> {
   int _number = 0;
-  ObserverCanceller _canceller;
 
   @override
   void initState() {
     super.initState();
-    _canceller = FEventBus.getDefault().addObserver<_ENumberChange>((event) {
+    FEventBus.getDefault().addObserver<_ENumberChange>((event) {
       _number = event.number;
-      setState(() {});
-    }, null);
+      reBuild();
+    }, this);
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _canceller?.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildImpl(BuildContext context) {
     return Container(
       child: Text(_number.toString()),
     );
