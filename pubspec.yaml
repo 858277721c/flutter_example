@@ -32,7 +32,7 @@ dependencies:
   flib_lifecycle_ext:
     git:
       url: git://github.com/zj565061763/flib_lifecycle_ext
-      ref: 43009e885cd7cb6add2b163b64ca8436d9465f6f
+      ref: e6e7f9bfff0ff13e1f852c383d9eccc5d7df742b
 
 dev_dependencies:
   flutter_test:
