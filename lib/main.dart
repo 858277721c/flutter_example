@@ -1,6 +1,7 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/page/button_page.dart';
+import 'package:my_flutter/page/change_number/page.dart';
 import 'package:my_flutter/page/dialog_page.dart';
 import 'package:my_flutter/page/eventbus_page.dart';
 import 'package:my_flutter/page/ink_page.dart';
@@ -28,16 +29,17 @@ void main() {
 
 class MyApp extends StatelessWidget {
   static final Map<String, WidgetBuilder> routes = {
-    (TitleBarPage as Type).toString(): (_) => TitleBarPage(),
-    (MainPage as Type).toString(): (_) => MainPage(),
-    (TextFieldPage as Type).toString(): (_) => TextFieldPage(),
-    (SystemBarPage as Type).toString(): (_) => SystemBarPage(),
-    (ButtonPage as Type).toString(): (_) => ButtonPage(),
-    (InkPage as Type).toString(): (_) => InkPage(),
-    (StepperPage as Type).toString(): (_) => StepperPage(),
-    (DialogPage as Type).toString(): (_) => DialogPage(),
-    (LifecyclePage as Type).toString(): (_) => LifecyclePage(),
-    (EventBusPage as Type).toString(): (_) => EventBusPage(),
+    (TitleBarPage).toString(): (_) => TitleBarPage(),
+    (MainPage).toString(): (_) => MainPage(),
+    (TextFieldPage).toString(): (_) => TextFieldPage(),
+    (SystemBarPage).toString(): (_) => SystemBarPage(),
+    (ButtonPage).toString(): (_) => ButtonPage(),
+    (InkPage).toString(): (_) => InkPage(),
+    (StepperPage).toString(): (_) => StepperPage(),
+    (DialogPage).toString(): (_) => DialogPage(),
+    (LifecyclePage).toString(): (_) => LifecyclePage(),
+    (EventBusPage).toString(): (_) => EventBusPage(),
+    (ChangeNumberPage).toString(): (_) => ChangeNumberPage(),
   };
 
   // This widget is the root of your application.

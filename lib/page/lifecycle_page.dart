@@ -70,7 +70,7 @@ class _TestStateView extends StatefulWidget {
 }
 
 class _TestStateViewState
-    extends FAccessTargetState<_TestStateView, _LifecyclePageState> {
+    extends FTargetState<_TestStateView, _LifecyclePageState> {
   @override
   void onTargetState(_LifecyclePageState state) {
     state.number.addObserver((value) {
