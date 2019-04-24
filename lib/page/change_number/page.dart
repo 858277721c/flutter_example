@@ -9,32 +9,66 @@ class ChangeNumberPage extends StatefulWidget {
   _ChangeNumberPageState createState() => _ChangeNumberPageState();
 }
 
-class _ChangeNumberPageState extends State<ChangeNumberPage> {
-  final _PageView pageView = _PageView(ChangeNumberBusiness());
+class _ChangeNumberPageState extends FState<ChangeNumberPage> {
+  final ChangeNumberBusiness business = ChangeNumberBusiness();
+
+  _NumberView numberView;
+  _TestView testView;
 
   @override
-  Widget build(BuildContext context) {
-    return pageView.newWidget();
+  void initState() {
+    super.initState();
+    this.numberView = _NumberView(business);
+    this.testView = _TestView(business);
+
+    business.addTestView.addObserver((value) {
+      setState(() {});
+    }, this);
+  }
+
+  @override
+  Widget buildImpl(BuildContext context) {
+    print('ChangeNumberPage ${runtimeType} build');
+    final List<Widget> list = [];
+
+    list.add(numberView.newWidget());
+
+    list.add(FButton.raised(
+      onPressed: () {
+        business.toggleTestView();
+      },
+      child: Text('toggle view'),
+    ));
+
+    if (business.addTestView.value) {
+      list.add(testView.newWidget());
+    }
+
+    return FSafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        title: Text((ChangeNumberPage).toString()),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: list,
+          ),
+        ),
+      ),
+    ));
   }
 }
 
-/// 页面View
-class _PageView extends FBusinessView<ChangeNumberBusiness> {
-  _PageView(ChangeNumberBusiness business) : super(business);
-
-  _TestView _testView;
+class _NumberView extends FBusinessView<ChangeNumberBusiness> {
+  _NumberView(ChangeNumberBusiness business) : super(business) {
+    print('ChangeNumberPage ${runtimeType} create----------');
+  }
 
   @override
   void onCreate() {
     print('ChangeNumberPage ${runtimeType} lifecycle onCreate');
-
-    _testView = _TestView(business);
-
     business.number.addObserver((value) {
-      reBuild();
-    }, this);
-
-    business.addTestView.addObserver((value) {
       reBuild();
     }, this);
   }
@@ -60,15 +94,7 @@ class _PageView extends FBusinessView<ChangeNumberBusiness> {
   @override
   Widget buildImpl(BuildContext context) {
     print('ChangeNumberPage ${runtimeType} build');
-    final List<Widget> list = [];
-    list.add(FButton.raised(
-      onPressed: () {
-        business.toggleTestView();
-      },
-      child: Text('toggle view'),
-    ));
-
-    list.add(FButton.raised(
+    return FButton.raised(
       padding: EdgeInsets.only(
         left: 10,
         right: 10,
@@ -77,35 +103,21 @@ class _PageView extends FBusinessView<ChangeNumberBusiness> {
         business.changeNumber();
       },
       child: Text(business.number.value.toString()),
-    ));
-
-    if (business.addTestView.value) {
-      list.add(_testView.newWidget());
-    }
-
-    return FSafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        title: Text((ChangeNumberPage).toString()),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: list,
-          ),
-        ),
-      ),
-    ));
+    );
   }
 }
 
 class _TestView extends FBusinessView<ChangeNumberBusiness> {
-  _TestView(ChangeNumberBusiness business) : super(business);
+  _TestView(ChangeNumberBusiness business) : super(business) {
+    print('ChangeNumberPage ${runtimeType} create----------');
+  }
 
   @override
   void onCreate() {
     print('ChangeNumberPage ${runtimeType} lifecycle onCreate');
     business.number.addObserver((value) {
+      print(
+          'ChangeNumberPage ${runtimeType} number changed lifecycle:${getLifecycle().getCurrentState()}');
       reBuild();
     }, this);
   }
