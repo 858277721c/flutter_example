@@ -1,7 +1,9 @@
-import 'package:flib_lifecycle_ext/flib_lifecycle_ext.dart';
+import 'package:flib_core/flib_core.dart';
 
 /// 页面业务类
 class ChangeNumberBusiness extends FBusiness {
+  ChangeNumberBusiness(FLifecycleOwner lifecycleOwner) : super(lifecycleOwner);
+
   final FLiveData<int> number = FLiveData(0);
   final FLiveData<bool> addTestView = FLiveData(false);
 

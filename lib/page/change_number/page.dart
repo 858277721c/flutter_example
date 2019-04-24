@@ -1,5 +1,4 @@
 import 'package:flib_core/flib_core.dart';
-import 'package:flib_lifecycle_ext/flib_lifecycle_ext.dart';
 import 'package:flutter/material.dart';
 
 import 'business.dart';
@@ -9,18 +8,16 @@ class ChangeNumberPage extends StatefulWidget {
   _ChangeNumberPageState createState() => _ChangeNumberPageState();
 }
 
-class _ChangeNumberPageState extends FState<ChangeNumberPage> {
-  final ChangeNumberBusiness business = ChangeNumberBusiness();
-
-  _NumberView numberView;
-  _TestView testView;
+class _ChangeNumberPageState
+    extends FBusinessState<ChangeNumberPage, ChangeNumberBusiness> {
+  @override
+  ChangeNumberBusiness createBusiness() {
+    return ChangeNumberBusiness(this);
+  }
 
   @override
   void initState() {
     super.initState();
-    this.numberView = _NumberView(business);
-    this.testView = _TestView(business);
-
     business.addTestView.addObserver((value) {
       setState(() {});
     }, this);
@@ -31,7 +28,7 @@ class _ChangeNumberPageState extends FState<ChangeNumberPage> {
     print('ChangeNumberPage ${runtimeType} build');
     final List<Widget> list = [];
 
-    list.add(numberView.newWidget());
+    list.add(_NumberView());
 
     list.add(FButton.raised(
       onPressed: () {
@@ -41,7 +38,7 @@ class _ChangeNumberPageState extends FState<ChangeNumberPage> {
     ));
 
     if (business.addTestView.value) {
-      list.add(testView.newWidget());
+      list.add(_TestView());
     }
 
     return FSafeArea(
@@ -60,91 +57,52 @@ class _ChangeNumberPageState extends FState<ChangeNumberPage> {
   }
 }
 
-class _NumberView extends FBusinessView<ChangeNumberBusiness> {
-  _NumberView(ChangeNumberBusiness business) : super(business) {
-    print('ChangeNumberPage ${runtimeType} create----------');
-  }
-
+class _NumberView extends StatefulWidget {
   @override
-  void onCreate() {
-    print('ChangeNumberPage ${runtimeType} lifecycle onCreate');
-    business.number.addObserver((value) {
-      reBuild();
+  _NumberViewState createState() => _NumberViewState();
+}
+
+class _NumberViewState
+    extends FTargetState<_NumberView, _ChangeNumberPageState> {
+  @override
+  void onTargetState(_ChangeNumberPageState state) {
+    state.business.number.addObserver((value) {
+      setState(() {});
     }, this);
   }
 
   @override
-  void onStart() {
-    super.onStart();
-    print('ChangeNumberPage ${runtimeType} lifecycle onStart');
-  }
-
-  @override
-  void onStop() {
-    super.onStop();
-    print('ChangeNumberPage ${runtimeType} lifecycle onStop');
-  }
-
-  @override
-  void onDestroy() {
-    super.onDestroy();
-    print('ChangeNumberPage ${runtimeType} lifecycle onDestroy');
-  }
-
-  @override
   Widget buildImpl(BuildContext context) {
-    print('ChangeNumberPage ${runtimeType} build');
     return FButton.raised(
       padding: EdgeInsets.only(
         left: 10,
         right: 10,
       ),
       onPressed: () {
-        business.changeNumber();
+        targetState.business.changeNumber();
       },
-      child: Text(business.number.value.toString()),
+      child: Text(targetState.business.number.value.toString()),
     );
   }
 }
 
-class _TestView extends FBusinessView<ChangeNumberBusiness> {
-  _TestView(ChangeNumberBusiness business) : super(business) {
-    print('ChangeNumberPage ${runtimeType} create----------');
-  }
-
+class _TestView extends StatefulWidget {
   @override
-  void onCreate() {
-    print('ChangeNumberPage ${runtimeType} lifecycle onCreate');
-    business.number.addObserver((value) {
-      print(
-          'ChangeNumberPage ${runtimeType} number changed lifecycle:${getLifecycle().getCurrentState()}');
+  _TestViewState createState() => _TestViewState();
+}
+
+class _TestViewState extends FTargetState<_TestView, _ChangeNumberPageState> {
+  @override
+  void onTargetState(_ChangeNumberPageState state) {
+    state.business.number.addObserver((value) {
       reBuild();
     }, this);
   }
 
   @override
-  void onStart() {
-    super.onStart();
-    print('ChangeNumberPage ${runtimeType} lifecycle onStart');
-  }
-
-  @override
-  void onStop() {
-    super.onStop();
-    print('ChangeNumberPage ${runtimeType} lifecycle onStop');
-  }
-
-  @override
-  void onDestroy() {
-    super.onDestroy();
-    print('ChangeNumberPage ${runtimeType} lifecycle onDestroy');
-  }
-
-  @override
   Widget buildImpl(BuildContext context) {
-    print('ChangeNumberPage ${runtimeType} build');
     return Container(
-      child: Text('TestView: ${business.number.value}'),
+      child: Text('TestView: ${targetState.business.number.value}'),
     );
   }
 }

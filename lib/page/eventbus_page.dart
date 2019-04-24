@@ -1,5 +1,4 @@
 import 'package:flib_core/flib_core.dart';
-import 'package:flib_lifecycle_ext/flib_lifecycle_ext.dart';
 import 'package:flutter/material.dart';
 
 class EventBusPage extends StatefulWidget {
@@ -62,7 +61,7 @@ class _TestViewState extends State<_TestView> {
     _canceller = FEventBus.getDefault().addObserver<_ENumberChange>((event) {
       _number = event.number;
       setState(() {});
-    });
+    }, null);
   }
 
   @override
