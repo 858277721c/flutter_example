@@ -7,9 +7,6 @@ class ChangeNumberBusiness extends FBusiness {
   final FLiveData<int> number = FLiveData(0);
   final FLiveData<bool> addTestView = FLiveData(false);
 
-  @override
-  void onCreate() {}
-
   /// 改变数字
   void changeNumber() {
     number.value = number.value + 1;
