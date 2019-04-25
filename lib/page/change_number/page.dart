@@ -9,7 +9,9 @@ class ChangeNumberPage extends StatefulWidget {
 }
 
 class _ChangeNumberPageState
-    extends FBusinessState<ChangeNumberPage, ChangeNumberBusiness> {
+    extends FRouteState<ChangeNumberPage, ChangeNumberBusiness> {
+  bool addTestView = false;
+
   @override
   ChangeNumberBusiness createBusiness() {
     return ChangeNumberBusiness(this);
@@ -19,6 +21,7 @@ class _ChangeNumberPageState
   void initState() {
     super.initState();
     business.addTestView.addObserver((value) {
+      addTestView = value;
       reBuild();
     }, this);
   }
@@ -37,7 +40,7 @@ class _ChangeNumberPageState
       child: Text('toggle view'),
     ));
 
-    if (business.addTestView.value) {
+    if (addTestView) {
       list.add(_TestView());
     }
 
@@ -64,9 +67,12 @@ class _NumberView extends StatefulWidget {
 
 class _NumberViewState
     extends FTargetState<_NumberView, _ChangeNumberPageState> {
+  int number = 0;
+
   @override
   void onTargetState(_ChangeNumberPageState state) {
     state.business.number.addObserver((value) {
+      number = value;
       reBuild();
     }, this);
   }
@@ -81,7 +87,7 @@ class _NumberViewState
       onPressed: () {
         targetState.business.changeNumber();
       },
-      child: Text(targetState.business.number.value.toString()),
+      child: Text(number.toString()),
     );
   }
 }
@@ -92,9 +98,12 @@ class _TestView extends StatefulWidget {
 }
 
 class _TestViewState extends FTargetState<_TestView, _ChangeNumberPageState> {
+  int number = 0;
+
   @override
   void onTargetState(_ChangeNumberPageState state) {
     state.business.number.addObserver((value) {
+      number = value;
       reBuild();
     }, this);
   }
@@ -102,7 +111,7 @@ class _TestViewState extends FTargetState<_TestView, _ChangeNumberPageState> {
   @override
   Widget buildImpl(BuildContext context) {
     return Container(
-      child: Text('TestView: ${targetState.business.number.value}'),
+      child: Text('TestView: ${number}'),
     );
   }
 }
