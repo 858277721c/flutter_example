@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'ext.dart';
 
-class FContainer extends FChildWidgetBuilder
+class FBContainer extends FChildWidgetBuilder<Container>
     with
         FAlignmentGeometry_alignment,
         FEdgeInsetsGeometry_padding,
@@ -15,7 +15,7 @@ class FContainer extends FChildWidgetBuilder
         FEdgeInsetsGeometry_margin,
         FMatrix4_transform {
   @override
-  Widget build() {
+  Container build() {
     return Container(
       key: key.value,
       alignment: alignment.value,
