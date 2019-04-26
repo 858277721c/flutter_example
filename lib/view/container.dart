@@ -2,66 +2,46 @@ import 'package:flutter/material.dart';
 
 import 'ext.dart';
 
-class FBContainer extends FChildWidgetBuilder<Container>
-    with
-        FAlignmentGeometry_alignment,
-        FEdgeInsetsGeometry_padding,
-        FColor_color,
-        FDecoration_decoration,
-        FDecoration_foregroundDecoration,
-        FDouble_width,
-        FDouble_height,
-        FBoxConstraints_constraints,
-        FEdgeInsetsGeometry_margin,
-        FMatrix4_transform {
-  @override
-  void read(Container source) {
-    assert(source != null);
-
-    if (source.key != null) {
-      this.key.value = source.key;
-    }
-    if (source.alignment != null) {
-      this.alignment.value = source.alignment;
-    }
-    if (source.padding != null) {
-      this.padding.value = source.padding;
-    }
-    if (source.decoration != null) {
-      this.decoration.value = source.decoration;
-    }
-    if (source.foregroundDecoration != null) {
-      this.foregroundDecoration.value = source.foregroundDecoration;
-    }
-    if (source.constraints != null) {
-      this.constraints.value = source.constraints;
-    }
-    if (source.margin != null) {
-      this.margin.value = source.margin;
-    }
-    if (source.transform != null) {
-      this.transform.value = source.transform;
-    }
-    if (source.child != null) {
-      this.child.value = source.child;
-    }
-  }
+class FBContainer extends FChildWidgetBuilder<Container> {
+  AlignmentGeometry alignment;
+  EdgeInsetsGeometry padding;
+  Color color;
+  Decoration decoration;
+  Decoration foregroundDecoration;
+  double width;
+  double height;
+  BoxConstraints constraints;
+  EdgeInsetsGeometry margin;
+  Matrix4 transform;
 
   @override
-  Container build() {
+  Container build({
+    Key key,
+    AlignmentGeometry alignment,
+    EdgeInsetsGeometry padding,
+    Color color,
+    Decoration decoration,
+    Decoration foregroundDecoration,
+    double width,
+    double height,
+    BoxConstraints constraints,
+    EdgeInsetsGeometry margin,
+    Matrix4 transform,
+    Widget child,
+  }) {
     return Container(
-      key: key.value,
-      alignment: alignment.value,
-      padding: padding.value,
-      color: color.value,
-      decoration: decoration.value,
-      foregroundDecoration: foregroundDecoration.value,
-      width: width.value,
-      height: height.value,
-      constraints: constraints.value,
-      margin: margin.value,
-      transform: transform.value,
-      child: child.value,
+      key: key ?? this.key,
+      alignment: alignment ?? this.alignment,
+      padding: padding ?? this.padding,
+      color: color ?? this.color,
+      decoration: decoration ?? this.decoration,
+      foregroundDecoration: foregroundDecoration ?? this.foregroundDecoration,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      constraints: constraints ?? this.constraints,
+      margin: margin ?? this.margin,
+      transform: transform ?? this.transform,
+      child: child ?? this.child,
     );
   }
 }
