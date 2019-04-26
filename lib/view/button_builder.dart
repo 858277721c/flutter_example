@@ -26,7 +26,7 @@ class FBMaterialButton extends FChildWidgetBuilder {
 
   MaterialButton build({
     Key key,
-    VoidCallback onPressed,
+    @required VoidCallback onPressed,
     ValueChanged<bool> onHighlightChanged,
     ButtonTextTheme textTheme,
     Color textColor,
@@ -253,6 +253,46 @@ class FBOutlineButton extends FChildWidgetBuilder {
       shape: shape ?? this.shape,
       clipBehavior: clipBehavior ?? this.clipBehavior,
       child: child ?? this.child,
+    );
+  }
+
+  OutlineButton buildIcon({
+    Key key,
+    @required VoidCallback onPressed,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color highlightColor,
+    Color splashColor,
+    double highlightElevation,
+    Color highlightedBorderColor,
+    Color disabledBorderColor,
+    BorderSide borderSide,
+    EdgeInsetsGeometry padding,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    @required Widget icon,
+    @required Widget label,
+  }) {
+    return OutlineButton.icon(
+      key: key ?? this.key,
+      onPressed: onPressed ?? this.onPressed,
+      textTheme: textTheme ?? this.textTheme,
+      textColor: textColor ?? this.textColor,
+      disabledTextColor: disabledTextColor ?? this.disabledTextColor,
+      color: color ?? this.color,
+      highlightColor: highlightColor ?? this.highlightColor,
+      splashColor: splashColor ?? this.splashColor,
+      highlightElevation: highlightElevation ?? this.highlightElevation,
+      highlightedBorderColor:
+          highlightedBorderColor ?? this.highlightedBorderColor,
+      borderSide: borderSide ?? this.borderSide,
+      padding: padding ?? this.padding,
+      shape: shape ?? this.shape,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      icon: icon,
+      label: label,
     );
   }
 }
