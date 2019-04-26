@@ -7,6 +7,7 @@ import 'package:my_flutter/page/eventbus_page.dart';
 import 'package:my_flutter/page/ink_page.dart';
 import 'package:my_flutter/page/lifecycle_page.dart';
 import 'package:my_flutter/page/main_page.dart';
+import 'package:my_flutter/page/new_page.dart';
 import 'package:my_flutter/page/stepper_page.dart';
 import 'package:my_flutter/page/system_bar_page.dart';
 import 'package:my_flutter/page/text_field_page.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
     (LifecyclePage).toString(): (_) => LifecyclePage(),
     (EventBusPage).toString(): (_) => EventBusPage(),
     (ChangeNumberPage).toString(): (_) => ChangeNumberPage(),
+    (NewPage).toString(): (_) => NewPage(),
   };
 
   // This widget is the root of your application.
@@ -60,39 +62,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  void initState() {
-    super.initState();
-    print('MyHomePage initState');
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    print('MyHomePage deactivate');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print('MyHomePage didChangeDependencies');
-  }
-
-  @override
-  void didUpdateWidget(MyHomePage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('MyHomePage didUpdateWidget');
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print('MyHomePage dispose');
-  }
-
-  @override
   Widget build(BuildContext context) {
-    print('MyHomePage build');
-
     final List<Widget> children = [];
     MyApp.routes.forEach((key, value) {
       children.add(_getButton(key, context));
