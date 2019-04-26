@@ -92,7 +92,24 @@ class FBFlatButton extends FChildWidgetBuilder {
   Clip clipBehavior = Clip.none;
   MaterialTapTargetSize materialTapTargetSize;
 
-  FlatButton build() {
+  FlatButton build({
+    Key key,
+    @required VoidCallback onPressed,
+    ValueChanged<bool> onHighlightChanged,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color disabledColor,
+    Color highlightColor,
+    Color splashColor,
+    Brightness colorBrightness,
+    EdgeInsetsGeometry padding,
+    ShapeBorder shape,
+    Clip clipBehavior = Clip.none,
+    MaterialTapTargetSize materialTapTargetSize,
+    @required Widget child,
+  }) {
     return FlatButton(
       key: key ?? this.key,
       onPressed: onPressed ?? this.onPressed,
@@ -138,7 +155,7 @@ class FBRaisedButton extends FChildWidgetBuilder {
 
   RaisedButton build({
     Key key,
-    VoidCallback onPressed,
+    @required VoidCallback onPressed,
     ValueChanged<bool> onHighlightChanged,
     ButtonTextTheme textTheme,
     Color textColor,
@@ -153,7 +170,7 @@ class FBRaisedButton extends FChildWidgetBuilder {
     double disabledElevation,
     EdgeInsetsGeometry padding,
     ShapeBorder shape,
-    Clip clipBehavior,
+    Clip clipBehavior = Clip.none,
     MaterialTapTargetSize materialTapTargetSize,
     Duration animationDuration,
     Widget child,
@@ -180,6 +197,62 @@ class FBRaisedButton extends FChildWidgetBuilder {
       highlightElevation: highlightElevation ?? this.highlightElevation,
       disabledElevation: disabledElevation ?? this.disabledElevation,
       animationDuration: animationDuration ?? this.animationDuration,
+    );
+  }
+}
+
+class FBOutlineButton extends FChildWidgetBuilder {
+  VoidCallback onPressed;
+  ButtonTextTheme textTheme;
+  Color textColor;
+  Color disabledTextColor;
+  Color color;
+  Color highlightColor;
+  Color splashColor;
+  double highlightElevation;
+  BorderSide borderSide;
+  Color disabledBorderColor;
+  Color highlightedBorderColor;
+  EdgeInsetsGeometry padding;
+  ShapeBorder shape;
+  Clip clipBehavior = Clip.none;
+
+  OutlineButton build({
+    Key key,
+    @required VoidCallback onPressed,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color highlightColor,
+    Color splashColor,
+    double highlightElevation,
+    BorderSide borderSide,
+    Color disabledBorderColor,
+    Color highlightedBorderColor,
+    EdgeInsetsGeometry padding,
+    ShapeBorder shape,
+    Clip clipBehavior = Clip.none,
+    Widget child,
+  }) {
+    return OutlineButton(
+      key: key ?? this.key,
+      onPressed: onPressed ?? this.onPressed,
+      textTheme: textTheme ?? this.textTheme,
+      textColor: textColor ?? this.textColor,
+      disabledTextColor: disabledTextColor ?? this.disabledTextColor,
+      color: color ?? this.color,
+      highlightColor: highlightColor ?? this.highlightColor,
+      splashColor: splashColor ?? this.splashColor,
+      highlightElevation: highlightElevation ?? this.highlightElevation,
+      borderSide: borderSide ?? this.borderSide,
+      disabledBorderColor: disabledBorderColor ?? this.disabledBorderColor,
+      highlightedBorderColor:
+          highlightedBorderColor ?? this.highlightedBorderColor,
+      padding: padding ?? this.padding,
+      shape: shape ?? this.shape,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      child: child ?? this.child,
     );
   }
 }
