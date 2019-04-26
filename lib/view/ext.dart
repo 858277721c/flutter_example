@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-abstract class FInstanceBuilder<T> {
-  T build();
-}
-
-abstract class FWidgetBuilder<T extends Widget> extends FInstanceBuilder<T> {
+abstract class FWidgetBuilder {
   Key key;
 }
 
-abstract class FChildWidgetBuilder<T extends Widget> extends FWidgetBuilder<T> {
+abstract class FChildWidgetBuilder extends FWidgetBuilder {
   Widget child;
 }
