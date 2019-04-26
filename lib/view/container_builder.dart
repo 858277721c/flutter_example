@@ -14,7 +14,7 @@ class FBContainer extends FChildWidgetBuilder {
   EdgeInsetsGeometry margin;
   Matrix4 transform;
 
-  Container build({
+  FBContainer copyWith({
     Key key,
     AlignmentGeometry alignment,
     EdgeInsetsGeometry padding,
@@ -28,19 +28,37 @@ class FBContainer extends FChildWidgetBuilder {
     Matrix4 transform,
     Widget child,
   }) {
+    final FBContainer copy = FBContainer();
+    copy.key = key ?? this.key;
+    copy.alignment = alignment ?? this.alignment;
+    copy.padding = padding ?? this.padding;
+    copy.color = color ?? this.color;
+    copy.decoration = decoration ?? this.decoration;
+    copy.foregroundDecoration =
+        foregroundDecoration ?? this.foregroundDecoration;
+    copy.width = width ?? this.width;
+    copy.height = height ?? this.height;
+    copy.constraints = constraints ?? this.constraints;
+    copy.margin = margin ?? this.margin;
+    copy.transform = transform ?? this.transform;
+    copy.child = child ?? this.child;
+    return copy;
+  }
+
+  Container build() {
     return Container(
-      key: key ?? this.key,
-      alignment: alignment ?? this.alignment,
-      padding: padding ?? this.padding,
-      color: color ?? this.color,
-      decoration: decoration ?? this.decoration,
-      foregroundDecoration: foregroundDecoration ?? this.foregroundDecoration,
-      width: width ?? this.width,
-      height: height ?? this.height,
-      constraints: constraints ?? this.constraints,
-      margin: margin ?? this.margin,
-      transform: transform ?? this.transform,
-      child: child ?? this.child,
+      key: this.key,
+      alignment: this.alignment,
+      padding: this.padding,
+      color: this.color,
+      decoration: this.decoration,
+      foregroundDecoration: this.foregroundDecoration,
+      width: this.width,
+      height: this.height,
+      constraints: this.constraints,
+      margin: this.margin,
+      transform: this.transform,
+      child: this.child,
     );
   }
 }
