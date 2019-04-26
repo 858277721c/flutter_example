@@ -110,6 +110,76 @@ class FBFlatButton extends FChildWidgetBuilder {
       clipBehavior: clipBehavior ?? this.clipBehavior,
       materialTapTargetSize:
           materialTapTargetSize ?? this.materialTapTargetSize,
+      child: child ?? this.child,
+    );
+  }
+}
+
+class FBRaisedButton extends FChildWidgetBuilder {
+  VoidCallback onPressed;
+  ValueChanged<bool> onHighlightChanged;
+  ButtonTextTheme textTheme;
+  Color textColor;
+  Color disabledTextColor;
+  Color color;
+  Color disabledColor;
+  Color highlightColor;
+  Color splashColor;
+  Brightness colorBrightness;
+  EdgeInsetsGeometry padding;
+  ShapeBorder shape;
+  Clip clipBehavior = Clip.none;
+  MaterialTapTargetSize materialTapTargetSize;
+
+  double elevation;
+  double highlightElevation;
+  double disabledElevation;
+  Duration animationDuration;
+
+  RaisedButton build({
+    Key key,
+    VoidCallback onPressed,
+    ValueChanged<bool> onHighlightChanged,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color disabledColor,
+    Color highlightColor,
+    Color splashColor,
+    Brightness colorBrightness,
+    double elevation,
+    double highlightElevation,
+    double disabledElevation,
+    EdgeInsetsGeometry padding,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    MaterialTapTargetSize materialTapTargetSize,
+    Duration animationDuration,
+    Widget child,
+  }) {
+    return RaisedButton(
+      key: key ?? this.key,
+      onPressed: onPressed ?? this.onPressed,
+      onHighlightChanged: onHighlightChanged ?? this.onHighlightChanged,
+      textTheme: textTheme ?? this.textTheme,
+      textColor: textColor ?? this.textColor,
+      disabledTextColor: disabledTextColor ?? this.disabledTextColor,
+      color: color ?? this.color,
+      disabledColor: disabledColor ?? this.disabledColor,
+      highlightColor: highlightColor ?? this.highlightColor,
+      splashColor: splashColor ?? this.splashColor,
+      colorBrightness: colorBrightness ?? this.colorBrightness,
+      padding: padding ?? this.padding,
+      shape: shape ?? this.shape,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      materialTapTargetSize:
+          materialTapTargetSize ?? this.materialTapTargetSize,
+      child: child ?? this.child,
+      elevation: elevation ?? this.elevation,
+      highlightElevation: highlightElevation ?? this.highlightElevation,
+      disabledElevation: disabledElevation ?? this.disabledElevation,
+      animationDuration: animationDuration ?? this.animationDuration,
     );
   }
 }
