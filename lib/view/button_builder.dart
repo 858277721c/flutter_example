@@ -130,6 +130,47 @@ class FBFlatButton extends FChildWidgetBuilder {
       child: child ?? this.child,
     );
   }
+
+  FlatButton buildIcon({
+    Key key,
+    @required VoidCallback onPressed,
+    ValueChanged<bool> onHighlightChanged,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color disabledColor,
+    Color highlightColor,
+    Color splashColor,
+    Brightness colorBrightness,
+    EdgeInsetsGeometry padding,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    MaterialTapTargetSize materialTapTargetSize,
+    @required Widget icon,
+    @required Widget label,
+  }) {
+    return FlatButton.icon(
+      key: key ?? this.key,
+      onPressed: onPressed ?? this.onPressed,
+      onHighlightChanged: onHighlightChanged ?? this.onHighlightChanged,
+      textTheme: textTheme ?? this.textTheme,
+      textColor: textColor ?? this.textColor,
+      disabledTextColor: disabledTextColor ?? this.disabledTextColor,
+      color: color ?? this.color,
+      disabledColor: disabledColor ?? this.disabledColor,
+      highlightColor: highlightColor ?? this.highlightColor,
+      splashColor: splashColor ?? this.splashColor,
+      colorBrightness: colorBrightness ?? this.colorBrightness,
+      padding: padding ?? this.padding,
+      shape: shape ?? this.shape,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      materialTapTargetSize:
+          materialTapTargetSize ?? this.materialTapTargetSize,
+      icon: icon,
+      label: label,
+    );
+  }
 }
 
 class FBRaisedButton extends FChildWidgetBuilder {
