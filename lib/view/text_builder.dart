@@ -45,3 +45,40 @@ class FBText extends FWidgetBuilder {
     );
   }
 }
+
+class FBRichText extends FWidgetBuilder {
+  TextSpan text;
+  TextAlign textAlign = TextAlign.start;
+  TextDirection textDirection;
+  bool softWrap = true;
+  TextOverflow overflow = TextOverflow.clip;
+  double textScaleFactor = 1.0;
+  int maxLines;
+  Locale locale;
+  StrutStyle strutStyle;
+
+  RichText build(
+    TextSpan text, {
+    Key key,
+    TextAlign textAlign,
+    TextDirection textDirection,
+    bool softWrap,
+    TextOverflow overflow,
+    double textScaleFactor,
+    int maxLines,
+    Locale locale,
+    StrutStyle strutStyle,
+  }) {
+    return RichText(
+      key: key ?? this.key,
+      text: text ?? this.text ?? TextSpan(text: ''),
+      textAlign: textAlign ?? this.textAlign,
+      textDirection: textDirection ?? this.textDirection,
+      softWrap: softWrap ?? this.softWrap,
+      textScaleFactor: textScaleFactor ?? this.textScaleFactor,
+      maxLines: maxLines ?? this.maxLines,
+      locale: locale ?? this.locale,
+      strutStyle: strutStyle ?? this.strutStyle,
+    );
+  }
+}
