@@ -4,15 +4,15 @@ import 'ext.dart';
 
 class FContainer extends FChildWidgetBuilder
     with
-        FAlignment_alignment,
-        FEdgeInsets_padding,
+        FAlignmentGeometry_alignment,
+        FEdgeInsetsGeometry_padding,
         FColor_color,
         FDecoration_decoration,
         FDecoration_foregroundDecoration,
         FDouble_width,
         FDouble_height,
         FBoxConstraints_constraints,
-        FEdgeInsets_margin,
+        FEdgeInsetsGeometry_margin,
         FMatrix4_transform {
   @override
   Widget build() {
