@@ -15,6 +15,39 @@ class FBContainer extends FChildWidgetBuilder<Container>
         FEdgeInsetsGeometry_margin,
         FMatrix4_transform {
   @override
+  void read(Container source) {
+    assert(source != null);
+
+    if (source.key != null) {
+      this.key.value = source.key;
+    }
+    if (source.alignment != null) {
+      this.alignment.value = source.alignment;
+    }
+    if (source.padding != null) {
+      this.padding.value = source.padding;
+    }
+    if (source.decoration != null) {
+      this.decoration.value = source.decoration;
+    }
+    if (source.foregroundDecoration != null) {
+      this.foregroundDecoration.value = source.foregroundDecoration;
+    }
+    if (source.constraints != null) {
+      this.constraints.value = source.constraints;
+    }
+    if (source.margin != null) {
+      this.margin.value = source.margin;
+    }
+    if (source.transform != null) {
+      this.transform.value = source.transform;
+    }
+    if (source.child != null) {
+      this.child.value = source.child;
+    }
+  }
+
+  @override
   Container build() {
     return Container(
       key: key.value,

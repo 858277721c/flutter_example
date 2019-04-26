@@ -87,9 +87,14 @@ class FMatrix4_transform {
   FValueHolder<Matrix4> get transform => _transform ??= FValueHolder();
 }
 
-abstract class FWidgetBuilder<T extends Widget> with FKey_key {
+abstract class FInstanceBuilder<T> {
+  void read(T source);
+
   T build();
 }
+
+abstract class FWidgetBuilder<T extends Widget> extends FInstanceBuilder<T>
+    with FKey_key {}
 
 abstract class FChildWidgetBuilder<T extends Widget> extends FWidgetBuilder<T>
     with FWidget_child {}
