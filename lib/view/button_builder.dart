@@ -184,14 +184,13 @@ class FBRaisedButton extends FChildWidgetBuilder {
   Color highlightColor;
   Color splashColor;
   Brightness colorBrightness;
+  double elevation;
+  double highlightElevation;
+  double disabledElevation;
   EdgeInsetsGeometry padding;
   ShapeBorder shape;
   Clip clipBehavior = Clip.none;
   MaterialTapTargetSize materialTapTargetSize;
-
-  double elevation;
-  double highlightElevation;
-  double disabledElevation;
   Duration animationDuration;
 
   RaisedButton build({
@@ -228,16 +227,63 @@ class FBRaisedButton extends FChildWidgetBuilder {
       highlightColor: highlightColor ?? this.highlightColor,
       splashColor: splashColor ?? this.splashColor,
       colorBrightness: colorBrightness ?? this.colorBrightness,
+      elevation: elevation ?? this.elevation,
+      highlightElevation: highlightElevation ?? this.highlightElevation,
+      disabledElevation: disabledElevation ?? this.disabledElevation,
       padding: padding ?? this.padding,
       shape: shape ?? this.shape,
       clipBehavior: clipBehavior ?? this.clipBehavior,
       materialTapTargetSize:
           materialTapTargetSize ?? this.materialTapTargetSize,
+      animationDuration: animationDuration ?? this.animationDuration,
       child: child ?? this.child,
+    );
+  }
+
+  RaisedButton buildIcon({
+    Key key,
+    @required VoidCallback onPressed,
+    ValueChanged<bool> onHighlightChanged,
+    ButtonTextTheme textTheme,
+    Color textColor,
+    Color disabledTextColor,
+    Color color,
+    Color disabledColor,
+    Color highlightColor,
+    Color splashColor,
+    Brightness colorBrightness,
+    double elevation,
+    double highlightElevation,
+    double disabledElevation,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    MaterialTapTargetSize materialTapTargetSize,
+    Duration animationDuration,
+    @required Widget icon,
+    @required Widget label,
+  }) {
+    return RaisedButton.icon(
+      key: key ?? this.key,
+      onPressed: onPressed ?? this.onPressed,
+      onHighlightChanged: onHighlightChanged ?? this.onHighlightChanged,
+      textTheme: textTheme ?? this.textTheme,
+      textColor: textColor ?? this.textColor,
+      disabledTextColor: disabledTextColor ?? this.disabledTextColor,
+      color: color ?? this.color,
+      disabledColor: disabledColor ?? this.disabledColor,
+      highlightColor: highlightColor ?? this.highlightColor,
+      splashColor: splashColor ?? this.splashColor,
+      colorBrightness: colorBrightness ?? this.colorBrightness,
       elevation: elevation ?? this.elevation,
       highlightElevation: highlightElevation ?? this.highlightElevation,
       disabledElevation: disabledElevation ?? this.disabledElevation,
+      shape: shape ?? this.shape,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      materialTapTargetSize:
+          materialTapTargetSize ?? this.materialTapTargetSize,
       animationDuration: animationDuration ?? this.animationDuration,
+      icon: icon,
+      label: label,
     );
   }
 }
