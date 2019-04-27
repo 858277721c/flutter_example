@@ -48,6 +48,14 @@ class FDialogBuilder {
             mediaQueryData.devicePixelRatio *
             _defaultWidthPercent;
 
+    final Material material = Material(
+      color: targetBackgroundColor,
+      elevation: targetElevation,
+      shape: targetShape,
+      type: MaterialType.card,
+      child: child,
+    );
+
     return SafeArea(
       child: Align(
         alignment: alignment,
@@ -56,13 +64,7 @@ class FDialogBuilder {
             minWidth: targetWidth,
             maxWidth: targetWidth,
           ),
-          child: Material(
-            color: targetBackgroundColor,
-            elevation: targetElevation,
-            shape: targetShape,
-            type: MaterialType.card,
-            child: child,
-          ),
+          child: material,
         ),
       ),
     );
