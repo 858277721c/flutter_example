@@ -40,13 +40,13 @@ class FDialogAction extends StatelessWidget {
           color: Color(0xFF666666),
         );
 
-    return Container(
-      height: height,
-      alignment: alignment,
-      child: InkWell(
-        onTap: onPressed,
-        child: DefaultTextStyle(
-          style: targetTextStyle,
+    return InkWell(
+      onTap: onPressed,
+      child: DefaultTextStyle(
+        style: targetTextStyle,
+        child: Container(
+          alignment: alignment,
+          height: height,
           child: child,
         ),
       ),
