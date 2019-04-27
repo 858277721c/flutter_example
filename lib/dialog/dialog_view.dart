@@ -43,10 +43,8 @@ class FDialogBuilder {
     final ShapeBorder targetShape =
         shape ?? dialogTheme.shape ?? _defaultDialogShape;
 
-    final double targetWidth = width ??
-        mediaQueryData.size.width *
-            mediaQueryData.devicePixelRatio *
-            _defaultWidthPercent;
+    final double targetWidth =
+        width ?? mediaQueryData.size.width * _defaultWidthPercent;
 
     final Material material = Material(
       color: targetBackgroundColor,
