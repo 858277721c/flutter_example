@@ -18,7 +18,7 @@ class FDialogConfirmView extends StatelessWidget {
     this.cancel,
     this.confirm,
     this.dialogBuilder,
-  }) : assert(content != null);
+  });
 
   @override
   Widget build(BuildContext context) {
