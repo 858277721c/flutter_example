@@ -6,16 +6,13 @@ class FDialogAction extends StatelessWidget {
   final TextStyle textStyle;
 
   final AlignmentGeometry alignment;
-  final double height;
 
   FDialogAction({
     this.child,
     this.onPressed,
     this.textStyle,
-    AlignmentGeometry alignment,
-    double height,
-  })  : this.alignment = alignment ?? Alignment.center,
-        this.height = height ?? 36;
+    this.alignment = Alignment.center,
+  });
 
   factory FDialogAction.simple(
     String text, {
@@ -36,7 +33,7 @@ class FDialogAction extends StatelessWidget {
         dialogTheme.contentTextStyle ??
         theme.textTheme.subhead ??
         TextStyle(
-          fontSize: 13,
+          fontSize: 14,
           color: Color(0xFF666666),
         );
 
@@ -46,7 +43,6 @@ class FDialogAction extends StatelessWidget {
         style: targetTextStyle,
         child: Container(
           alignment: alignment,
-          height: height,
           child: child,
         ),
       ),
