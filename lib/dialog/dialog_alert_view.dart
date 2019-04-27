@@ -19,8 +19,7 @@ class FDialogAlertView extends StatelessWidget {
     this.actionsDividerTop,
     this.actionsDivider,
     FDialogBuilder dialogBuilder,
-  })  : assert(content != null),
-        this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
+  }) : this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
 
   Widget transformTitle({@required Widget widget, BuildContext context}) {
     return Container(
@@ -63,19 +62,48 @@ class FDialogAlertView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final DialogTheme dialogTheme = DialogTheme.of(context);
+
     final List<Widget> list = [];
 
     if (title != null) {
-      list.add(transformTitle(
+      final Widget titleTransform = transformTitle(
         widget: title,
         context: context,
+      );
+
+      final TextStyle titleTextStyle = dialogTheme.titleTextStyle ??
+          theme.textTheme.title ??
+          TextStyle(
+            fontSize: 16,
+            color: Color(0xFF333333),
+          );
+
+      list.add(DefaultTextStyle(
+        style: titleTextStyle,
+        child: titleTransform,
       ));
     }
 
-    list.add(transformContent(
-      widget: content,
-      context: context,
-    ));
+    if (content != null) {
+      final Widget contentTransform = transformContent(
+        widget: content,
+        context: context,
+      );
+
+      final TextStyle contentTextStyle = dialogTheme.contentTextStyle ??
+          theme.textTheme.subhead ??
+          TextStyle(
+            fontSize: 14,
+            color: Color(0xFF666666),
+          );
+
+      list.add(DefaultTextStyle(
+        style: contentTextStyle,
+        child: contentTransform,
+      ));
+    }
 
     if (actions != null && actions.isNotEmpty) {
       if (actionsDividerTop == null) {
