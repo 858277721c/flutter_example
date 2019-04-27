@@ -4,7 +4,10 @@ import 'dialog_view.dart';
 
 class FDialogAlertView extends StatelessWidget {
   final Widget title;
+  final TextStyle titleTextStyle;
+
   final Widget content;
+  final TextStyle contentTextStyle;
 
   final List<Widget> actions;
   final Widget actionsDividerTop;
@@ -15,7 +18,9 @@ class FDialogAlertView extends StatelessWidget {
 
   FDialogAlertView({
     this.title,
+    this.titleTextStyle,
     this.content,
+    this.contentTextStyle,
     this.actions,
     this.actionsDividerTop,
     this.actionsDivider,
@@ -87,7 +92,8 @@ class FDialogAlertView extends StatelessWidget {
         context: context,
       );
 
-      final TextStyle titleTextStyle = dialogTheme.titleTextStyle ??
+      final TextStyle targetTextStyle = titleTextStyle ??
+          dialogTheme.titleTextStyle ??
           theme.textTheme.title ??
           TextStyle(
             fontSize: 16,
@@ -95,7 +101,7 @@ class FDialogAlertView extends StatelessWidget {
           );
 
       list.add(DefaultTextStyle(
-        style: titleTextStyle,
+        style: targetTextStyle,
         child: titleTransform,
       ));
     }
@@ -106,7 +112,8 @@ class FDialogAlertView extends StatelessWidget {
         context: context,
       );
 
-      final TextStyle contentTextStyle = dialogTheme.contentTextStyle ??
+      final TextStyle targetTextStyle = contentTextStyle ??
+          dialogTheme.contentTextStyle ??
           theme.textTheme.subhead ??
           TextStyle(
             fontSize: 14,
@@ -114,7 +121,7 @@ class FDialogAlertView extends StatelessWidget {
           );
 
       list.add(DefaultTextStyle(
-        style: contentTextStyle,
+        style: targetTextStyle,
         child: contentTransform,
       ));
     }
