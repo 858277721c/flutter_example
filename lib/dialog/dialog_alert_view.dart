@@ -19,10 +19,9 @@ class FDialogAlertView extends StatelessWidget {
     this.actions,
     this.actionsDividerTop,
     this.actionsDivider,
-    double actionsHeight,
+    this.actionsHeight = 36,
     FDialogBuilder dialogBuilder,
-  })  : this.actionsHeight = actionsHeight ?? 36,
-        this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
+  }) : this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
 
   Widget transformTitle({@required Widget widget, BuildContext context}) {
     return Container(
