@@ -52,10 +52,21 @@ class FDialogBuilder {
       child: child,
     );
 
-    return Container(
+    Widget current = material;
+
+    current = Container(
       alignment: alignment,
       padding: targetPadding,
-      child: material,
+      child: current,
     );
+
+    if (targetPadding.left == 0 &&
+        targetPadding.top == 0 &&
+        targetPadding.right == 0 &&
+        targetPadding.bottom == 0) {
+      current = SafeArea(child: current);
+    }
+
+    return current;
   }
 }
