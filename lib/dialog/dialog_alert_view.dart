@@ -26,7 +26,7 @@ class FDialogAlertView extends StatelessWidget {
 
   Widget transformTitle({@required Widget widget, BuildContext context}) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 15),
       child: widget,
     );
   }
@@ -34,8 +34,8 @@ class FDialogAlertView extends StatelessWidget {
   Widget transformContent({@required Widget widget, BuildContext context}) {
     return Container(
       margin: EdgeInsets.only(
-        top: 10,
-        bottom: 10,
+        top: 15,
+        bottom: 15,
       ),
       child: widget,
     );
