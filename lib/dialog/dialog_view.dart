@@ -15,8 +15,8 @@ class FDialogBuilder {
     this.shape,
     this.width,
     this.height,
-    this.alignment,
-  });
+    AlignmentGeometry alignment,
+  }) : this.alignment = alignment ?? Alignment.center;
 
   static const RoundedRectangleBorder _defaultDialogShape =
       RoundedRectangleBorder(
@@ -32,24 +32,39 @@ class FDialogBuilder {
     final DialogTheme dialogTheme = DialogTheme.of(context);
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
+    final Color targetBackgroundColor = backgroundColor ??
+        dialogTheme.backgroundColor ??
+        Theme.of(context).dialogBackgroundColor ??
+        Colors.white;
+
+    final double targetElevation =
+        elevation ?? dialogTheme.elevation ?? _defaultElevation;
+
+    final ShapeBorder targetShape =
+        shape ?? dialogTheme.shape ?? _defaultDialogShape;
+
+    final double targetWidth = width ??
+        mediaQueryData.size.width *
+            mediaQueryData.devicePixelRatio *
+            _defaultWidthPercent;
+
     return SafeArea(
-        child: Container(
-      alignment: alignment,
-      width: width ??
-          mediaQueryData.size.width *
-              mediaQueryData.devicePixelRatio *
-              _defaultWidthPercent,
-      height: height ?? null,
-      child: Material(
-        color: backgroundColor ??
-            dialogTheme.backgroundColor ??
-            Theme.of(context).dialogBackgroundColor ??
-            Colors.white,
-        elevation: elevation ?? dialogTheme.elevation ?? _defaultElevation,
-        shape: shape ?? dialogTheme.shape ?? _defaultDialogShape,
-        type: MaterialType.card,
-        child: child,
+      child: Align(
+        alignment: alignment,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: targetWidth,
+            maxWidth: targetWidth,
+          ),
+          child: Material(
+            color: targetBackgroundColor,
+            elevation: targetElevation,
+            shape: targetShape,
+            type: MaterialType.card,
+            child: child,
+          ),
+        ),
       ),
-    ));
+    );
   }
 }
