@@ -5,16 +5,14 @@ class FDialogBuilder {
   final double elevation;
   final ShapeBorder shape;
 
-  final double width;
-  final double height;
+  final EdgeInsets padding;
   final AlignmentGeometry alignment;
 
   FDialogBuilder({
     this.backgroundColor,
     this.elevation,
     this.shape,
-    this.width,
-    this.height,
+    this.padding,
     this.alignment = Alignment.center,
   });
 
@@ -23,7 +21,7 @@ class FDialogBuilder {
           borderRadius: BorderRadius.all(Radius.circular(5.0)));
 
   static const double _defaultElevation = 24.0;
-  static const double _defaultWidthPercent = 0.8;
+  static const double _defaultPaddingWidthPercent = 0.1;
 
   Widget build(Widget child, BuildContext context) {
     assert(child != null);
@@ -43,8 +41,8 @@ class FDialogBuilder {
     final ShapeBorder targetShape =
         shape ?? dialogTheme.shape ?? _defaultDialogShape;
 
-    final double targetWidth =
-        width ?? mediaQueryData.size.width * _defaultWidthPercent;
+    final EdgeInsets targetPadding = padding ??
+        EdgeInsets.all(mediaQueryData.size.width * _defaultPaddingWidthPercent);
 
     final Material material = Material(
       color: targetBackgroundColor,
@@ -54,17 +52,10 @@ class FDialogBuilder {
       child: child,
     );
 
-    return SafeArea(
-      child: Align(
-        alignment: alignment,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: targetWidth,
-            maxWidth: targetWidth,
-          ),
-          child: material,
-        ),
-      ),
+    return Container(
+      alignment: alignment,
+      padding: targetPadding,
+      child: material,
     );
   }
 }
