@@ -80,9 +80,9 @@ class FDialogAlertView extends StatelessWidget {
     if (actions != null && actions.isNotEmpty) {
       if (actionsDividerTop == null) {
         list.add(Container(
-          color: Color(0xFF9999),
+          color: Color(0xFF999999),
           width: double.infinity,
-          height: 0.5,
+          height: 0.3,
         ));
       } else {
         list.add(actionsDividerTop);
