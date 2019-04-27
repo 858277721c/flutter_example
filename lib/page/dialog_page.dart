@@ -21,8 +21,8 @@ class _DialogPageState extends State<DialogPage> {
                         context: context,
                         builder: (context) {
                           return FDialogConfirmView(
-                            title: FDialogAction.simple('title'),
-                            content: FDialogAction.simple('content'),
+                            title: Text('title'),
+                            content: Text('content'),
                             cancel: FDialogAction.simple(
                               'cancel',
                               onPressed: () {
