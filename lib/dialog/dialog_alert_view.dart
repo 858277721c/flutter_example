@@ -9,6 +9,7 @@ class FDialogAlertView extends StatelessWidget {
   final List<Widget> actions;
   final Widget actionsDividerTop;
   final Widget actionsDivider;
+  final double actionsHeight;
 
   final FDialogBuilder dialogBuilder;
 
@@ -18,8 +19,10 @@ class FDialogAlertView extends StatelessWidget {
     this.actions,
     this.actionsDividerTop,
     this.actionsDivider,
+    double actionsHeight,
     FDialogBuilder dialogBuilder,
-  }) : this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
+  })  : this.actionsHeight = actionsHeight ?? 36,
+        this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
 
   Widget transformTitle({@required Widget widget, BuildContext context}) {
     return Container(
@@ -46,17 +49,29 @@ class FDialogAlertView extends StatelessWidget {
       final Widget item = widgets[i];
       list.add(Expanded(child: item));
 
-//      if (i < widgets.length - 1) {
-//        list.add(Container(
-//          color: Color(0xFF9999),
-//          width: 0.5,
-//          height: double.infinity,
-//        ));
-//      }
+      if (i < widgets.length - 1) {
+        list.add(createActionsDivider());
+      }
     }
 
     return Row(
       children: list,
+    );
+  }
+
+  Widget createActionsDividerTop() {
+    return Container(
+      color: Color(0xFF999999),
+      width: double.infinity,
+      height: 0.3,
+    );
+  }
+
+  Widget createActionsDivider() {
+    return Container(
+      color: Color(0xFF999999),
+      width: 0.3,
+      height: double.infinity,
     );
   }
 
@@ -107,18 +122,19 @@ class FDialogAlertView extends StatelessWidget {
 
     if (actions != null && actions.isNotEmpty) {
       if (actionsDividerTop == null) {
-        list.add(Container(
-          color: Color(0xFF999999),
-          width: double.infinity,
-          height: 0.3,
-        ));
+        list.add(createActionsDividerTop());
       } else {
         list.add(actionsDividerTop);
       }
 
-      list.add(transformActions(
+      final Widget actionsTransform = transformActions(
         widgets: actions,
         context: context,
+      );
+
+      list.add(SizedBox(
+        child: actionsTransform,
+        height: actionsHeight,
       ));
     }
 
