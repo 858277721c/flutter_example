@@ -5,8 +5,8 @@ import 'dialog_alert_view.dart';
 import 'dialog_view.dart';
 
 class FDialogConfirmView extends StatelessWidget {
-  final FDialogAction title;
-  final FDialogAction content;
+  final Widget title;
+  final Widget content;
   final FDialogAction cancel;
   final FDialogAction confirm;
 
