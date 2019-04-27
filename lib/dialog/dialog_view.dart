@@ -15,8 +15,8 @@ class FDialogBuilder {
     this.shape,
     this.width,
     this.height,
-    AlignmentGeometry alignment,
-  }) : this.alignment = alignment ?? Alignment.center;
+    this.alignment = Alignment.center,
+  });
 
   static const RoundedRectangleBorder _defaultDialogShape =
       RoundedRectangleBorder(
