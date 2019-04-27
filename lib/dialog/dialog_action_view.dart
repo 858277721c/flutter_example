@@ -5,11 +5,16 @@ class FDialogAction extends StatelessWidget {
   final VoidCallback onPressed;
 
   final AlignmentGeometry alignment;
+  final EdgeInsets padding;
 
   FDialogAction({
     this.child,
     this.onPressed,
     this.alignment = Alignment.center,
+    this.padding = const EdgeInsets.only(
+      left: 10,
+      right: 10,
+    ),
   });
 
   factory FDialogAction.simple(
@@ -27,6 +32,7 @@ class FDialogAction extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
+        padding: padding,
         alignment: alignment,
         child: child,
       ),
