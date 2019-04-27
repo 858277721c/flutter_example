@@ -20,6 +20,8 @@ class FDialogAction extends StatelessWidget {
   factory FDialogAction.simple(
     String text, {
     VoidCallback onPressed,
+    AlignmentGeometry alignment,
+    EdgeInsets padding,
   }) {
     return FDialogAction(
       child: Text(text),
