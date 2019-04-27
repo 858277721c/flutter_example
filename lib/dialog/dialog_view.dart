@@ -44,15 +44,13 @@ class FDialogBuilder {
     final EdgeInsets targetPadding = padding ??
         EdgeInsets.all(mediaQueryData.size.width * _defaultPaddingWidthPercent);
 
-    final Material material = Material(
+    Widget current = Material(
       color: targetBackgroundColor,
       elevation: targetElevation,
       shape: targetShape,
       type: MaterialType.card,
       child: child,
     );
-
-    Widget current = material;
 
     current = Container(
       alignment: alignment,
