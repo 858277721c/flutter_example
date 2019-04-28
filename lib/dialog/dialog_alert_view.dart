@@ -8,6 +8,7 @@ class FDialogAlertView extends StatelessWidget {
 
   final Widget content;
   final TextStyle contentTextStyle;
+  final EdgeInsetsGeometry contentPadding;
 
   final List<Widget> actions;
   final Widget actionsDividerTop;
@@ -21,6 +22,7 @@ class FDialogAlertView extends StatelessWidget {
     this.titleTextStyle,
     this.content,
     this.contentTextStyle,
+    this.contentPadding,
     this.actions,
     this.actionsDividerTop,
     this.actionsDivider,
@@ -107,9 +109,20 @@ class FDialogAlertView extends StatelessWidget {
     }
 
     if (content != null) {
-      final Widget contentTransform = transformContent(
+      Widget current = transformContent(
         widget: content,
         context: context,
+      );
+
+      final EdgeInsetsGeometry targetPadding = contentPadding ??
+          EdgeInsets.only(
+            left: 10,
+            right: 10,
+          );
+
+      current = Padding(
+        padding: targetPadding,
+        child: current,
       );
 
       final TextStyle targetTextStyle = contentTextStyle ??
@@ -122,7 +135,7 @@ class FDialogAlertView extends StatelessWidget {
 
       list.add(DefaultTextStyle(
         style: targetTextStyle,
-        child: contentTransform,
+        child: current,
       ));
     }
 
