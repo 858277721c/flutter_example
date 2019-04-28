@@ -5,7 +5,7 @@ class FDialogBuilder {
   final double elevation;
   final ShapeBorder shape;
 
-  final EdgeInsets padding;
+  final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
 
   FDialogBuilder({

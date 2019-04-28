@@ -5,7 +5,7 @@ class FDialogAction extends StatelessWidget {
   final VoidCallback onPressed;
 
   final AlignmentGeometry alignment;
-  final EdgeInsets padding;
+  final EdgeInsetsGeometry padding;
 
   FDialogAction({
     this.child,
