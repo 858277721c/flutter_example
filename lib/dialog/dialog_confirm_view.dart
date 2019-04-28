@@ -20,6 +20,67 @@ class FDialogConfirmView extends StatelessWidget {
     this.dialogBuilder,
   });
 
+  factory FDialogConfirmView.simple({
+    String title,
+    String content,
+    String cancel,
+    VoidCallback cancelOnPressed,
+    String confirm,
+    VoidCallback confirmOnPressed,
+    FDialogBuilder dialogBuilder,
+  }) {
+    Widget titleWidget;
+
+    if (title != null) {
+      titleWidget = Text(
+        title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    Widget contentWidget;
+    if (content != null) {
+      contentWidget = Text(
+        content,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    FDialogAction cancelWidget;
+    if (cancel != null) {
+      cancelWidget = FDialogAction(
+        child: Text(
+          cancel,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onPressed: cancelOnPressed,
+      );
+    }
+
+    FDialogAction confirmWidget;
+    if (confirm != null) {
+      confirmWidget = FDialogAction(
+        child: Text(
+          confirm,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onPressed: confirmOnPressed,
+      );
+    }
+
+    return FDialogConfirmView(
+      title: titleWidget,
+      content: contentWidget,
+      cancel: cancelWidget,
+      confirm: confirmWidget,
+      dialogBuilder: dialogBuilder,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> listAction = [];

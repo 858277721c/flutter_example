@@ -20,21 +20,17 @@ class _DialogPageState extends State<DialogPage> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return FDialogConfirmView(
-                            title: Text('title'),
-                            content: Text('content'),
-                            cancel: FDialogAction.simple(
-                              'cancel',
-                              onPressed: () {
-                                print('DialogPage onPressed cancel');
-                              },
-                            ),
-                            confirm: FDialogAction.simple(
-                              'confirm',
-                              onPressed: () {
-                                print('DialogPage onPressed confirm');
-                              },
-                            ),
+                          return FDialogConfirmView.simple(
+                            title: 'title',
+                            content: 'content',
+                            cancel: 'cancel',
+                            cancelOnPressed: () {
+                              print('DialogPage onPressed cancel');
+                            },
+                            confirm: 'confirm',
+                            confirmOnPressed: () {
+                              print('DialogPage onPressed confirm');
+                            },
                           );
                         });
                   },
