@@ -35,6 +35,7 @@ class _DialogPageState extends State<DialogPage> {
     showDialog(
         context: context,
         builder: (context) {
+          print('DialogPage build FDialogConfirmView');
           return FDialogConfirmView.simple(
             title: 'title',
             content: 'content',
