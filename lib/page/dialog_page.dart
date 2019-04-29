@@ -25,10 +25,12 @@ class _DialogPageState extends State<DialogPage> {
                             content: 'content',
                             cancel: 'cancel',
                             cancelOnPressed: () {
+                              Navigator.of(context).pop();
                               print('DialogPage onPressed cancel');
                             },
                             confirm: 'confirm',
                             confirmOnPressed: () {
+                              Navigator.of(context).pop();
                               print('DialogPage onPressed confirm');
                             },
                           );
