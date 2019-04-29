@@ -10,37 +10,45 @@ class DialogPage extends StatefulWidget {
 class _DialogPageState extends State<DialogPage> {
   @override
   Widget build(BuildContext context) {
+    final List<Widget> list = [];
+
+    list.add(FButton.raised(
+      onPressed: () {
+        showConfirmDialog();
+      },
+      child: Text('showConfirmDialog'),
+    ));
+
     return FSafeArea(
       child: Scaffold(
         body: Container(
+          alignment: Alignment.center,
           child: Column(
-            children: <Widget>[
-              FButton.raised(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return FDialogConfirmView.simple(
-                            title: 'title',
-                            content: 'content',
-                            cancel: 'cancel',
-                            cancelOnPressed: () {
-                              Navigator.of(context).pop();
-                              print('DialogPage onPressed cancel');
-                            },
-                            confirm: 'confirm',
-                            confirmOnPressed: () {
-                              Navigator.of(context).pop();
-                              print('DialogPage onPressed confirm');
-                            },
-                          );
-                        });
-                  },
-                  child: Text('FDialogConfirmView')),
-            ],
+            children: list,
           ),
         ),
       ),
     );
+  }
+
+  void showConfirmDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return FDialogConfirmView.simple(
+            title: 'title',
+            content: 'content',
+            cancel: 'cancel',
+            cancelOnPressed: () {
+              Navigator.of(context).pop();
+              print('DialogPage onPressed cancel');
+            },
+            confirm: 'confirm',
+            confirmOnPressed: () {
+              Navigator.of(context).pop();
+              print('DialogPage onPressed confirm');
+            },
+          );
+        });
   }
 }
