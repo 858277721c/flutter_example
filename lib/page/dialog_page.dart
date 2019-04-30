@@ -8,7 +8,7 @@ class DialogPage extends StatefulWidget {
 }
 
 class _DialogPageState extends State<DialogPage> {
-  final FDialogController dialogConfirm = FDialogController();
+  final FDialog dialogConfirm = FDialog();
 
   @override
   void initState() {

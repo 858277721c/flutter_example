@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FDialogController {
+class FDialog {
   final GlobalKey<_InternalWidgetState> _globalKey = GlobalKey();
 
   /// 窗口关闭监听
