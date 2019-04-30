@@ -20,7 +20,7 @@ class FDialogBuilder {
       RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0)));
 
-  static const double _defaultElevation = 24.0;
+  static const double _defaultElevation = 0;
   static const double _defaultPaddingWidthPercent = 0.1;
 
   Widget build(Widget child, BuildContext context) {
