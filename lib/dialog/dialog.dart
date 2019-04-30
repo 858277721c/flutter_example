@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class FDialog {
   final GlobalKey<_InternalWidgetState> _globalKey = GlobalKey();
 
+  /// 触摸到非内容区域是否关闭窗口
+  final bool dismissOnTouchOutside;
+
   /// 窗口关闭监听
   VoidCallback onDismissListener;
+
+  FDialog({
+    this.dismissOnTouchOutside = true,
+  });
 
   Widget _widget;
   bool _isShowing = false;
@@ -14,7 +21,16 @@ class FDialog {
   Widget _widgetBuilder(BuildContext context) {
     return _InternalWidget(
       builder: (context) {
-        return _widget;
+        if (dismissOnTouchOutside) {
+          return _widget;
+        }
+
+        return Container(
+          color: Colors.transparent,
+          child: _widget,
+          width: double.infinity,
+          height: double.infinity,
+        );
       },
       key: _globalKey,
     );
