@@ -8,6 +8,16 @@ class DialogPage extends StatefulWidget {
 }
 
 class _DialogPageState extends State<DialogPage> {
+  final FDialogController dialogConfirm = FDialogController();
+
+  @override
+  void initState() {
+    super.initState();
+    dialogConfirm.onDismissListener = () {
+      print('DialogPage dialogConfirm dismissed');
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> list = [];
@@ -32,24 +42,21 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   void showConfirmDialog() {
-    showDialog(
+    dialogConfirm.show(
         context: context,
-        builder: (context) {
-          print('DialogPage build FDialogConfirmView');
-          return FDialogConfirmView.simple(
-            title: 'title',
-            content: 'content',
-            cancel: 'cancel',
-            cancelOnPressed: () {
-              Navigator.of(context).pop();
-              print('DialogPage onPressed cancel');
-            },
-            confirm: 'confirm',
-            confirmOnPressed: () {
-              Navigator.of(context).pop();
-              print('DialogPage onPressed confirm');
-            },
-          );
-        });
+        widget: FDialogConfirmView.simple(
+          title: 'title',
+          content: 'content',
+          cancel: 'cancel',
+          cancelOnPressed: () {
+            dialogConfirm.dismiss();
+            print('DialogPage onPressed cancel');
+          },
+          confirm: 'confirm',
+          confirmOnPressed: () {
+            dialogConfirm.dismiss();
+            print('DialogPage onPressed confirm');
+          },
+        ));
   }
 }
