@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dialog_action_view.dart';
 import 'dialog_alert_view.dart';
-import 'dialog_view.dart';
+import 'dialog_view_wrapper.dart';
 
 class FDialogConfirmView extends StatelessWidget {
   final Widget title;
@@ -10,14 +10,11 @@ class FDialogConfirmView extends StatelessWidget {
   final FDialogAction cancel;
   final FDialogAction confirm;
 
-  final FDialogBuilder dialogBuilder;
-
   FDialogConfirmView({
     this.title,
     this.content,
     this.cancel,
     this.confirm,
-    this.dialogBuilder,
   });
 
   factory FDialogConfirmView.simple({
@@ -27,7 +24,7 @@ class FDialogConfirmView extends StatelessWidget {
     VoidCallback cancelOnPressed,
     String confirm,
     VoidCallback confirmOnPressed,
-    FDialogBuilder dialogBuilder,
+    FSimpleDialogViewWrapper dialogBuilder,
   }) {
     Widget titleWidget;
 
@@ -77,7 +74,6 @@ class FDialogConfirmView extends StatelessWidget {
       content: contentWidget,
       cancel: cancelWidget,
       confirm: confirmWidget,
-      dialogBuilder: dialogBuilder,
     );
   }
 
@@ -97,7 +93,6 @@ class FDialogConfirmView extends StatelessWidget {
       title: title,
       content: content,
       actions: listAction,
-      dialogBuilder: dialogBuilder,
     );
   }
 }

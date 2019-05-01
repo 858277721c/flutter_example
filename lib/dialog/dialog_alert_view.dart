@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'dialog_view.dart';
-
 class FDialogAlertView extends StatelessWidget {
   final Widget title;
   final TextStyle titleTextStyle;
@@ -15,8 +13,6 @@ class FDialogAlertView extends StatelessWidget {
   final Widget actionsDivider;
   final double actionsHeight;
 
-  final FDialogBuilder dialogBuilder;
-
   FDialogAlertView({
     this.title,
     this.titleTextStyle,
@@ -27,8 +23,7 @@ class FDialogAlertView extends StatelessWidget {
     this.actionsDividerTop,
     this.actionsDivider,
     this.actionsHeight = 36,
-    FDialogBuilder dialogBuilder,
-  }) : this.dialogBuilder = dialogBuilder ?? FDialogBuilder();
+  });
 
   Widget transformTitle({@required Widget widget, BuildContext context}) {
     return Container(
@@ -162,6 +157,6 @@ class FDialogAlertView extends StatelessWidget {
       children: list,
     );
 
-    return dialogBuilder.build(column, context);
+    return column;
   }
 }

@@ -10,7 +10,6 @@ class DialogPage extends StatefulWidget {
 class _DialogPageState extends State<DialogPage> {
   final FDialog dialogConfirm = FDialog();
   final FDialog dialogProgress = FDialog();
-  final FDialogBuilder dialogBuilder = FDialogBuilder();
 
   @override
   void initState() {
@@ -72,11 +71,8 @@ class _DialogPageState extends State<DialogPage> {
   void showProgressDialog() {
     dialogProgress.show(
       context: context,
-      widget: dialogBuilder.build(
-        FDialogProgressView(
-          content: '加载中...',
-        ),
-        context,
+      widget: FDialogProgressView(
+        content: '加载中...',
       ),
     );
   }

@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'dialog_view_wrapper.dart';
+
+abstract class FDialogViewWrapper {
+  Widget wrap(BuildContext context, Widget widget);
+}
+
 class FDialog {
   final GlobalKey<_InternalWidgetState> _globalKey = GlobalKey();
 
   /// 触摸到非内容区域是否关闭窗口
-  final bool dismissOnTouchOutside;
+  bool dismissOnTouchOutside = true;
 
   /// 窗口关闭监听
   VoidCallback onDismissListener;
 
-  FDialog({
-    this.dismissOnTouchOutside = true,
-  });
+  FDialogViewWrapper dialogViewWrapper = FSimpleDialogViewWrapper();
 
   Widget _widget;
   bool _isShowing = false;
@@ -21,13 +25,18 @@ class FDialog {
   Widget _widgetBuilder(BuildContext context) {
     return _InternalWidget(
       builder: (context) {
+        Widget current = _widget;
+        if (dialogViewWrapper != null) {
+          current = dialogViewWrapper.wrap(context, current);
+        }
+
         if (dismissOnTouchOutside) {
-          return _widget;
+          return current;
         }
 
         return Container(
           color: Colors.transparent,
-          child: _widget,
+          child: current,
           width: double.infinity,
           height: double.infinity,
         );

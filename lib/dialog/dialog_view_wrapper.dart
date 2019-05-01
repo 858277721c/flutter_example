@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class FDialogBuilder {
+import 'dialog.dart';
+
+class FSimpleDialogViewWrapper implements FDialogViewWrapper {
   final Color backgroundColor;
   final double elevation;
   final ShapeBorder shape;
@@ -8,7 +10,7 @@ class FDialogBuilder {
   final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
 
-  FDialogBuilder({
+  FSimpleDialogViewWrapper({
     this.backgroundColor,
     this.elevation,
     this.shape,
@@ -23,7 +25,8 @@ class FDialogBuilder {
   static const double _defaultElevation = 0;
   static const double _defaultPaddingWidthPercent = 0.1;
 
-  Widget build(Widget child, BuildContext context) {
+  @override
+  Widget wrap(BuildContext context, Widget child) {
     assert(child != null);
     assert(context != null);
 
