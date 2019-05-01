@@ -73,7 +73,9 @@ class _DialogPageState extends State<DialogPage> {
     dialogProgress.show(
       context: context,
       widget: dialogBuilder.build(
-        FDialogProgressView(content: '加载中...',),
+        FDialogProgressView(
+          content: '加载中...',
+        ),
         context,
       ),
     );
