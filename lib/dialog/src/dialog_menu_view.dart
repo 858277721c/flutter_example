@@ -101,6 +101,8 @@ class FDialogMenuView extends StatelessWidget {
     ThemeData theme,
     DialogTheme dialogTheme,
   ) {
+    final List<Widget> listMenuRow = [];
+
     final TextStyle targetMenusTextStyle = menusTextStyle ??
         dialogTheme.contentTextStyle ??
         TextStyle(
@@ -108,7 +110,6 @@ class FDialogMenuView extends StatelessWidget {
           color: Color(0xFF333333),
         );
 
-    final List<Widget> listMenuRow = [];
     listMenuRow.add(DefaultTextStyle(
       style: targetMenusTextStyle,
       child: Text(menus[index].toString()),
