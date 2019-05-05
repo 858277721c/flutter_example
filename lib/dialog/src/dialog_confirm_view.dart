@@ -21,9 +21,9 @@ class FDialogConfirmView extends StatelessWidget {
     String title = '',
     Widget content,
     String cancel = '',
-    VoidCallback cancelOnPressed,
+    VoidCallback onClickCancel,
     String confirm = '',
-    VoidCallback confirmOnPressed,
+    VoidCallback onClickConfirm,
     @required BuildContext context,
   }) {
     Widget titleWidget;
@@ -53,7 +53,7 @@ class FDialogConfirmView extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onPressed: cancelOnPressed,
+        onClick: onClickCancel,
         borderRadius: confirm == null
             ? BorderRadius.only(
                 bottomLeft: Radius.circular(5.0),
@@ -75,7 +75,7 @@ class FDialogConfirmView extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onPressed: confirmOnPressed,
+        onClick: onClickConfirm,
         borderRadius: cancel == null
             ? BorderRadius.only(
                 bottomLeft: Radius.circular(5.0),

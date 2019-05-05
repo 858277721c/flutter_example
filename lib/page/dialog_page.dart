@@ -69,13 +69,13 @@ class _DialogPageState extends State<DialogPage> {
       widget: FDialogConfirmView.simple(
         context: context,
         content: Text('我是内容'),
-        cancelOnPressed: () {
+        onClickCancel: () {
           dialogConfirm.dismiss();
-          print('DialogPage onPressed cancel');
+          print('DialogPage onClickCancel');
         },
-        confirmOnPressed: () {
+        onClickConfirm: () {
           dialogConfirm.dismiss();
-          print('DialogPage onPressed confirm');
+          print('DialogPage onClickConfirm');
         },
       ),
     );
@@ -102,8 +102,8 @@ class _DialogPageState extends State<DialogPage> {
       widget: FDialogMenuView(
         title: '请选择书本',
         menus: listBook,
-        onPressedMenu: (index) {
-          print('DialogPage onPressed menu ' + listBook[index].toString());
+        onClickMenu: (index) {
+          print('DialogPage onClickMenu ' + listBook[index].toString());
         },
       ),
     );

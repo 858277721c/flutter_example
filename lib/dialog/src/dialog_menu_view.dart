@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'locale.dart';
 
-typedef OnPressedMenu = Function(int index);
+typedef OnClickMenu = Function(int index);
 
 class FDialogMenuView extends StatelessWidget {
   final String title;
   final TextStyle titleTextStyle;
-  final VoidCallback onPressedClose;
+  final VoidCallback onClickClose;
 
   final String cancel;
   final TextStyle cancelTextStyle;
@@ -15,18 +15,18 @@ class FDialogMenuView extends StatelessWidget {
   final List<dynamic> menus;
   final TextStyle menusTextStyle;
 
-  final OnPressedMenu onPressedMenu;
+  final OnClickMenu onClickMenu;
   final int selectedIndex;
 
   FDialogMenuView({
     this.title,
     this.titleTextStyle,
-    this.onPressedClose,
+    this.onClickClose,
     this.cancel = '',
     this.cancelTextStyle,
     this.menus,
     this.menusTextStyle,
-    this.onPressedMenu,
+    this.onClickMenu,
     this.selectedIndex = -1,
   }) : assert(menus != null);
 
@@ -60,7 +60,7 @@ class FDialogMenuView extends StatelessWidget {
       child: widgetTextTitle,
     ));
 
-    if (onPressedClose != null) {
+    if (onClickClose != null) {
       Widget widgetClose = Container(
         color: Colors.transparent,
         padding: EdgeInsets.only(
@@ -76,7 +76,7 @@ class FDialogMenuView extends StatelessWidget {
 
       widgetClose = GestureDetector(
         child: widgetClose,
-        onTap: onPressedClose,
+        onTap: onClickClose,
       );
 
       listTitle.add(Container(
@@ -134,10 +134,10 @@ class FDialogMenuView extends StatelessWidget {
 
     widgetMenu = InkWell(
       child: widgetMenu,
-      onTap: onPressedMenu == null
+      onTap: onClickMenu == null
           ? null
           : () {
-              onPressedMenu(index);
+              onClickMenu(index);
             },
     );
 

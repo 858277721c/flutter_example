@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FDialogAction extends StatelessWidget {
   final Widget child;
-  final VoidCallback onPressed;
+  final VoidCallback onClick;
 
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry padding;
@@ -10,7 +10,7 @@ class FDialogAction extends StatelessWidget {
 
   FDialogAction({
     this.child,
-    this.onPressed,
+    this.onClick,
     this.alignment = Alignment.center,
     this.padding = const EdgeInsets.only(
       left: 10,
@@ -23,7 +23,7 @@ class FDialogAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: borderRadius,
-      onTap: onPressed,
+      onTap: onClick,
       child: Container(
         padding: padding,
         alignment: alignment,
