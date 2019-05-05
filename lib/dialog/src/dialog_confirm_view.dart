@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dialog_action_view.dart';
 import 'dialog_alert_view.dart';
-import 'dialog_view_wrapper.dart';
+import 'locale.dart';
 
 class FDialogConfirmView extends StatelessWidget {
   final Widget title;
@@ -18,17 +18,20 @@ class FDialogConfirmView extends StatelessWidget {
   });
 
   factory FDialogConfirmView.simple({
-    String title,
-    String content,
-    String cancel,
+    String title = '',
+    Widget content,
+    String cancel = '',
     VoidCallback cancelOnPressed,
-    String confirm,
+    String confirm = '',
     VoidCallback confirmOnPressed,
-    FSimpleDialogViewWrapper dialogBuilder,
+    @required BuildContext context,
   }) {
     Widget titleWidget;
-
     if (title != null) {
+      if (title == '') {
+        title = FLibDialogLocale.tips(context);
+      }
+
       titleWidget = Text(
         title,
         maxLines: 1,
@@ -36,17 +39,14 @@ class FDialogConfirmView extends StatelessWidget {
       );
     }
 
-    Widget contentWidget;
-    if (content != null) {
-      contentWidget = Text(
-        content,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
+    Widget contentWidget = content;
 
     FDialogAction cancelWidget;
     if (cancel != null) {
+      if (cancel == '') {
+        cancel = FLibDialogLocale.cancel(context);
+      }
+
       cancelWidget = FDialogAction(
         child: Text(
           cancel,
@@ -65,6 +65,10 @@ class FDialogConfirmView extends StatelessWidget {
 
     FDialogAction confirmWidget;
     if (confirm != null) {
+      if (confirm == '') {
+        confirm = FLibDialogLocale.confirm(context);
+      }
+
       confirmWidget = FDialogAction(
         child: Text(
           confirm,

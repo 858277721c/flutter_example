@@ -53,14 +53,11 @@ class _DialogPageState extends State<DialogPage> {
     dialogConfirm.show(
         context: context,
         widget: FDialogConfirmView.simple(
-          title: 'title',
-          content: 'content',
-          cancel: 'cancel',
+          content: Text('我是内容'),
           cancelOnPressed: () {
             dialogConfirm.dismiss();
             print('DialogPage onPressed cancel');
           },
-          confirm: 'confirm',
           confirmOnPressed: () {
             dialogConfirm.dismiss();
             print('DialogPage onPressed confirm');
