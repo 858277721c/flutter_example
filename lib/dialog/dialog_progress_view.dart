@@ -20,7 +20,9 @@ class FDialogProgressView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> list = [];
     list.add(SizedBox(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+      ),
       width: progressSize,
       height: progressSize,
     ));
