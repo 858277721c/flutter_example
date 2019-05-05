@@ -51,18 +51,20 @@ class _DialogPageState extends State<DialogPage> {
 
   void showConfirmDialog() {
     dialogConfirm.show(
+      context: context,
+      widget: FDialogConfirmView.simple(
         context: context,
-        widget: FDialogConfirmView.simple(
-          content: Text('我是内容'),
-          cancelOnPressed: () {
-            dialogConfirm.dismiss();
-            print('DialogPage onPressed cancel');
-          },
-          confirmOnPressed: () {
-            dialogConfirm.dismiss();
-            print('DialogPage onPressed confirm');
-          },
-        ));
+        content: Text('我是内容'),
+        cancelOnPressed: () {
+          dialogConfirm.dismiss();
+          print('DialogPage onPressed cancel');
+        },
+        confirmOnPressed: () {
+          dialogConfirm.dismiss();
+          print('DialogPage onPressed confirm');
+        },
+      ),
+    );
   }
 
   void showProgressDialog() {
