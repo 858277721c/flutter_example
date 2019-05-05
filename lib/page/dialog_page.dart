@@ -91,15 +91,20 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   void showMenuDialog() {
+    final List<String> listBook = [
+      'Java疯狂讲义',
+      'Android原理剖析',
+      'flutter从入门到放弃',
+    ];
+
     dialogMenu.show(
       context: context,
       widget: FDialogMenuView(
         title: '请选择书本',
-        menus: [
-          'Java疯狂讲义',
-          'Android原理剖析',
-          'flutter从入门到放弃',
-        ],
+        menus: listBook,
+        onPressedMenu: (index) {
+          print('DialogPage onPressed menu ' + listBook[index].toString());
+        },
       ),
     );
   }
