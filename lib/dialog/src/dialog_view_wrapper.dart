@@ -18,6 +18,7 @@ class FSimpleDialogViewWrapper implements FDialogViewWrapper {
     this.alignment = Alignment.center,
   });
 
+  static const Color _defaultColor = Colors.white;
   static const double _defaultElevation = 0;
   static const double _defaultPaddingWidthPercent = 0.1;
 
@@ -32,7 +33,7 @@ class FSimpleDialogViewWrapper implements FDialogViewWrapper {
     final Color targetBackgroundColor = backgroundColor ??
         dialogTheme.backgroundColor ??
         Theme.of(context).dialogBackgroundColor ??
-        Colors.white;
+        _defaultColor;
 
     final double targetElevation =
         elevation ?? dialogTheme.elevation ?? _defaultElevation;
