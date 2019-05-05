@@ -10,6 +10,7 @@ class DialogPage extends StatefulWidget {
 class _DialogPageState extends State<DialogPage> {
   final FDialog dialogConfirm = FDialog();
   final FDialog dialogProgress = FDialog();
+  final FDialog dialogMenu = FDialog();
 
   @override
   void initState() {
@@ -35,6 +36,13 @@ class _DialogPageState extends State<DialogPage> {
         showProgressDialog();
       },
       child: Text('showProgressDialog'),
+    ));
+
+    list.add(FButton.raised(
+      onPressed: () {
+        showMenuDialog();
+      },
+      child: Text('showMenuDialog'),
     ));
 
     return FSafeArea(
@@ -72,6 +80,20 @@ class _DialogPageState extends State<DialogPage> {
       context: context,
       widget: FDialogProgressView(
         content: '加载中...',
+      ),
+    );
+  }
+
+  void showMenuDialog() {
+    dialogMenu.show(
+      context: context,
+      widget: FDialogMenuView(
+        title: '请选择书本',
+        menus: [
+          'Java疯狂讲义',
+          'Android原理剖析',
+          'flutter从入门到放弃',
+        ],
       ),
     );
   }

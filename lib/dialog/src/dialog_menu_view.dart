@@ -205,6 +205,7 @@ class FDialogMenuView extends StatelessWidget {
     }
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: list,
     );
   }
