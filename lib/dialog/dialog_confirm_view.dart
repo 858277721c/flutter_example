@@ -54,6 +54,12 @@ class FDialogConfirmView extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         onPressed: cancelOnPressed,
+        borderRadius: confirm == null
+            ? BorderRadius.only(
+                bottomLeft: Radius.circular(5.0),
+                bottomRight: Radius.circular(5.0),
+              )
+            : BorderRadius.only(bottomLeft: Radius.circular(5.0)),
       );
     }
 
@@ -66,6 +72,12 @@ class FDialogConfirmView extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         onPressed: confirmOnPressed,
+        borderRadius: cancel == null
+            ? BorderRadius.only(
+                bottomLeft: Radius.circular(5.0),
+                bottomRight: Radius.circular(5.0),
+              )
+            : BorderRadius.only(bottomRight: Radius.circular(5.0)),
       );
     }
 

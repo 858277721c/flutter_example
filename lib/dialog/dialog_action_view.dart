@@ -6,6 +6,7 @@ class FDialogAction extends StatelessWidget {
 
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry padding;
+  final BorderRadius borderRadius;
 
   FDialogAction({
     this.child,
@@ -15,6 +16,7 @@ class FDialogAction extends StatelessWidget {
       left: 10,
       right: 10,
     ),
+    this.borderRadius = BorderRadius.zero,
   });
 
   factory FDialogAction.simple(
@@ -32,6 +34,7 @@ class FDialogAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: borderRadius,
       onTap: onPressed,
       child: Container(
         padding: padding,
