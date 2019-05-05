@@ -19,18 +19,6 @@ class FDialogAction extends StatelessWidget {
     this.borderRadius = BorderRadius.zero,
   });
 
-  factory FDialogAction.simple(
-    String text, {
-    VoidCallback onPressed,
-    AlignmentGeometry alignment,
-    EdgeInsets padding,
-  }) {
-    return FDialogAction(
-      child: Text(text),
-      onPressed: onPressed,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
