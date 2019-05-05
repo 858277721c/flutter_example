@@ -1,8 +1,8 @@
 library flib_dialog;
 
-export 'dialog.dart';
-export 'dialog_action_view.dart';
-export 'dialog_alert_view.dart';
-export 'dialog_confirm_view.dart';
-export 'dialog_progress_view.dart';
-export 'dialog_view_wrapper.dart';
+export 'src/dialog.dart';
+export 'src/dialog_action_view.dart';
+export 'src/dialog_alert_view.dart';
+export 'src/dialog_confirm_view.dart';
+export 'src/dialog_progress_view.dart';
+export 'src/dialog_view_wrapper.dart';
