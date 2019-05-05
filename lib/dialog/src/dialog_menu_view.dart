@@ -137,30 +137,19 @@ class FDialogMenuView extends StatelessWidget {
             },
     );
 
-    widgetMenu = wrapMenu(widgetMenu);
+    widgetMenu = wrapPadding(widgetMenu);
     widgetMenu = wrapBottomDivider(widgetMenu);
 
     return widgetMenu;
   }
 
-  Widget wrapMenu(Widget widget) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 10,
-          ),
-          child: widget,
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 20),
-          width: double.infinity,
-          height: 0.3,
-          color: Color(0xFF999999),
-        )
-      ],
+  Widget wrapPadding(Widget widget) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 10,
+      ),
+      child: widget,
     );
   }
 
@@ -169,13 +158,16 @@ class FDialogMenuView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         widget,
-        Container(
-          margin: EdgeInsets.only(left: 20),
-          width: double.infinity,
-          height: 0.3,
-          color: Color(0xFF999999),
-        )
+        buildDivider(EdgeInsets.only(left: 20)),
       ],
+    );
+  }
+
+  Widget buildDivider(EdgeInsetsGeometry margin) {
+    return Container(
+      margin: margin,
+      color: Color(0xFF999999),
+      height: 0.3,
     );
   }
 
@@ -188,11 +180,7 @@ class FDialogMenuView extends StatelessWidget {
 
     if (title != null) {
       list.add(buildTitle(context, theme, dialogTheme));
-      list.add(Container(
-        color: Color(0xFF999999),
-        width: double.infinity,
-        height: 0.3,
-      ));
+      list.add(buildDivider(null));
     }
 
     if (menus.length > 0) {
