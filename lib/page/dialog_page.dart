@@ -22,6 +22,7 @@ class _DialogPageState extends State<DialogPage> {
     dialogMenu.dialogViewWrapper = FSimpleDialogViewWrapper(
       padding: EdgeInsets.zero,
       alignment: Alignment.bottomCenter,
+      borderRadius: BorderRadius.zero,
     );
   }
 
