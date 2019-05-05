@@ -8,8 +8,8 @@ class FDialogProgressView extends StatelessWidget {
 
   FDialogProgressView({
     this.content,
-    this.progressSize = 30,
-    this.padding = 15,
+    this.progressSize = 26,
+    this.padding = 13,
     this.textStyle = const TextStyle(
       fontSize: 13,
       color: const Color(0xFF333333),
