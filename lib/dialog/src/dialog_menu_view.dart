@@ -138,13 +138,13 @@ class FDialogMenuView extends StatelessWidget {
             },
     );
 
-    widgetMenu = wrapPadding(widgetMenu);
-    widgetMenu = wrapBottomDivider(widgetMenu);
+    widgetMenu = wrapMenuPadding(widgetMenu);
+    widgetMenu = wrapMenuBottomDivider(widgetMenu);
 
     return widgetMenu;
   }
 
-  Widget wrapPadding(Widget widget) {
+  Widget wrapMenuPadding(Widget widget) {
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -154,7 +154,7 @@ class FDialogMenuView extends StatelessWidget {
     );
   }
 
-  Widget wrapBottomDivider(Widget widget) {
+  Widget wrapMenuBottomDivider(Widget widget) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
