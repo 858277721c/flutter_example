@@ -138,16 +138,23 @@ class FDialogMenuView extends StatelessWidget {
             },
     );
 
+    widgetMenu = wrapMenuHeight(widgetMenu);
     widgetMenu = wrapMenuPadding(widgetMenu);
     widgetMenu = wrapMenuBottomDivider(widgetMenu);
-
     return widgetMenu;
+  }
+
+  Widget wrapMenuHeight(Widget widget) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 40),
+      child: widget,
+    );
   }
 
   Widget wrapMenuPadding(Widget widget) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 20,
+        left: 10,
         right: 10,
       ),
       child: widget,
@@ -159,7 +166,7 @@ class FDialogMenuView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         widget,
-        buildDivider(EdgeInsets.only(left: 20)),
+        buildDivider(EdgeInsets.only(left: 10)),
       ],
     );
   }
@@ -167,6 +174,7 @@ class FDialogMenuView extends StatelessWidget {
   Widget buildDivider(EdgeInsetsGeometry margin) {
     return Container(
       margin: margin,
+      width: double.infinity,
       color: Color(0xFF999999),
       height: 0.3,
     );
@@ -186,6 +194,7 @@ class FDialogMenuView extends StatelessWidget {
 
     if (menus.length > 0) {
       list.add(ListView.builder(
+        shrinkWrap: true,
         itemCount: menus.length,
         itemBuilder: (context, index) {
           return buildMenu(index, theme, dialogTheme);
