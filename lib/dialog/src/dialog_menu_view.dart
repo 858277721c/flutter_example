@@ -69,7 +69,7 @@ class FDialogMenuView extends StatelessWidget {
         ),
         child: Icon(
           Icons.close,
-          size: 12,
+          size: 20,
           color: Color(0xFF8d97a3),
         ),
       );

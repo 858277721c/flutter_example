@@ -104,6 +104,7 @@ class _DialogPageState extends State<DialogPage> {
         menus: listBook,
         onClickMenu: (index) {
           print('DialogPage onClickMenu ' + listBook[index].toString());
+          dialogMenu.dismiss();
         },
       ),
     );
