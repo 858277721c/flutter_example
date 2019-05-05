@@ -14,6 +14,10 @@ class FLibDialogLocale {
   static String tips(BuildContext context, {Locale locale}) {
     return _LibLocale(context, locale).tips();
   }
+
+  static String pleaseSelect(BuildContext context, {Locale locale}) {
+    return _LibLocale(context, locale).pleaseSelect();
+  }
 }
 
 abstract class _LibLocale {
