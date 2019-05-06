@@ -19,11 +19,11 @@ class _TitleBarPageState extends State<TitleBarPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               FTitleBarItem(
-                Text('aa'),
+                Text('收藏'),
                 onClick: () {},
               ),
               FTitleBarItem(
-                Text('bb'),
+                Text('关注'),
                 onClick: () {},
               ),
             ],
