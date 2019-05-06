@@ -195,13 +195,15 @@ class FDialogMenuView extends StatelessWidget {
     }
 
     if (menus.length > 0) {
-      list.add(ListView.builder(
+      Widget widgetMenus = ListView.builder(
         shrinkWrap: true,
         itemCount: menus.length,
         itemBuilder: (context, index) {
           return buildMenu(index, theme, dialogTheme);
         },
-      ));
+      );
+
+      list.add(widgetMenus);
     }
 
     return Column(
