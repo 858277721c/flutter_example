@@ -16,14 +16,8 @@ class _DialogPageState extends State<DialogPage> {
   void initState() {
     super.initState();
     dialogConfirm.onDismissListener = () {
-      print('DialogPage dialogConfirm dismissed');
+      print('DialogPage dialogConfirm dismiss');
     };
-
-    dialogMenu.dialogViewWrapper = FSimpleDialogViewWrapper(
-      padding: EdgeInsets.zero,
-      alignment: Alignment.bottomCenter,
-      borderRadius: BorderRadius.zero,
-    );
   }
 
   @override

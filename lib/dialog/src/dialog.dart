@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'dialog_view_wrapper.dart';
+
 abstract class FDialogViewWrapper {
   Widget wrap(BuildContext context, Widget widget);
 }
 
 abstract class FDialogView {
   void applyDialog(FDialog dialog);
+}
+
+mixin FDialogViewMixin implements FDialogView {
+  FDialog dialog;
+
+  @override
+  void applyDialog(FDialog dialog) {
+    this.dialog = dialog;
+    if (dialog.dialogViewWrapper == null) {
+      dialog.dialogViewWrapper = FSimpleDialogViewWrapper();
+    }
+  }
 }
 
 class FDialog {

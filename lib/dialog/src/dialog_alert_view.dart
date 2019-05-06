@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class FDialogAlertView extends StatelessWidget {
+import 'dialog.dart';
+
+class FDialogAlertView extends StatelessWidget with FDialogViewMixin {
   final Widget title;
   final TextStyle titleTextStyle;
 

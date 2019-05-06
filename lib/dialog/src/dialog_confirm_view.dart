@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'dialog.dart';
 import 'dialog_action_view.dart';
 import 'dialog_alert_view.dart';
 import 'locale.dart';
 
-class FDialogConfirmView extends StatelessWidget {
+class FDialogConfirmView extends StatelessWidget with FDialogViewMixin {
   final Widget title;
   final Widget content;
   final FDialogAction cancel;

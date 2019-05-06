@@ -6,7 +6,7 @@ import 'locale.dart';
 
 typedef OnClickMenu = Function(int index);
 
-class FDialogMenuView extends StatelessWidget implements FDialogView {
+class FDialogMenuView extends StatelessWidget with FDialogViewMixin {
   final String title;
   final TextStyle titleTextStyle;
 
@@ -15,8 +15,6 @@ class FDialogMenuView extends StatelessWidget implements FDialogView {
 
   final OnClickMenu onClickMenu;
   final int selectedIndex;
-
-  FDialog _dialog;
 
   FDialogMenuView({
     this.title = '',
@@ -29,7 +27,7 @@ class FDialogMenuView extends StatelessWidget implements FDialogView {
 
   @override
   void applyDialog(FDialog dialog) {
-    _dialog = dialog;
+    this.dialog = dialog;
     if (dialog.dialogViewWrapper == null) {
       dialog.dialogViewWrapper = FSimpleDialogViewWrapper(
         alignment: Alignment.bottomCenter,
@@ -86,7 +84,7 @@ class FDialogMenuView extends StatelessWidget implements FDialogView {
     widgetClose = GestureDetector(
       child: widgetClose,
       onTap: () {
-        _dialog.dismiss();
+        dialog.dismiss();
       },
     );
 
