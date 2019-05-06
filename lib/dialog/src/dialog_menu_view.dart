@@ -121,7 +121,7 @@ class FDialogMenuView extends StatelessWidget {
       listMenuRow.add(Icon(
         Icons.check,
         color: theme.accentColor,
-        size: 15,
+        size: 20,
       ));
     }
 
