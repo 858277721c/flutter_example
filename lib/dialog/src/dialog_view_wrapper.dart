@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'dialog.dart';
 
+class FOriginalDialogViewWrapper implements FDialogViewWrapper {
+  @override
+  Widget wrap(BuildContext context, Widget widget) {
+    return widget;
+  }
+}
+
 class FSimpleDialogViewWrapper implements FDialogViewWrapper {
   final Color backgroundColor;
   final double elevation;

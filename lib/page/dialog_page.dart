@@ -100,9 +100,6 @@ class _DialogPageState extends State<DialogPage> {
     dialogMenu.show(
       context: context,
       widget: FDialogMenuView(
-        onClickClose: (){
-          dialogMenu.dismiss();
-        },
         title: '请选择书本',
         menus: listBook,
         onClickMenu: (index) {

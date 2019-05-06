@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-class FDialogProgressView extends StatelessWidget {
+import 'dialog.dart';
+import 'dialog_view_wrapper.dart';
+
+class FDialogProgressView extends StatelessWidget implements FDialogView {
   final String content;
   final double progressSize;
   final double padding;
@@ -12,6 +15,13 @@ class FDialogProgressView extends StatelessWidget {
     this.padding = 13,
     this.textStyle,
   });
+
+  @override
+  void applyDialog(FDialog dialog) {
+    if (dialog.dialogViewWrapper == null) {
+      dialog.dialogViewWrapper = FSimpleDialogViewWrapper();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

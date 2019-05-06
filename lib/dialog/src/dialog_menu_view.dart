@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'dialog.dart';
+import 'dialog_view_wrapper.dart';
 import 'locale.dart';
 
 typedef OnClickMenu = Function(int index);
 
-class FDialogMenuView extends StatelessWidget {
+class FDialogMenuView extends StatelessWidget implements FDialogView {
   final String title;
   final TextStyle titleTextStyle;
-  final VoidCallback onClickClose;
 
   final List<dynamic> menus;
   final TextStyle menusTextStyle;
@@ -15,15 +16,28 @@ class FDialogMenuView extends StatelessWidget {
   final OnClickMenu onClickMenu;
   final int selectedIndex;
 
+  FDialog _dialog;
+
   FDialogMenuView({
     this.title = '',
     this.titleTextStyle,
-    this.onClickClose,
     this.menus,
     this.menusTextStyle,
     this.onClickMenu,
     this.selectedIndex = -1,
   }) : assert(menus != null);
+
+  @override
+  void applyDialog(FDialog dialog) {
+    _dialog = dialog;
+    if (dialog.dialogViewWrapper == null) {
+      dialog.dialogViewWrapper = FSimpleDialogViewWrapper(
+        alignment: Alignment.bottomCenter,
+        borderRadius: BorderRadius.zero,
+        padding: EdgeInsets.zero,
+      );
+    }
+  }
 
   Widget buildTitle(
     BuildContext context,
@@ -55,31 +69,31 @@ class FDialogMenuView extends StatelessWidget {
       child: widgetTextTitle,
     ));
 
-    if (onClickClose != null) {
-      Widget widgetClose = Container(
-        color: Colors.transparent,
-        padding: EdgeInsets.only(
-          left: 10,
-          right: 10,
-        ),
-        height: double.infinity,
-        child: Icon(
-          Icons.close,
-          size: 20,
-          color: Color(0xFF8d97a3),
-        ),
-      );
+    Widget widgetClose = Container(
+      color: Colors.transparent,
+      padding: EdgeInsets.only(
+        left: 10,
+        right: 10,
+      ),
+      height: double.infinity,
+      child: Icon(
+        Icons.close,
+        size: 20,
+        color: Color(0xFF8d97a3),
+      ),
+    );
 
-      widgetClose = GestureDetector(
-        child: widgetClose,
-        onTap: onClickClose,
-      );
+    widgetClose = GestureDetector(
+      child: widgetClose,
+      onTap: () {
+        _dialog.dismiss();
+      },
+    );
 
-      listTitle.add(Container(
-        alignment: Alignment.centerRight,
-        child: widgetClose,
-      ));
-    }
+    listTitle.add(Container(
+      alignment: Alignment.centerRight,
+      child: widgetClose,
+    ));
 
     return Container(
       height: 40,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'dialog_view_wrapper.dart';
-
 abstract class FDialogViewWrapper {
   Widget wrap(BuildContext context, Widget widget);
+}
+
+abstract class FDialogView {
+  void applyDialog(FDialog dialog);
 }
 
 class FDialog {
@@ -15,7 +17,7 @@ class FDialog {
   /// 窗口关闭监听
   VoidCallback onDismissListener;
 
-  FDialogViewWrapper dialogViewWrapper = FSimpleDialogViewWrapper();
+  FDialogViewWrapper dialogViewWrapper;
 
   Widget _widget;
   bool _isShowing = false;
@@ -25,6 +27,11 @@ class FDialog {
   Widget _widgetBuilder(BuildContext context) {
     return _InternalWidget(
       builder: (context) {
+        if (_widget is FDialogView) {
+          final FDialogView dialogView = _widget as FDialogView;
+          dialogView.applyDialog(this);
+        }
+
         Widget current = _widget;
         if (dialogViewWrapper != null) {
           current = dialogViewWrapper.wrap(context, current);
