@@ -132,16 +132,7 @@ class FDialogMenuView extends StatelessWidget {
 
     widgetMenu = wrapMenuHeight(widgetMenu);
     widgetMenu = wrapMenuPadding(widgetMenu);
-
-    widgetMenu = InkWell(
-      child: widgetMenu,
-      onTap: onClickMenu == null
-          ? null
-          : () {
-              onClickMenu(index);
-            },
-    );
-
+    widgetMenu = wrapClick(widgetMenu, index);
     widgetMenu = wrapMenuBottomDivider(widgetMenu);
     return widgetMenu;
   }
@@ -160,6 +151,17 @@ class FDialogMenuView extends StatelessWidget {
         right: 10,
       ),
       child: widget,
+    );
+  }
+
+  Widget wrapClick(Widget widget, int index) {
+    return InkWell(
+      child: widget,
+      onTap: onClickMenu == null
+          ? null
+          : () {
+              onClickMenu(index);
+            },
     );
   }
 
