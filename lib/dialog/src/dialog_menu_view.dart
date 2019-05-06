@@ -203,6 +203,10 @@ class FDialogMenuView extends StatelessWidget {
         },
       );
 
+      widgetMenus = Flexible(
+        child: widgetMenus,
+      );
+
       list.add(widgetMenus);
     }
 
