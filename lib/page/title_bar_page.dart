@@ -14,7 +14,6 @@ class _TitleBarPageState extends State<TitleBarPage> {
         appBar: FSimpleTitleBar(
           middle: Text(
             widget.runtimeType.toString(),
-            style: FTextStyle.titleBar(),
           ),
         ),
         body: Container(),
