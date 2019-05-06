@@ -15,6 +15,19 @@ class _TitleBarPageState extends State<TitleBarPage> {
           middle: Text(
             widget.runtimeType.toString(),
           ),
+          right: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              FTitleBarItem(
+                Text('aa'),
+                onClick: () {},
+              ),
+              FTitleBarItem(
+                Text('bb'),
+                onClick: () {},
+              ),
+            ],
+          ),
         ),
         body: Container(),
       ),
