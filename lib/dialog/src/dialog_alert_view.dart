@@ -42,7 +42,7 @@ class FDialogAlertView extends StatelessWidget {
     );
   }
 
-  Widget wrapActions(
+  Widget transformActions(
       {@required List<Widget> widgets, BuildContext context}) {
     final List<Widget> list = [];
 
@@ -51,7 +51,7 @@ class FDialogAlertView extends StatelessWidget {
       list.add(Expanded(child: item));
 
       if (i < widgets.length - 1) {
-        list.add(createActionsDivider());
+        list.add(buildActionsDivider());
       }
     }
 
@@ -60,7 +60,7 @@ class FDialogAlertView extends StatelessWidget {
     );
   }
 
-  Widget createActionsDividerTop() {
+  Widget buildActionsTopDivider() {
     return Container(
       color: Color(0xFF999999),
       width: double.infinity,
@@ -68,7 +68,7 @@ class FDialogAlertView extends StatelessWidget {
     );
   }
 
-  Widget createActionsDivider() {
+  Widget buildActionsDivider() {
     return Container(
       color: Color(0xFF999999),
       width: 0.3,
@@ -136,12 +136,12 @@ class FDialogAlertView extends StatelessWidget {
 
     if (actions != null && actions.isNotEmpty) {
       if (actionsDividerTop == null) {
-        list.add(createActionsDividerTop());
+        list.add(buildActionsTopDivider());
       } else {
         list.add(actionsDividerTop);
       }
 
-      final Widget actionsTransform = wrapActions(
+      final Widget actionsTransform = transformActions(
         widgets: actions,
         context: context,
       );
