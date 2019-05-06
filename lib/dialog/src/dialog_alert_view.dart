@@ -25,14 +25,14 @@ class FDialogAlertView extends StatelessWidget {
     this.actionsHeight = 36,
   });
 
-  Widget wrapTitle({@required Widget widget, BuildContext context}) {
+  Widget wrapTitle(Widget widget) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: widget,
     );
   }
 
-  Widget wrapContent({@required Widget widget, BuildContext context}) {
+  Widget wrapContent(Widget widget) {
     return Container(
       margin: EdgeInsets.only(
         top: 15,
@@ -42,8 +42,7 @@ class FDialogAlertView extends StatelessWidget {
     );
   }
 
-  Widget transformActions(
-      {@required List<Widget> widgets, BuildContext context}) {
+  Widget transformActions(List<Widget> widgets, BuildContext context) {
     final List<Widget> list = [];
 
     for (int i = 0; i < widgets.length; i++) {
@@ -78,20 +77,15 @@ class FDialogAlertView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     final DialogTheme dialogTheme = DialogTheme.of(context);
 
     final List<Widget> list = [];
 
     if (title != null) {
-      final Widget titleTransform = wrapTitle(
-        widget: title,
-        context: context,
-      );
+      final Widget widgetTitle = wrapTitle(title);
 
       final TextStyle targetTextStyle = titleTextStyle ??
           dialogTheme.titleTextStyle ??
-          theme.textTheme.title ??
           TextStyle(
             fontSize: 16,
             color: Color(0xFF333333),
@@ -99,15 +93,12 @@ class FDialogAlertView extends StatelessWidget {
 
       list.add(DefaultTextStyle(
         style: targetTextStyle,
-        child: titleTransform,
+        child: widgetTitle,
       ));
     }
 
     if (content != null) {
-      Widget current = wrapContent(
-        widget: content,
-        context: context,
-      );
+      Widget widgetContent = wrapContent(content);
 
       final EdgeInsetsGeometry targetPadding = contentPadding ??
           EdgeInsets.only(
@@ -115,14 +106,13 @@ class FDialogAlertView extends StatelessWidget {
             right: 10,
           );
 
-      current = Padding(
+      widgetContent = Padding(
         padding: targetPadding,
-        child: current,
+        child: widgetContent,
       );
 
       final TextStyle targetTextStyle = contentTextStyle ??
           dialogTheme.contentTextStyle ??
-          theme.textTheme.subhead ??
           TextStyle(
             fontSize: 14,
             color: Color(0xFF666666),
@@ -130,7 +120,7 @@ class FDialogAlertView extends StatelessWidget {
 
       list.add(DefaultTextStyle(
         style: targetTextStyle,
-        child: current,
+        child: widgetContent,
       ));
     }
 
@@ -142,8 +132,8 @@ class FDialogAlertView extends StatelessWidget {
       }
 
       final Widget actionsTransform = transformActions(
-        widgets: actions,
-        context: context,
+        actions,
+        context,
       );
 
       list.add(SizedBox(
