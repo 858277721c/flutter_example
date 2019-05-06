@@ -10,15 +10,13 @@ class FDialogProgressView extends StatelessWidget {
     this.content,
     this.progressSize = 26,
     this.padding = 13,
-    this.textStyle = const TextStyle(
-      fontSize: 13,
-      color: const Color(0xFF333333),
-    ),
+    this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> list = [];
+
     list.add(SizedBox(
       child: CircularProgressIndicator(
         strokeWidth: 2,
@@ -36,7 +34,11 @@ class FDialogProgressView extends StatelessWidget {
     if (content != null) {
       list.add(Text(
         content,
-        style: textStyle,
+        style: textStyle ??
+            TextStyle(
+              fontSize: 13,
+              color: const Color(0xFF333333),
+            ),
       ));
     }
 
