@@ -67,6 +67,7 @@ class FDialogMenuView extends StatelessWidget {
           left: 10,
           right: 10,
         ),
+        height: double.infinity,
         child: Icon(
           Icons.close,
           size: 20,
