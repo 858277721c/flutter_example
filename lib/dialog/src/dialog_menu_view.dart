@@ -9,9 +9,6 @@ class FDialogMenuView extends StatelessWidget {
   final TextStyle titleTextStyle;
   final VoidCallback onClickClose;
 
-  final String cancel;
-  final TextStyle cancelTextStyle;
-
   final List<dynamic> menus;
   final TextStyle menusTextStyle;
 
@@ -19,11 +16,9 @@ class FDialogMenuView extends StatelessWidget {
   final int selectedIndex;
 
   FDialogMenuView({
-    this.title,
+    this.title = '',
     this.titleTextStyle,
     this.onClickClose,
-    this.cancel = '',
-    this.cancelTextStyle,
     this.menus,
     this.menusTextStyle,
     this.onClickMenu,
