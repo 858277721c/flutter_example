@@ -25,14 +25,14 @@ class FDialogAlertView extends StatelessWidget {
     this.actionsHeight = 36,
   });
 
-  Widget transformTitle({@required Widget widget, BuildContext context}) {
+  Widget wrapTitle({@required Widget widget, BuildContext context}) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: widget,
     );
   }
 
-  Widget transformContent({@required Widget widget, BuildContext context}) {
+  Widget wrapContent({@required Widget widget, BuildContext context}) {
     return Container(
       margin: EdgeInsets.only(
         top: 15,
@@ -42,7 +42,7 @@ class FDialogAlertView extends StatelessWidget {
     );
   }
 
-  Widget transformActions(
+  Widget wrapActions(
       {@required List<Widget> widgets, BuildContext context}) {
     final List<Widget> list = [];
 
@@ -84,7 +84,7 @@ class FDialogAlertView extends StatelessWidget {
     final List<Widget> list = [];
 
     if (title != null) {
-      final Widget titleTransform = transformTitle(
+      final Widget titleTransform = wrapTitle(
         widget: title,
         context: context,
       );
@@ -104,7 +104,7 @@ class FDialogAlertView extends StatelessWidget {
     }
 
     if (content != null) {
-      Widget current = transformContent(
+      Widget current = wrapContent(
         widget: content,
         context: context,
       );
@@ -141,7 +141,7 @@ class FDialogAlertView extends StatelessWidget {
         list.add(actionsDividerTop);
       }
 
-      final Widget actionsTransform = transformActions(
+      final Widget actionsTransform = wrapActions(
         widgets: actions,
         context: context,
       );
