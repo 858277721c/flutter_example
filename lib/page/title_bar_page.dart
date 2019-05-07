@@ -12,7 +12,7 @@ class _TitleBarPageState extends State<TitleBarPage> {
     return FSafeArea(
       child: Scaffold(
         appBar: FSimpleTitleBar(
-          elevation: 20,
+          elevation: 4,
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fitWidth,
