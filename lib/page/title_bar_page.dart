@@ -12,6 +12,13 @@ class _TitleBarPageState extends State<TitleBarPage> {
     return FSafeArea(
       child: Scaffold(
         appBar: FSimpleTitleBar(
+          elevation: 20,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.fitWidth,
+              image: AssetImage('images/bg_blue.png'),
+            ),
+          ),
           middle: Text(
             widget.runtimeType.toString(),
           ),

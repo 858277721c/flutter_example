@@ -27,7 +27,7 @@ dependencies:
   flib_core:
     git:
       url: git://github.com/zj565061763/flib_core
-      ref: 08cbba219a12d829f90f8e27c291a3695f404398
+      ref: ccc6a06adc73286bc01ed5316ed29f5ad45b5352
 
   flib_builder:
     git:
@@ -48,6 +48,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+  - images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
