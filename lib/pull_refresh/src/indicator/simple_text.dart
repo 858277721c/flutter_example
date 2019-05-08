@@ -41,8 +41,35 @@ class _SimpleTextIndicatorState extends State<_SimpleTextIndicator> {
 
   void _onStateChanged(FPullRefreshState state) {}
 
+  String _getStateText() {
+    switch (widget.controller.state) {
+      case FPullRefreshState.idle:
+        return '';
+      case FPullRefreshState.pullRefresh:
+        return '下载刷新';
+      case FPullRefreshState.releaseRefresh:
+        break;
+      case FPullRefreshState.refresh:
+        return '刷新中';
+      case FPullRefreshState.refreshResult:
+        final dynamic result = widget.controller.refreshResult;
+        if (result is bool) {
+          if (result) {
+            return '刷新成功';
+          } else {
+            return '刷新失败';
+          }
+        }
+        return '刷新完成';
+      case FPullRefreshState.refreshFinish:
+        return '下载刷新';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Text(_getStateText()),
+    );
   }
 }

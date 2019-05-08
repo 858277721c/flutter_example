@@ -36,6 +36,8 @@ abstract class FPullRefreshController {
 
   FPullRefreshDirection get refreshDirection;
 
+  dynamic get refreshResult;
+
   void addStateChangeCallback(FPullRefreshStateChangeCallback callback);
 
   void removeStateChangeCallback(FPullRefreshStateChangeCallback callback);
@@ -53,6 +55,8 @@ class FSimplePullRefreshController implements FPullRefreshController {
   FPullRefreshState _state = FPullRefreshState.idle;
   FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
 
+  dynamic _refreshResult;
+
   final List<FPullRefreshStateChangeCallback> _listStateChangeCallback = [];
 
   Timer _stopRefreshTimer;
@@ -62,6 +66,9 @@ class FSimplePullRefreshController implements FPullRefreshController {
 
   @override
   FPullRefreshDirection get refreshDirection => _refreshDirection;
+
+  @override
+  get refreshResult => _refreshResult;
 
   @override
   void addStateChangeCallback(FPullRefreshStateChangeCallback callback) {
@@ -112,6 +119,10 @@ class FSimplePullRefreshController implements FPullRefreshController {
     }
 
     _notifyStateChangeCallback(state);
+
+    if (state == FPullRefreshState.idle) {
+      _refreshResult = null;
+    }
   }
 
   void _setDirection(FPullRefreshDirection direction) {
@@ -141,6 +152,7 @@ class FSimplePullRefreshController implements FPullRefreshController {
   void stopRefresh({dynamic result}) {
     if (result != null) {
       if (_state == FPullRefreshState.refresh) {
+        _refreshResult = result;
         _setState(FPullRefreshState.refreshResult);
       }
     } else {
