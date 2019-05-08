@@ -26,7 +26,7 @@ class _ListViewPageState extends State<ListViewPage> {
           ' Update: ' +
           notification.metrics.toString() +
           ' ' +
-          notification.metrics.viewportDimension.toString());
+          notification.scrollDelta.toString());
     } else if (notification is ScrollEndNotification) {
       print(runtimeType.toString() +
           ' End: ' +
@@ -34,11 +34,8 @@ class _ListViewPageState extends State<ListViewPage> {
           ' ' +
           notification.metrics.viewportDimension.toString());
     } else if (notification is UserScrollNotification) {
-      print(runtimeType.toString() +
-          ' User: ' +
-          notification.metrics.toString() +
-          ' ' +
-          notification.metrics.viewportDimension.toString());
+      print(
+          runtimeType.toString() + ' User: ' + notification.metrics.toString());
     }
   }
 
