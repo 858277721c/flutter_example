@@ -54,7 +54,10 @@ class FSimplePullRefresh implements FPullRefresh {
 
     _state = state;
 
-    _stopRefreshTimer?.cancel();
+    if (_stopRefreshTimer != null) {
+      _stopRefreshTimer.cancel();
+      _stopRefreshTimer = null;
+    }
     if (state == FPullRefreshState.refreshResult) {
       _stopRefreshTimer = Timer(Duration(milliseconds: 600), () {
         stopRefresh();
