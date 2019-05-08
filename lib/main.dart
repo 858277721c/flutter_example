@@ -12,6 +12,7 @@ import 'package:my_flutter/page/stepper_page.dart';
 import 'package:my_flutter/page/system_bar_page.dart';
 import 'package:my_flutter/page/text_field_page.dart';
 import 'package:my_flutter/page/title_bar_page.dart';
+import 'package:my_flutter/page/pull_refresh_page.dart';
 
 void main() {
   FRes.getInstance().init(
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
     (EventBusPage).toString(): (_) => EventBusPage(),
     (ChangeNumberPage).toString(): (_) => ChangeNumberPage(),
     (NewPage).toString(): (_) => NewPage(),
+    (PullRefreshPage).toString(): (_) => PullRefreshPage(),
   };
 
   // This widget is the root of your application.
