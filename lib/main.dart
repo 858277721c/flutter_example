@@ -13,6 +13,7 @@ import 'package:my_flutter/page/system_bar_page.dart';
 import 'package:my_flutter/page/text_field_page.dart';
 import 'package:my_flutter/page/title_bar_page.dart';
 import 'package:my_flutter/page/pull_refresh_page.dart';
+import 'package:my_flutter/page/listview_page.dart';
 
 void main() {
   FRes.getInstance().init(
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
     (ChangeNumberPage).toString(): (_) => ChangeNumberPage(),
     (NewPage).toString(): (_) => NewPage(),
     (PullRefreshPage).toString(): (_) => PullRefreshPage(),
+    (ListViewPage).toString(): (_) => ListViewPage(),
   };
 
   // This widget is the root of your application.
