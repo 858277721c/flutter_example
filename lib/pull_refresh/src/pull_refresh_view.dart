@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 
 import 'pull_refresh.dart';
 
@@ -8,10 +9,13 @@ class FPullRefreshView extends StatefulWidget {
   final FPullRefreshIndicator indicatorBottom;
 
   FPullRefreshView({
-    FPullRefreshController controller,
-    this.indicatorTop,
-    this.indicatorBottom,
-  }) : this.controller = controller ?? FSimplePullRefreshController();
+    @required this.controller,
+    FPullRefreshIndicator indicatorTop,
+    FPullRefreshIndicator indicatorBottom,
+  })  : assert(controller != null),
+        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator(),
+        this.indicatorBottom =
+            indicatorBottom ?? FSimpleTextPullRefreshIndicator();
 
   @override
   _FPullRefreshViewState createState() => _FPullRefreshViewState();
