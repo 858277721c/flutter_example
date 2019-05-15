@@ -1,7 +1,7 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
 
-import 'business.dart';
+import 'view_model.dart';
 
 class ChangeNumberPage extends StatefulWidget {
   @override
@@ -9,18 +9,18 @@ class ChangeNumberPage extends StatefulWidget {
 }
 
 class _ChangeNumberPageState
-    extends FRouteState<ChangeNumberPage, ChangeNumberBusiness> {
+    extends FRouteState<ChangeNumberPage, ChangeNumberViewModel> {
   bool addTestView = false;
 
   @override
-  ChangeNumberBusiness createBusiness() {
-    return ChangeNumberBusiness(this);
+  ChangeNumberViewModel createViewModel() {
+    return ChangeNumberViewModel(this);
   }
 
   @override
   void initState() {
     super.initState();
-    business.addTestView.addObserver((value) {
+    viewModel.addTestView.addObserver((value) {
       addTestView = value;
       reBuild();
     }, this);
@@ -35,7 +35,7 @@ class _ChangeNumberPageState
 
     list.add(FButton.raised(
       onPressed: () {
-        business.toggleTestView();
+        viewModel.toggleTestView();
       },
       child: Text('toggle view'),
     ));
@@ -71,7 +71,7 @@ class _NumberViewState
 
   @override
   void onTargetState(_ChangeNumberPageState state) {
-    state.business.number.addObserver((value) {
+    state.viewModel.number.addObserver((value) {
       number = value;
       reBuild();
     }, this);
@@ -85,7 +85,7 @@ class _NumberViewState
         right: 10,
       ),
       onPressed: () {
-        targetState.business.changeNumber();
+        targetState.viewModel.changeNumber();
       },
       child: Text(number.toString()),
     );
@@ -102,7 +102,7 @@ class _TestViewState extends FTargetState<_TestView, _ChangeNumberPageState> {
 
   @override
   void onTargetState(_ChangeNumberPageState state) {
-    state.business.number.addObserver((value) {
+    state.viewModel.number.addObserver((value) {
       number = value;
       reBuild();
     }, this);

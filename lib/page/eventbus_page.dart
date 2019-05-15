@@ -1,4 +1,5 @@
 import 'package:flib_core/flib_core.dart';
+import 'package:flib_event_bus/flib_event_bus.dart';
 import 'package:flutter/material.dart';
 
 class EventBusPage extends StatefulWidget {
@@ -32,11 +33,9 @@ class _EventBusPageState extends State<EventBusPage> {
               ),
               onPressed: () {
                 _number++;
-                FEventBus.getDefault().post(_ENumberChange(_number));
+                FEventBus.singleton.post(_ENumberChange(_number));
               },
-              child: Text(
-                _number.toString(),
-              ),
+              child: Text('click'),
             ),
             _TestView(),
           ],
@@ -57,7 +56,7 @@ class _TestViewState extends FState<_TestView> {
   @override
   void initState() {
     super.initState();
-    FEventBus.getDefault().addObserver<_ENumberChange>((event) {
+    FEventBus.singleton.addObserver<_ENumberChange>((event) {
       _number = event.number;
       reBuild();
     }, this);

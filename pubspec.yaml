@@ -27,12 +27,18 @@ dependencies:
   flib_core:
     git:
       url: git://github.com/zj565061763/flib_core
-      ref: bd9914c1fa75878b5a4d5980381415500a23fc53
+      ref: 578c1936c1cd6aee5633314eaad11c53e4dc65c3
 
   flib_builder:
     git:
       url: git://github.com/zj565061763/flib_builder
       ref: 46ec0f08b5996f9e7e671f00b74e1d1c652b028d
+
+  flib_event_bus:
+    git:
+      url: git://github.com/zj565061763/flib_event_bus
+      ref: 6ee0e1ab59d67fa00ad1cd0019aea0d6a30b9c21
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
