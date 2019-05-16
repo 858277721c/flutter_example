@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 
+import 'direction_helper.dart';
 import 'pull_refresh.dart';
 
 class FPullRefreshView extends StatefulWidget {
@@ -29,10 +30,24 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   AnimationController _animationController;
 
   FPullRefreshState _state = FPullRefreshState.idle;
+  double _offset = 0.0;
+
+  DirectionHelper topHelper;
+  DirectionHelper bottomHelper;
 
   @override
   void initState() {
     super.initState();
+    topHelper = TopDirectionHelper(
+      widget.indicatorTop,
+      widget.controller,
+    );
+
+    bottomHelper = BottomDirectionHelper(
+      widget.indicatorBottom,
+      widget.controller,
+    );
+
     widget.controller.addStateChangeCallback(_onStateChanged);
     _animationController = AnimationController(vsync: this);
   }
@@ -71,19 +86,18 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     }
   }
 
-  Widget _wrapTransform(Widget widget) {
-    return Transform.translate(
-      offset: Offset(0, 0),
-      child: widget,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> list = [];
-    Widget widgetTop = widget.indicatorTop.build(widget.controller);
+    Widget widgetTop = topHelper.newWidget();
+    widgetTop = topHelper.wrapPosition(widgetTop, _offset);
 
+    Widget widgetBottom = bottomHelper.newWidget();
+    widgetBottom = bottomHelper.wrapPosition(widgetBottom, _offset);
+
+    final List<Widget> list = [];
     list.add(widget.child);
+    list.add(widgetTop);
+    list.add(widgetBottom);
 
     Widget result = Stack(
       children: list,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter/pull_refresh/src/pull_refresh.dart';
 
-class FSimpleTextPullRefreshIndicator implements FPullRefreshIndicator {
+class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
   @override
   Widget build(FPullRefreshController controller) {
     return _SimpleTextIndicator(controller);

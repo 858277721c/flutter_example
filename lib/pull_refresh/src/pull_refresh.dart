@@ -49,6 +49,10 @@ abstract class FPullRefreshController {
 
 abstract class FPullRefreshIndicator {
   Widget build(FPullRefreshController controller);
+
+  double getRefreshSize() {
+    return null;
+  }
 }
 
 class FSimplePullRefreshController implements FPullRefreshController {
