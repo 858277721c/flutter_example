@@ -1,6 +1,8 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
 
+import 'new_page.dart';
+
 class LifecyclePage extends StatefulWidget {
   @override
   _LifecyclePageState createState() => _LifecyclePageState();
@@ -25,7 +27,14 @@ class _LifecyclePageState extends FState<LifecyclePage> {
         title: Text(widget.runtimeType.toString()),
       ),
       body: SingleChildScrollView(
-        child: Container(),
+        child: Container(
+          child: GestureDetector(
+            child: Text('click'),
+            onTap: () {
+              Navigator.of(context).pushNamed((NewPage).toString());
+            },
+          ),
+        ),
       ),
     ));
   }
