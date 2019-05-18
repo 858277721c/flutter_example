@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 
@@ -5,17 +7,14 @@ import 'direction_helper.dart';
 import 'pull_refresh.dart';
 
 class FPullRefreshView extends StatefulWidget {
-  final FPullRefreshController controller;
   final Widget child;
 
   final FPullRefreshIndicator indicatorTop;
 
   FPullRefreshView({
-    @required this.controller,
     @required this.child,
     FPullRefreshIndicator indicatorTop,
-  })  : assert(controller != null),
-        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator();
+  }) : this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator();
 
   @override
   _FPullRefreshViewState createState() => _FPullRefreshViewState();
@@ -26,19 +25,18 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   AnimationController _animationController;
 
   FPullRefreshState _state = FPullRefreshState.idle;
-  double _offset = 0.0;
+  FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
 
+  double _offset = 0.0;
   DirectionHelper topHelper;
+
+  Timer _refreshResultTimer;
 
   @override
   void initState() {
     super.initState();
-    topHelper = TopDirectionHelper(
-      widget.indicatorTop,
-      widget.controller,
-    );
+    topHelper = TopDirectionHelper(widget.indicatorTop);
 
-    widget.controller.addStateChangeCallback(_onStateChanged);
     _animationController = AnimationController(
       vsync: this,
       lowerBound: -1000,
@@ -47,40 +45,45 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   }
 
   @override
-  void didUpdateWidget(FPullRefreshView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      oldWidget.controller.removeStateChangeCallback(_onStateChanged);
-      widget.controller.addStateChangeCallback(_onStateChanged);
-    }
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  @override
   void dispose() {
-    widget.controller.removeStateChangeCallback(_onStateChanged);
+    _animationController.dispose();
     super.dispose();
   }
 
-  void _onStateChanged(FPullRefreshState state) {
-    _updateIfNeed();
+  void _setState(FPullRefreshState state) {
+    assert(state != null);
+
+    final FPullRefreshState old = _state;
+    if (old == state) {
+      return;
+    }
+
+    assert(_refreshDirection != FPullRefreshDirection.none);
+
+    _state = state;
+
+    if (_refreshResultTimer != null) {
+      _refreshResultTimer.cancel();
+      _refreshResultTimer = null;
+    }
+    if (state == FPullRefreshState.refreshResult) {
+      _refreshResultTimer = Timer(Duration(milliseconds: 600), () {
+        _stopRefresh();
+      });
+    }
   }
 
-  void _updateIfNeed() {}
+  void _stopRefresh() {}
 
   void _updateOffset(double delta) {
-    _offset += delta;
-    _animationController.value = _offset;
+    final double targetOffset = _offset += delta;
+
+    _offset = targetOffset;
+    _animationController.value = targetOffset;
   }
 
-  Widget _buildTop() {
-    Widget widget = topHelper.newWidget();
+  Widget _buildTop(BuildContext context) {
+    Widget widget = topHelper.newWidget(context, _state);
     final double offset = topHelper.getIndicatorOffset(_offset);
 
     print('top offset: $offset');
@@ -98,7 +101,7 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     final Widget widgetTop = AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
-        return _buildTop();
+        return _buildTop(context);
       },
     );
 
@@ -129,7 +132,7 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
         switch (axisDirection) {
           case AxisDirection.down:
             if (notification.metrics.extentBefore == 0.0) {
-              _state = FPullRefreshState.pullRefresh;
+              _setState(FPullRefreshState.pullRefresh);
             }
             break;
           case AxisDirection.up:

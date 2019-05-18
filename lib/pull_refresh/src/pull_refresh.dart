@@ -18,7 +18,7 @@ enum FPullRefreshState {
   /// 刷新中
   refresh,
 
-  /// 展示刷新结果，用于扩展刷新成功和失败
+  /// 展示刷新结果
   refreshResult,
 
   /// 刷新结束，如果未做任何操作，在动画结束后，回到[FPullRefreshState.idle]状态
@@ -48,7 +48,10 @@ abstract class FPullRefreshController {
 }
 
 abstract class FPullRefreshIndicator {
-  Widget build(FPullRefreshController controller);
+  Widget build(
+    BuildContext context,
+    FPullRefreshState state,
+  );
 
   double getRefreshSize() {
     return null;

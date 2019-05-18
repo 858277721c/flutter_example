@@ -4,15 +4,11 @@ import 'pull_refresh.dart';
 
 abstract class DirectionHelper {
   final GlobalKey<_IndicatorWrapperState> key = GlobalKey();
-
   final FPullRefreshIndicator indicator;
-  final FPullRefreshController controller;
 
   DirectionHelper(
     this.indicator,
-    this.controller,
-  )   : assert(indicator != null),
-        assert(controller != null);
+  ) : assert(indicator != null);
 
   Size _getIndicatorRealSize() {
     final _IndicatorWrapperState state = key.currentState;
@@ -22,11 +18,17 @@ abstract class DirectionHelper {
     return null;
   }
 
-  Widget newWidget() {
+  Widget newWidget(
+    BuildContext context,
+    FPullRefreshState state,
+  ) {
     return _IndicatorWrapper(
       key: key,
       builder: (context) {
-        return indicator.build(controller);
+        return indicator.build(
+          context,
+          state,
+        );
       },
     );
   }
@@ -42,23 +44,10 @@ abstract class DirectionHelper {
     }
     return size;
   }
-
-  Widget wrapPosition(Widget widget, double offset) {
-    return Positioned(
-      child: widget,
-      top: getIndicatorOffset(offset),
-    );
-  }
 }
 
 abstract class _VerticalHelper extends DirectionHelper {
-  _VerticalHelper(
-    FPullRefreshIndicator indicator,
-    FPullRefreshController controller,
-  ) : super(
-          indicator,
-          controller,
-        );
+  _VerticalHelper(FPullRefreshIndicator indicator) : super(indicator);
 
   @override
   double getIndicatorSize() {
@@ -66,33 +55,26 @@ abstract class _VerticalHelper extends DirectionHelper {
     if (size != null) {
       return size.height;
     }
-    return 0.0;
+    return null;
   }
 }
 
 class TopDirectionHelper extends _VerticalHelper {
-  TopDirectionHelper(
-    FPullRefreshIndicator indicator,
-    FPullRefreshController controller,
-  ) : super(
-          indicator,
-          controller,
-        );
+  TopDirectionHelper(FPullRefreshIndicator indicator) : super(indicator);
 
   @override
   double getIndicatorOffset(double offset) {
-    return -getIndicatorSize() + offset;
+    final double size = getIndicatorSize();
+    if (size == null) {
+      return -double.infinity;
+    }
+
+    return -size + offset;
   }
 }
 
 class BottomDirectionHelper extends _VerticalHelper {
-  BottomDirectionHelper(
-    FPullRefreshIndicator indicator,
-    FPullRefreshController controller,
-  ) : super(
-          indicator,
-          controller,
-        );
+  BottomDirectionHelper(FPullRefreshIndicator indicator) : super(indicator);
 
   @override
   double getIndicatorOffset(double offset) {
