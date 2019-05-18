@@ -36,6 +36,9 @@ class _ListViewPageState extends State<ListViewPage> {
     } else if (notification is UserScrollNotification) {
       print(
           runtimeType.toString() + ' User: ' + notification.metrics.toString());
+    } else if (notification is OverscrollNotification) {
+      print(
+          runtimeType.toString() + ' Overscroll: ' + notification.metrics.toString());
     }
   }
 
