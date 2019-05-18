@@ -14,11 +14,20 @@ abstract class DirectionHelper {
   )   : assert(indicator != null),
         assert(controller != null);
 
+  Size _getIndicatorRealSize() {
+    final _IndicatorWrapperState state = key.currentState;
+    if (state != null && state.mounted) {
+      return state.size;
+    }
+    return null;
+  }
+
   Widget newWidget() {
     return _IndicatorWrapper(
       key: key,
-      indicator: indicator,
-      controller: controller,
+      builder: (context) {
+        return indicator.build(controller);
+      },
     );
   }
 
@@ -53,12 +62,9 @@ abstract class _VerticalHelper extends DirectionHelper {
 
   @override
   double getIndicatorSize() {
-    final _IndicatorWrapperState state = key.currentState;
-    if (state != null) {
-      final Size size = state.size;
-      if (size != null) {
-        return size.height;
-      }
+    final Size size = _getIndicatorRealSize();
+    if (size != null) {
+      return size.height;
     }
     return 0.0;
   }
@@ -95,15 +101,12 @@ class BottomDirectionHelper extends _VerticalHelper {
 }
 
 class _IndicatorWrapper extends StatefulWidget {
-  final FPullRefreshIndicator indicator;
-  final FPullRefreshController controller;
+  final WidgetBuilder builder;
 
   _IndicatorWrapper({
     Key key,
-    this.indicator,
-    this.controller,
-  })  : assert(indicator != null),
-        assert(controller != null),
+    this.builder,
+  })  : assert(builder != null),
         super(key: key);
 
   @override
@@ -112,14 +115,17 @@ class _IndicatorWrapper extends StatefulWidget {
 
 class _IndicatorWrapperState extends State<_IndicatorWrapper> {
   Size get size {
-    if (context == null) {
-      return null;
+    if (context != null) {
+      final RenderObject renderObject = context.findRenderObject();
+      if (renderObject is RenderBox) {
+        return renderObject.size;
+      }
     }
-    return context.size;
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.indicator.build(widget.controller);
+    return widget.builder(context);
   }
 }

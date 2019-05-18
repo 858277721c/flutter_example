@@ -9,17 +9,13 @@ class FPullRefreshView extends StatefulWidget {
   final Widget child;
 
   final FPullRefreshIndicator indicatorTop;
-  final FPullRefreshIndicator indicatorBottom;
 
   FPullRefreshView({
     @required this.controller,
     @required this.child,
     FPullRefreshIndicator indicatorTop,
-    FPullRefreshIndicator indicatorBottom,
   })  : assert(controller != null),
-        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator(),
-        this.indicatorBottom =
-            indicatorBottom ?? FSimpleTextPullRefreshIndicator();
+        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator();
 
   @override
   _FPullRefreshViewState createState() => _FPullRefreshViewState();
@@ -30,23 +26,15 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   AnimationController _animationController;
 
   FPullRefreshState _state = FPullRefreshState.idle;
-
-  bool _isDrag = false;
   double _offset = 0.0;
 
   DirectionHelper topHelper;
-  DirectionHelper bottomHelper;
 
   @override
   void initState() {
     super.initState();
     topHelper = TopDirectionHelper(
       widget.indicatorTop,
-      widget.controller,
-    );
-
-    bottomHelper = BottomDirectionHelper(
-      widget.indicatorBottom,
       widget.controller,
     );
 
@@ -80,26 +68,34 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     _updateIfNeed();
   }
 
-  void _updateIfNeed() {
-    final FPullRefreshState newState = widget.controller.state;
-    if (_state != newState) {
-      _state = newState;
-      setState(() {});
-    }
+  void _updateIfNeed() {}
+
+  void _updateOffset(double delta) {
+    _offset += delta;
+    _animationController.value = _offset;
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget widgetTop = topHelper.newWidget();
-    widgetTop = topHelper.wrapPosition(widgetTop, _offset);
+    final Widget widgetTop = AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        Widget widget = topHelper.newWidget();
+        final double top = topHelper.getIndicatorOffset(_offset);
 
-    Widget widgetBottom = bottomHelper.newWidget();
-    widgetBottom = bottomHelper.wrapPosition(widgetBottom, _offset);
+        print('top offset: $top');
+
+        widget = Positioned(
+          child: widget,
+          top: top,
+        );
+        return widget;
+      },
+    );
 
     final List<Widget> list = [];
     list.add(widget.child);
     list.add(widgetTop);
-    list.add(widgetBottom);
 
     Widget result = Stack(
       children: list,
@@ -124,18 +120,23 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
         switch (axisDirection) {
           case AxisDirection.down:
             if (notification.metrics.extentBefore == 0.0) {
-              _isDrag = true;
+              _state = FPullRefreshState.pullRefresh;
             }
             break;
           case AxisDirection.up:
-            // TODO: Handle this case.
             break;
           default:
             break;
         }
       }
     } else if (notification is ScrollUpdateNotification) {
-      _offset -= notification.dragDetails.primaryDelta;
+    } else if (notification is OverscrollNotification) {
+      if (_state == FPullRefreshState.pullRefresh ||
+          _state == FPullRefreshState.releaseRefresh) {
+        _updateOffset(notification.dragDetails.primaryDelta / 3);
+      }
+    } else if (notification is ScrollEndNotification) {
+      _offset = 0;
     }
 
     return false;
