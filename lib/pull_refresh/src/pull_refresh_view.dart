@@ -39,7 +39,11 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     );
 
     widget.controller.addStateChangeCallback(_onStateChanged);
-    _animationController = AnimationController(vsync: this);
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: -1000,
+      upperBound: 1000,
+    );
   }
 
   @override
@@ -75,21 +79,26 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     _animationController.value = _offset;
   }
 
+  Widget _buildTop() {
+    Widget widget = topHelper.newWidget();
+    final double offset = topHelper.getIndicatorOffset(_offset);
+
+    print('top offset: $offset');
+
+    widget = Transform.translate(
+      offset: Offset(0.0, offset),
+      child: widget,
+    );
+
+    return widget;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget widgetTop = AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
-        Widget widget = topHelper.newWidget();
-        final double top = topHelper.getIndicatorOffset(_offset);
-
-        print('top offset: $top');
-
-        widget = Positioned(
-          child: widget,
-          top: top,
-        );
-        return widget;
+        return _buildTop();
       },
     );
 

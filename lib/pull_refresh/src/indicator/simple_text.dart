@@ -44,9 +44,9 @@ class _SimpleTextIndicatorState extends State<_SimpleTextIndicator> {
   String _getStateText() {
     switch (widget.controller.state) {
       case FPullRefreshState.idle:
-        return '';
+        return '下拉刷新';
       case FPullRefreshState.pullRefresh:
-        return '下载刷新';
+        return '下拉刷新';
       case FPullRefreshState.releaseRefresh:
         break;
       case FPullRefreshState.refresh:
@@ -62,7 +62,7 @@ class _SimpleTextIndicatorState extends State<_SimpleTextIndicator> {
         }
         return '刷新完成';
       case FPullRefreshState.refreshFinish:
-        return '下载刷新';
+        return '下拉刷新';
     }
   }
 
