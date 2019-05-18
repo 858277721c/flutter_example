@@ -16,29 +16,19 @@ class _ListViewPageState extends State<ListViewPage> {
 
   bool _onNotificationListenerCallback(ScrollNotification notification) {
     if (notification is ScrollStartNotification) {
-      print(runtimeType.toString() +
-          ' Start: ' +
-          notification.metrics.toString() +
-          ' ' +
-          notification.metrics.viewportDimension.toString());
+      print(
+          '$runtimeType----- Start: ${notification.metrics} ${notification.metrics.viewportDimension}');
     } else if (notification is ScrollUpdateNotification) {
-      print(runtimeType.toString() +
-          ' Update: ' +
-          notification.metrics.toString() +
-          ' ' +
-          notification.scrollDelta.toString());
+      print('$runtimeType----- Update: ${notification.scrollDelta}');
     } else if (notification is ScrollEndNotification) {
-      print(runtimeType.toString() +
-          ' End: ' +
-          notification.metrics.toString() +
-          ' ' +
-          notification.metrics.viewportDimension.toString());
+      print(
+          '$runtimeType----- End: ${notification.metrics} ${notification.metrics.viewportDimension}');
     } else if (notification is UserScrollNotification) {
       print(
-          runtimeType.toString() + ' User: ' + notification.metrics.toString());
+          '$runtimeType----- User: ${notification.metrics} ${notification.direction}');
     } else if (notification is OverscrollNotification) {
       print(
-          runtimeType.toString() + ' Overscroll: ' + notification.metrics.toString());
+          '$runtimeType----- Over: ${notification.metrics} ${notification.overscroll}');
     }
   }
 
