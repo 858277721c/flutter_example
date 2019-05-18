@@ -16,7 +16,7 @@ abstract class DirectionHelper {
 
   Size _getIndicatorRealSize() {
     final _IndicatorWrapperState state = key.currentState;
-    if (state != null && state.mounted) {
+    if (state != null) {
       return state.size;
     }
     return null;
@@ -115,7 +115,7 @@ class _IndicatorWrapper extends StatefulWidget {
 
 class _IndicatorWrapperState extends State<_IndicatorWrapper> {
   Size get size {
-    if (context != null) {
+    if (mounted) {
       final RenderObject renderObject = context.findRenderObject();
       if (renderObject is RenderBox) {
         return renderObject.size;
