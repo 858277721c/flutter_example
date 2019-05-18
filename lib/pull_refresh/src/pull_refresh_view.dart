@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 
 import 'direction_helper.dart';
@@ -28,14 +29,15 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
 
   double _offset = 0.0;
-  DirectionHelper topHelper;
+  DirectionHelper _topHelper;
+  DirectionHelper _helper;
 
   Timer _refreshResultTimer;
 
   @override
   void initState() {
     super.initState();
-    topHelper = TopDirectionHelper(widget.indicatorTop);
+    _topHelper = TopDirectionHelper(widget.indicatorTop);
 
     _animationController = AnimationController(
       vsync: this,
@@ -50,6 +52,29 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     super.dispose();
   }
 
+  void _setDirection(FPullRefreshDirection direction) {
+    assert(direction != null);
+    assert(_state == FPullRefreshState.idle);
+
+    if (_refreshDirection != direction) {
+      _refreshDirection = direction;
+
+      print('$runtimeType-----  _setDirection: $direction');
+
+      switch (direction) {
+        case FPullRefreshDirection.top:
+          _helper = _topHelper;
+          break;
+        case FPullRefreshDirection.bottom:
+          _helper = null;
+          break;
+        default:
+          _helper = null;
+          break;
+      }
+    }
+  }
+
   void _setState(FPullRefreshState state) {
     assert(state != null);
 
@@ -61,6 +86,8 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
     assert(_refreshDirection != FPullRefreshDirection.none);
 
     _state = state;
+
+    print('$runtimeType----- _setState: $state');
 
     if (_refreshResultTimer != null) {
       _refreshResultTimer.cancel();
@@ -78,15 +105,26 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   void _updateOffset(double delta) {
     final double targetOffset = _offset += delta;
 
+    print('$runtimeType----- _offset: $targetOffset');
+
+    final double refreshSize = _helper.getRefreshSize();
+    if (targetOffset.abs() >= refreshSize) {
+      if (_state == FPullRefreshState.pullRefresh) {
+        _setState(FPullRefreshState.releaseRefresh);
+      }
+    } else {
+      if (_state == FPullRefreshState.releaseRefresh) {
+        _setState(FPullRefreshState.pullRefresh);
+      }
+    }
+
     _offset = targetOffset;
     _animationController.value = targetOffset;
   }
 
   Widget _buildTop(BuildContext context) {
-    Widget widget = topHelper.newWidget(context, _state);
-    final double offset = topHelper.getIndicatorOffset(_offset);
-
-    print('top offset: $offset');
+    Widget widget = _topHelper.newWidget(context, _state);
+    final double offset = _topHelper.getIndicatorOffset(_offset);
 
     widget = Transform.translate(
       offset: Offset(0.0, offset),
@@ -127,19 +165,24 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
 
   bool _handleNotification(ScrollNotification notification) {
     if (notification is ScrollStartNotification) {
-      if (_canPull(notification)) {
-        final AxisDirection axisDirection = notification.metrics.axisDirection;
-        switch (axisDirection) {
-          case AxisDirection.down:
-            if (notification.metrics.extentBefore == 0.0) {
+    } else if (notification is UserScrollNotification) {
+      switch (notification.direction) {
+        case ScrollDirection.forward:
+          if (_canPull(notification)) {
+            if (notification.metrics.extentBefore == 0.0 &&
+                _topHelper.getIndicatorSize() != null) {
+              _setDirection(FPullRefreshDirection.top);
               _setState(FPullRefreshState.pullRefresh);
             }
-            break;
-          case AxisDirection.up:
-            break;
-          default:
-            break;
-        }
+          }
+          break;
+        case ScrollDirection.reverse:
+          break;
+        case ScrollDirection.idle:
+          if (_state == FPullRefreshState.releaseRefresh) {
+            _setState(FPullRefreshState.refresh);
+          }
+          break;
       }
     } else if (notification is ScrollUpdateNotification) {
     } else if (notification is OverscrollNotification) {
