@@ -30,6 +30,8 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   AnimationController _animationController;
 
   FPullRefreshState _state = FPullRefreshState.idle;
+
+  bool _isDrag = false;
   double _offset = 0.0;
 
   DirectionHelper topHelper;
@@ -112,16 +114,29 @@ class _FPullRefreshViewState extends State<FPullRefreshView>
   }
 
   bool _canPull(ScrollNotification notification) {
-    return notification.metrics.extentBefore == 0.0 &&
-        _state == FPullRefreshState.idle;
+    return _state == FPullRefreshState.idle;
   }
 
   bool _handleNotification(ScrollNotification notification) {
     if (notification is ScrollStartNotification) {
-      if (_canPull(notification)) {}
-
-      if (notification.metrics.axisDirection == AxisDirection.down) {}
-    } else if (notification is ScrollUpdateNotification) {}
+      if (_canPull(notification)) {
+        final AxisDirection axisDirection = notification.metrics.axisDirection;
+        switch (axisDirection) {
+          case AxisDirection.down:
+            if (notification.metrics.extentBefore == 0.0) {
+              _isDrag = true;
+            }
+            break;
+          case AxisDirection.up:
+            // TODO: Handle this case.
+            break;
+          default:
+            break;
+        }
+      }
+    } else if (notification is ScrollUpdateNotification) {
+      _offset -= notification.dragDetails.primaryDelta;
+    }
 
     return false;
   }
