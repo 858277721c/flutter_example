@@ -31,7 +31,7 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
           leading: Text('leading'),
           title: Text('title'),
           subtitle: Text('subtitle'),
-          trailing: Text('trailing'),
+          trailing: Text(index.toString()),
           selected: index % 2 == 0,
         );
       },
