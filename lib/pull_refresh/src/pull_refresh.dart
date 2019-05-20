@@ -273,14 +273,27 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return widget.controller;
   }
 
+  DirectionHelper get currentHelper {
+    switch (controller._refreshDirection) {
+      case FPullRefreshDirection.top:
+        return _topHelper;
+      case FPullRefreshDirection.bottom:
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  double get currentOffset {
+    return _animationController.value;
+  }
+
   @override
   void initState() {
     super.initState();
-    controller.addStateChangeCallback((oldState, newState) {
-      _scrollByState();
-    });
-
     _topHelper = TopDirectionHelper(widget.indicatorTop);
+
+    controller.addStateChangeCallback(_stateChangeCallback);
 
     _animationController = AnimationController(
       value: 0.0,
@@ -288,7 +301,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       lowerBound: -1000,
       upperBound: 1000,
     );
-
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         switch (controller.state) {
@@ -307,23 +319,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   @override
   void dispose() {
+    controller.removeStateChangeCallback(_stateChangeCallback);
     _animationController.dispose();
     super.dispose();
   }
 
-  DirectionHelper get currentHelper {
-    switch (controller._refreshDirection) {
-      case FPullRefreshDirection.top:
-        return _topHelper;
-      case FPullRefreshDirection.bottom:
-        return null;
-      default:
-        return null;
-    }
-  }
-
-  double get currentOffset {
-    return _animationController.value;
+  void _stateChangeCallback(
+    FPullRefreshState oldState,
+    FPullRefreshState newState,
+  ) {
+    _scrollByState();
   }
 
   void _updateOffset(double delta) {
