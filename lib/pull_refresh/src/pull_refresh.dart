@@ -306,12 +306,29 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     }
   }
 
-  double get offset {
+  double get currentOffset {
     return _animationController.value;
   }
 
   void _updateOffset(double delta) {
-    final double targetOffset = offset + delta;
+    double targetOffset = currentOffset + delta;
+
+    switch (controller._refreshDirection) {
+      case FPullRefreshDirection.top:
+        if (targetOffset < 0) {
+          if (currentOffset == 0) {
+            return;
+          }
+          targetOffset = 0;
+        }
+
+        break;
+      case FPullRefreshDirection.bottom:
+        // TODO: Handle this case.
+        break;
+      default:
+        break;
+    }
 
     final double refreshSize = currentHelper.getRefreshSize();
     if (targetOffset.abs() > refreshSize) {
@@ -323,6 +340,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         controller._setState(FPullRefreshState.pullRefresh);
       }
     }
+
+    print('$runtimeType----- targetOffset: $targetOffset');
 
     _animationController.value = targetOffset;
   }
@@ -358,11 +377,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       }
     } else if (notification is OverscrollNotification) {
       if (_isDrag) {
-        _updateOffset(-notification.overscroll / 3);
+        final double delta = -notification.overscroll / 3;
+        _updateOffset(delta);
       }
     } else if (notification is ScrollUpdateNotification) {
       if (_isDrag) {
-        _updateOffset(-notification.scrollDelta / 2);
+        final double delta = -notification.scrollDelta / 2;
+        if (delta > 0 && notification.metrics.extentBefore != 0.0) {
+        } else {
+          _updateOffset(delta);
+        }
       }
     } else if (notification is ScrollEndNotification) {}
 
@@ -380,7 +404,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           duration: currentHelper.getAnimationDuration(
             _kMinDuration,
             _kMaxDuration,
-            offset - targetOffset,
+            currentOffset - targetOffset,
           ),
         );
         break;
@@ -390,7 +414,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           duration: currentHelper.getAnimationDuration(
             _kMinDuration,
             _kMaxDuration,
-            offset,
+            currentOffset,
           ),
         );
         break;
@@ -401,7 +425,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   Widget _buildTop(BuildContext context) {
     Widget widget = _topHelper.newWidget(context, controller.state);
-    final double targetOffset = _topHelper.getIndicatorOffset(offset);
+    final double targetOffset = _topHelper.getIndicatorOffset(currentOffset);
 
     widget = Transform.translate(
       offset: Offset(0.0, targetOffset),
@@ -413,7 +437,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   Widget _buildChild() {
     return Transform.translate(
-      offset: Offset(0.0, offset),
+      offset: Offset(0.0, currentOffset),
       child: widget.child,
     );
   }
