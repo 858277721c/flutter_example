@@ -1,5 +1,6 @@
 import 'package:flib_core/flib_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_flutter/pull_refresh/flib_pull_refresh.dart';
 
 class PullRefreshPage extends StatefulWidget {
   @override
@@ -9,9 +10,16 @@ class PullRefreshPage extends StatefulWidget {
 class _PullRefreshPageState extends State<PullRefreshPage> {
   final List<String> list = List.filled(20, "1", growable: true);
 
+  final FPullRefreshController pullRefreshController = FPullRefreshController();
+
   @override
   void initState() {
     super.initState();
+    pullRefreshController.setRefreshCallback((direction) {
+      Future.delayed(Duration(seconds: 2)).then((value) {
+        pullRefreshController.stopRefresh();
+      });
+    });
   }
 
   @override
@@ -29,12 +37,7 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
       },
     );
 
-    body = RefreshIndicator(
-      child: body,
-      onRefresh: () {
-        return Future.delayed(Duration(seconds: 2));
-      },
-    );
+    body = pullRefreshController.newRefreshWidget(child: body);
 
     body = Container(child: body);
 

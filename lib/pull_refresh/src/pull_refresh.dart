@@ -48,8 +48,8 @@ abstract class FPullRefreshIndicator {
   }
 }
 
-const Duration _kMaxDuration = const Duration(milliseconds: 400);
-const Duration _kMinDuration = const Duration(milliseconds: 200);
+const Duration _kMaxDuration = const Duration(milliseconds: 150);
+const Duration _kMinDuration = const Duration(milliseconds: 50);
 
 //---------- Controller ----------
 
