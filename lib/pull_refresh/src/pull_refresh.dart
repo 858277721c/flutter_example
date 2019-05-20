@@ -9,8 +9,7 @@ import 'direction_helper.dart';
 typedef FPullRefreshStateChangeCallback = void Function(
     FPullRefreshState state);
 
-typedef FPullRefreshDirectionChangeCallback = void Function(
-    FPullRefreshDirection direction);
+typedef FPullRefreshCallback = void Function(FPullRefreshDirection direction);
 
 enum FPullRefreshState {
   /// 空闲
@@ -49,25 +48,59 @@ abstract class FPullRefreshIndicator {
   }
 }
 
-class FPullRefreshController {
+abstract class FPullRefreshController {
+  factory FPullRefreshController() {
+    return _SimplePullRefreshController();
+  }
+
+  FPullRefreshState get state;
+
+  dynamic get refreshResult;
+
+  /// 设置刷新回调
+  void setRefreshCallback(FPullRefreshCallback callback);
+
+  /// 添加状态变化回调
+  void addStateChangeCallback(FPullRefreshStateChangeCallback callback);
+
+  /// 移除状态变化回调
+  void removeStateChangeCallback(FPullRefreshStateChangeCallback callback);
+
+  /// 触发刷新
+  void startRefresh(FPullRefreshDirection direction);
+
+  /// 停止刷新
+  void stopRefresh({dynamic result});
+
+  /// 创建一个刷新Widget
+  Widget newRefreshWidget({
+    @required Widget child,
+    FPullRefreshIndicator indicatorTop,
+  });
+}
+
+class _SimplePullRefreshController implements FPullRefreshController {
   FPullRefreshState _state = FPullRefreshState.idle;
   FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
 
   dynamic _refreshResult;
-
-  final List<FPullRefreshStateChangeCallback> _listStateChangeCallback = [];
-  final List<FPullRefreshDirectionChangeCallback> _listDirectionChangeCallback =
-      [];
-
   Timer _stopRefreshTimer;
 
+  FPullRefreshCallback _refreshCallback;
+  final List<FPullRefreshStateChangeCallback> _listStateChangeCallback = [];
+
+  @override
   FPullRefreshState get state => _state;
 
-  FPullRefreshDirection get refreshDirection => _refreshDirection;
-
+  @override
   dynamic get refreshResult => _refreshResult;
 
-  /// 添加状态变化回调
+  @override
+  void setRefreshCallback(FPullRefreshCallback callback) {
+    _refreshCallback = callback;
+  }
+
+  @override
   void addStateChangeCallback(FPullRefreshStateChangeCallback callback) {
     if (callback == null || _listStateChangeCallback.contains(callback)) {
       return;
@@ -75,27 +108,12 @@ class FPullRefreshController {
     _listStateChangeCallback.add(callback);
   }
 
-  /// 移除状态变化回调
+  @override
   void removeStateChangeCallback(FPullRefreshStateChangeCallback callback) {
     _listStateChangeCallback.remove(callback);
   }
 
-  /// 添加方向变化回调
-  void addDirectionChangeCallback(
-      FPullRefreshDirectionChangeCallback callback) {
-    if (callback == null || _listDirectionChangeCallback.contains(callback)) {
-      return;
-    }
-    _listDirectionChangeCallback.add(callback);
-  }
-
-  /// 移除方向变化回调
-  void removeDirectionChangeCallback(
-      FPullRefreshDirectionChangeCallback callback) {
-    _listDirectionChangeCallback.remove(callback);
-  }
-
-  /// 触发刷新
+  @override
   void startRefresh(FPullRefreshDirection direction) {
     assert(direction != null);
     assert(direction != FPullRefreshDirection.none);
@@ -106,7 +124,7 @@ class FPullRefreshController {
     }
   }
 
-  /// 停止刷新
+  @override
   void stopRefresh({dynamic result}) {
     if (result != null) {
       if (_state == FPullRefreshState.refresh) {
@@ -123,6 +141,18 @@ class FPullRefreshController {
     }
   }
 
+  @override
+  Widget newRefreshWidget({
+    @required Widget child,
+    FPullRefreshIndicator indicatorTop,
+  }) {
+    return _PullRefreshView(
+      controller: this,
+      child: child,
+      indicatorTop: indicatorTop,
+    );
+  }
+
   void _notifyStateChangeCallback(FPullRefreshState state) {
     if (_listStateChangeCallback.isEmpty) {
       return;
@@ -136,17 +166,22 @@ class FPullRefreshController {
     });
   }
 
-  void _notifyDirectionChangeCallback(FPullRefreshDirection direction) {
-    if (_listDirectionChangeCallback.isEmpty) {
-      return;
+  void _notifyRefreshCallback() {
+    assert(_refreshDirection != FPullRefreshDirection.none);
+    if (_refreshCallback != null) {
+      _refreshCallback(_refreshDirection);
     }
+  }
 
-    final List<FPullRefreshDirectionChangeCallback> listCopy =
-        List.from(_listDirectionChangeCallback);
+  void _setDirection(FPullRefreshDirection direction) {
+    assert(direction != null);
+    assert(_state == FPullRefreshState.idle);
 
-    listCopy.forEach((item) {
-      item(direction);
-    });
+    if (_refreshDirection != direction) {
+      _refreshDirection = direction;
+
+      print('$runtimeType-----  _setDirection: $direction');
+    }
   }
 
   void _setState(FPullRefreshState state) {
@@ -180,31 +215,7 @@ class FPullRefreshController {
     }
   }
 
-  void _setDirection(FPullRefreshDirection direction) {
-    assert(direction != null);
-    assert(_state == FPullRefreshState.idle);
-
-    if (_refreshDirection != direction) {
-      _refreshDirection = direction;
-
-      print('$runtimeType-----  _setDirection: $direction');
-
-      _notifyDirectionChangeCallback(direction);
-    }
-  }
-
   void _updateUIByState() {}
-
-  Widget newWidget({
-    @required Widget child,
-    FPullRefreshIndicator indicatorTop,
-  }) {
-    return _PullRefreshView(
-      controller: this,
-      child: child,
-      indicatorTop: indicatorTop,
-    );
-  }
 }
 
 class _PullRefreshView extends StatefulWidget {
@@ -230,7 +241,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   DirectionHelper _topHelper;
 
-  FPullRefreshController get controller {
+  _SimplePullRefreshController get controller {
     return widget.controller;
   }
 
@@ -251,6 +262,10 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     });
 
     _animationController.addListener(() {
+      if (controller.state == FPullRefreshState.refresh) {
+        controller._notifyRefreshCallback();
+      }
+
       print('$runtimeType AnimationValue: ${_animationController.value}');
     });
   }
@@ -262,7 +277,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   DirectionHelper get currentHelper {
-    switch (controller.refreshDirection) {
+    switch (controller._refreshDirection) {
       case FPullRefreshDirection.top:
         return _topHelper;
       case FPullRefreshDirection.bottom:
