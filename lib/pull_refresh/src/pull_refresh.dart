@@ -48,6 +48,8 @@ abstract class FPullRefreshIndicator {
   }
 }
 
+//---------- Controller ----------
+
 abstract class FPullRefreshController {
   factory FPullRefreshController() {
     return _SimplePullRefreshController();
@@ -222,6 +224,8 @@ class _SimplePullRefreshController implements FPullRefreshController {
   void _updateUIByState() {}
 }
 
+//---------- View ----------
+
 class _PullRefreshView extends StatefulWidget {
   final FPullRefreshController controller;
 
@@ -266,11 +270,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     );
 
     _animationController.addStatusListener((status) {
-      print(
-          '$runtimeType----- AnimationStatus: $status state:${controller.state}');
       if (status == AnimationStatus.completed) {
-        if (controller.state == FPullRefreshState.refresh) {
-          controller._notifyRefreshCallback();
+        switch (controller.state) {
+          case FPullRefreshState.refresh:
+            controller._notifyRefreshCallback();
+            break;
+          case FPullRefreshState.refreshFinish:
+            controller._setState(FPullRefreshState.idle);
+            break;
+          default:
+            break;
         }
       }
     });
@@ -300,10 +309,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   void _updateOffset(double delta) {
     final double targetOffset = offset + delta;
 
-    print('$runtimeType----- targetOffset: $targetOffset');
-
     final double refreshSize = currentHelper.getRefreshSize();
-    if (targetOffset.abs() >= refreshSize) {
+    if (targetOffset.abs() > refreshSize) {
       if (controller.state == FPullRefreshState.pullRefresh) {
         controller._setState(FPullRefreshState.releaseRefresh);
       }
@@ -365,8 +372,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       case FPullRefreshState.refresh:
         final double targetOffset = currentHelper.getRefreshOffset();
 
-        _animationController.animateTo(targetOffset,
-            duration: Duration(seconds: 1));
+        _animationController.animateTo(
+          targetOffset,
+          duration: Duration(seconds: 1),
+        );
+        break;
+      case FPullRefreshState.refreshFinish:
+        _animationController.animateTo(
+          0,
+          duration: Duration(seconds: 1),
+        );
         break;
       default:
         break;
