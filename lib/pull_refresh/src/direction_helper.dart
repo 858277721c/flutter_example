@@ -33,10 +33,13 @@ abstract class DirectionHelper {
     );
   }
 
+  /// 指示器的大小，可能为null
   double getIndicatorSize();
 
+  /// 指示器的位置，不为null
   double getIndicatorOffset(double offset);
 
+  /// 指示器可以触发刷新的大小，可能为null
   double getRefreshSize() {
     double size = indicator.getRefreshSize();
     if (size == null) {
