@@ -251,6 +251,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   AnimationController _animationController;
 
   DirectionHelper _topHelper;
+  bool _isDrag = false;
 
   _SimplePullRefreshController get controller {
     return widget.controller;
@@ -330,11 +331,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return controller.state == FPullRefreshState.idle;
   }
 
-  bool _isDrag() {
-    return controller.state == FPullRefreshState.pullRefresh ||
-        controller.state == FPullRefreshState.releaseRefresh;
-  }
-
   bool _handleNotification(ScrollNotification notification) {
     if (notification is ScrollStartNotification) {
     } else if (notification is UserScrollNotification) {
@@ -343,6 +339,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           if (_canPull(notification)) {
             if (notification.metrics.extentBefore == 0.0 &&
                 _topHelper.getIndicatorSize() != null) {
+              _isDrag = true;
               controller._setDirection(FPullRefreshDirection.top);
               controller._setState(FPullRefreshState.pullRefresh);
             }
@@ -351,17 +348,18 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         case ScrollDirection.reverse:
           break;
         case ScrollDirection.idle:
+          _isDrag = false;
           if (controller.state == FPullRefreshState.releaseRefresh) {
             controller._setState(FPullRefreshState.refresh);
           }
           break;
       }
     } else if (notification is OverscrollNotification) {
-      if (_isDrag()) {
+      if (_isDrag) {
         _updateOffset(notification.dragDetails.primaryDelta / 3);
       }
     } else if (notification is ScrollUpdateNotification) {
-      if (_isDrag()) {
+      if (_isDrag) {
         _updateOffset(-notification.scrollDelta / 2);
       }
     } else if (notification is ScrollEndNotification) {}
