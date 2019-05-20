@@ -250,12 +250,12 @@ class _SimplePullRefreshController implements FPullRefreshController {
       });
     }
 
-    _notifyStateChangeCallback(state);
-
     if (state == FPullRefreshState.idle) {
       _refreshResult = null;
       _setDirection(FPullRefreshDirection.none);
     }
+
+    _notifyStateChangeCallback(state);
   }
 
   void _setDirection(FPullRefreshDirection direction) {
@@ -372,7 +372,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _updateIndicator() {
-    _animationController.value = _animationController.value;
+    if (controller._refreshDirection != FPullRefreshDirection.none) {
+      _animationController.value = _animationController.value;
+    }
   }
 
   void _scrollByState() {
