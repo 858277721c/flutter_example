@@ -62,6 +62,10 @@ abstract class FPullRefreshController {
 
   dynamic get refreshResult;
 
+  bool get overlayMode;
+
+  void set overlayMode(bool overlay);
+
   /// 设置刷新回调
   void setRefreshCallback(FPullRefreshCallback callback);
 
@@ -88,6 +92,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
   FPullRefreshState _state = FPullRefreshState.idle;
   FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
 
+  bool _overlayMode = false;
   dynamic _refreshResult;
   Timer _stopRefreshTimer;
 
@@ -99,6 +104,17 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
   @override
   dynamic get refreshResult => _refreshResult;
+
+  @override
+  bool get overlayMode => _overlayMode;
+
+  @override
+  void set overlayMode(bool overlay) {
+    assert(overlay != null);
+    assert(_state == FPullRefreshState.idle,
+        'overlayMode can only changed in FPullRefreshState.idle state');
+    _overlayMode = overlay;
+  }
 
   @override
   void setRefreshCallback(FPullRefreshCallback callback) {
@@ -450,12 +466,14 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       },
     );
 
-    Widget widgetChild = AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return _buildChild();
-      },
-    );
+    final Widget widgetChild = controller.overlayMode
+        ? widget.child
+        : AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return _buildChild();
+            },
+          );
 
     final List<Widget> list = [];
     list.add(widgetChild);
