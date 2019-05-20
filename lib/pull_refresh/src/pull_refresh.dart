@@ -511,12 +511,11 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       },
     );
 
-    final List<Widget> list = [];
-    list.add(widgetChild);
-    list.add(widgetTop);
-
     return Stack(
-      children: list,
+      children: <Widget>[
+        widgetChild,
+        widgetTop,
+      ],
     );
   }
 }
