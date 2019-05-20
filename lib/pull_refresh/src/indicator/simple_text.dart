@@ -6,9 +6,9 @@ class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
     switch (state) {
       case FPullRefreshState.idle:
         return '下拉刷新';
-      case FPullRefreshState.pullRefresh:
+      case FPullRefreshState.pullStart:
         return '下拉刷新';
-      case FPullRefreshState.releaseRefresh:
+      case FPullRefreshState.pullReady:
         return '松开刷新';
       case FPullRefreshState.refresh:
         return '刷新中';

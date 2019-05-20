@@ -18,11 +18,11 @@ enum FPullRefreshState {
   /// 空闲状态
   idle,
 
-  /// 下拉刷新，还未达到可以刷新的条件
-  pullRefresh,
+  /// 拖动状态，还未达到可以刷新的条件
+  pullStart,
 
-  /// 松开刷新，已经达到可以刷新的条件
-  releaseRefresh,
+  /// 拖动状态，已经达到可以刷新的条件
+  pullReady,
 
   /// 刷新中
   refresh,
@@ -30,7 +30,7 @@ enum FPullRefreshState {
   /// 展示刷新结果
   refreshResult,
 
-  /// 结束状态，如果未做任何操作，在动画结束后，回到[FPullRefreshState.idle]状态
+  /// 结束状态，在动画结束后，回到[FPullRefreshState.idle]状态
   finish,
 }
 
@@ -451,7 +451,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
             if (notification.metrics.extentBefore == 0.0) {
               _isDrag = true;
               controller._setDirection(FPullRefreshDirection.top);
-              controller._setState(FPullRefreshState.pullRefresh);
+              controller._setState(FPullRefreshState.pullStart);
             }
           }
           break;
@@ -459,9 +459,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           break;
         case ScrollDirection.idle:
           _isDrag = false;
-          if (controller.state == FPullRefreshState.releaseRefresh) {
+          if (controller.state == FPullRefreshState.pullReady) {
             controller._setState(FPullRefreshState.refresh);
-          } else if (controller.state == FPullRefreshState.pullRefresh) {
+          } else if (controller.state == FPullRefreshState.pullStart) {
             controller._setState(FPullRefreshState.finish);
           }
           break;
@@ -510,12 +510,12 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
     final double refreshSize = currentHelper.getRefreshSize();
     if (targetOffset.abs() > refreshSize) {
-      if (controller.state == FPullRefreshState.pullRefresh) {
-        controller._setState(FPullRefreshState.releaseRefresh);
+      if (controller.state == FPullRefreshState.pullStart) {
+        controller._setState(FPullRefreshState.pullReady);
       }
     } else {
-      if (controller.state == FPullRefreshState.releaseRefresh) {
-        controller._setState(FPullRefreshState.pullRefresh);
+      if (controller.state == FPullRefreshState.pullReady) {
+        controller._setState(FPullRefreshState.pullStart);
       }
     }
 
