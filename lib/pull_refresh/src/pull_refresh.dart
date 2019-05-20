@@ -488,16 +488,17 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   @override
   Widget build(BuildContext context) {
-    Widget widgetChild = _wrapNotification(widget.child);
-    if (!controller.overlayMode) {
-      widgetChild = AnimatedBuilder(
-        child: widgetChild,
-        animation: _animationController,
-        builder: (context, child) {
-          return _wrapChildTransform(child);
-        },
-      );
-    }
+    final Widget widgetNotification = _wrapNotification(widget.child);
+
+    final Widget widgetChild = controller.overlayMode
+        ? widgetNotification
+        : AnimatedBuilder(
+            child: widgetNotification,
+            animation: _animationController,
+            builder: (context, child) {
+              return _wrapChildTransform(child);
+            },
+          );
 
     final Widget widgetTop = AnimatedBuilder(
       animation: _animationController,
