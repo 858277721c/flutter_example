@@ -350,15 +350,32 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       }
     });
 
+    _registerController(controller);
+  }
+
+  void _registerController(FPullRefreshController controller) {
     controller.addStateChangeCallback(_stateChangeCallback);
     controller.addDirectionChangeCallback(_directionChangeCallback);
+  }
+
+  void _unregisterController(FPullRefreshController controller) {
+    controller.removeStateChangeCallback(_stateChangeCallback);
+    controller.removeDirectionChangeCallback(_directionChangeCallback);
+  }
+
+  @override
+  void didUpdateWidget(_PullRefreshView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      _unregisterController(oldWidget.controller);
+      _registerController(controller);
+    }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    controller.removeStateChangeCallback(_stateChangeCallback);
-    controller.removeDirectionChangeCallback(_directionChangeCallback);
+    _unregisterController(controller);
     super.dispose();
   }
 
