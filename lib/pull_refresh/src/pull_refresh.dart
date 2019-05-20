@@ -351,8 +351,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   bool _handleNotification(ScrollNotification notification) {
-    if (notification is ScrollStartNotification) {
-    } else if (notification is UserScrollNotification) {
+    if (notification is UserScrollNotification) {
       switch (notification.direction) {
         case ScrollDirection.forward:
           if (_canPull(notification)) {
@@ -388,7 +387,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           _updateOffset(delta);
         }
       }
-    } else if (notification is ScrollEndNotification) {}
+    }
 
     return false;
   }
