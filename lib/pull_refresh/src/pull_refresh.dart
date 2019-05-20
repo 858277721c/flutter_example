@@ -12,7 +12,7 @@ typedef FPullRefreshStateChangeCallback = void Function(
 typedef FPullRefreshCallback = void Function(FPullRefreshDirection direction);
 
 enum FPullRefreshState {
-  /// 空闲
+  /// 空闲状态
   idle,
 
   /// 下拉刷新，还未达到可以刷新的条件
@@ -27,8 +27,8 @@ enum FPullRefreshState {
   /// 展示刷新结果
   refreshResult,
 
-  /// 刷新结束，如果未做任何操作，在动画结束后，回到[FPullRefreshState.idle]状态
-  refreshFinish,
+  /// 结束状态，如果未做任何操作，在动画结束后，回到[FPullRefreshState.idle]状态
+  finish,
 }
 
 enum FPullRefreshDirection {
@@ -140,7 +140,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
     } else {
       if (_state == FPullRefreshState.refresh ||
           _state == FPullRefreshState.refreshResult) {
-        _setState(FPullRefreshState.refreshFinish);
+        _setState(FPullRefreshState.finish);
         _updateUIByState();
       }
     }
@@ -279,7 +279,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           case FPullRefreshState.refresh:
             controller._notifyRefreshCallback();
             break;
-          case FPullRefreshState.refreshFinish:
+          case FPullRefreshState.finish:
             controller._setState(FPullRefreshState.idle);
             break;
           default:
@@ -351,12 +351,14 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           _isDrag = false;
           if (controller.state == FPullRefreshState.releaseRefresh) {
             controller._setState(FPullRefreshState.refresh);
+          } else if (controller.state == FPullRefreshState.pullRefresh) {
+            controller._setState(FPullRefreshState.finish);
           }
           break;
       }
     } else if (notification is OverscrollNotification) {
       if (_isDrag) {
-        _updateOffset(notification.dragDetails.primaryDelta / 3);
+        _updateOffset(-notification.overscroll / 3);
       }
     } else if (notification is ScrollUpdateNotification) {
       if (_isDrag) {
@@ -382,7 +384,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           ),
         );
         break;
-      case FPullRefreshState.refreshFinish:
+      case FPullRefreshState.finish:
         _animationController.animateTo(
           0,
           duration: currentHelper.getAnimationDuration(

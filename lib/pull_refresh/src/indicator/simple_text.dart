@@ -14,7 +14,7 @@ class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
         return '刷新中';
       case FPullRefreshState.refreshResult:
         return '刷新完成';
-      case FPullRefreshState.refreshFinish:
+      case FPullRefreshState.finish:
         return '下拉刷新';
     }
     return '';
