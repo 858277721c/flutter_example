@@ -141,7 +141,6 @@ class _SimplePullRefreshController implements FPullRefreshController {
     if (_state == FPullRefreshState.idle) {
       _setDirection(FPullRefreshDirection.top);
       _setState(FPullRefreshState.refresh);
-      _updateUIByState();
     }
   }
 
@@ -151,13 +150,11 @@ class _SimplePullRefreshController implements FPullRefreshController {
       if (_state == FPullRefreshState.refresh) {
         _refreshResult = result;
         _setState(FPullRefreshState.refreshResult);
-        _updateUIByState();
       }
     } else {
       if (_state == FPullRefreshState.refresh ||
           _state == FPullRefreshState.refreshResult) {
         _setState(FPullRefreshState.finish);
-        _updateUIByState();
       }
     }
   }
@@ -239,8 +236,6 @@ class _SimplePullRefreshController implements FPullRefreshController {
       _refreshResult = null;
     }
   }
-
-  void _updateUIByState() {}
 }
 
 //---------- View ----------
