@@ -48,6 +48,9 @@ abstract class FPullRefreshIndicator {
   }
 }
 
+const Duration _kMaxDuration = const Duration(microseconds: 400);
+const Duration _kMinDuration = const Duration(microseconds: 200);
+
 //---------- Controller ----------
 
 abstract class FPullRefreshController {
@@ -374,13 +377,21 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
         _animationController.animateTo(
           targetOffset,
-          duration: Duration(seconds: 1),
+          duration: currentHelper.getAnimationDuration(
+            _kMinDuration,
+            _kMaxDuration,
+            offset - targetOffset,
+          ),
         );
         break;
       case FPullRefreshState.refreshFinish:
         _animationController.animateTo(
           0,
-          duration: Duration(seconds: 1),
+          duration: currentHelper.getAnimationDuration(
+            _kMinDuration,
+            _kMaxDuration,
+            offset,
+          ),
         );
         break;
       default:

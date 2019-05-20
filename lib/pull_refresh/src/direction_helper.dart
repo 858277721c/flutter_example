@@ -46,6 +46,47 @@ abstract class DirectionHelper {
   }
 
   double getRefreshOffset();
+
+  Duration getAnimationDuration(
+    Duration minDuration,
+    Duration maxDuration,
+    double distance,
+  ) {
+    return _computeDuration(
+      minDuration: minDuration,
+      maxDuration: maxDuration,
+      distance: distance,
+      distanceMax: getIndicatorSize(),
+    );
+  }
+
+  static _computeDuration({
+    Duration minDuration,
+    Duration maxDuration,
+    double distance,
+    double distanceMax,
+  }) {
+    assert(minDuration != null);
+    assert(maxDuration != null);
+
+    if (distance == null || distance == 0) {
+      return minDuration;
+    }
+
+    if (distanceMax == null || distanceMax == 0) {
+      return minDuration;
+    }
+
+    distance = distance.abs();
+    distanceMax = distanceMax.abs();
+
+    if (distance >= distanceMax) {
+      return maxDuration;
+    }
+
+    final double disPercent = distance / distanceMax;
+    return minDuration * disPercent + minDuration;
+  }
 }
 
 abstract class _VerticalHelper extends DirectionHelper {
