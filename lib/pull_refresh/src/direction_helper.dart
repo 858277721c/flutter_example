@@ -95,7 +95,7 @@ abstract class DirectionHelper {
     final double disPercent = distance / distanceMax;
     final Duration disDuration = minDuration * disPercent + minDuration;
 
-    return disDuration > maxDuration ? maxDuration : minDuration;
+    return disDuration > maxDuration ? maxDuration : disDuration;
   }
 }
 
