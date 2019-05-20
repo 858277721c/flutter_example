@@ -362,8 +362,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       }
     }
 
-    print('$runtimeType----- targetOffset: $targetOffset');
-
     _animationController.value = targetOffset;
   }
 
