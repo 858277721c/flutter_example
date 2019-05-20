@@ -44,6 +44,8 @@ abstract class DirectionHelper {
     }
     return size;
   }
+
+  double getRefreshOffset();
 }
 
 abstract class _VerticalHelper extends DirectionHelper {
@@ -71,6 +73,15 @@ class TopDirectionHelper extends _VerticalHelper {
 
     return -size + offset;
   }
+
+  @override
+  double getRefreshOffset() {
+    final double refreshSize = getRefreshSize();
+    if (refreshSize != null) {
+      return refreshSize;
+    }
+    return 0.0;
+  }
 }
 
 class BottomDirectionHelper extends _VerticalHelper {
@@ -78,7 +89,20 @@ class BottomDirectionHelper extends _VerticalHelper {
 
   @override
   double getIndicatorOffset(double offset) {
-    return getIndicatorSize() + offset;
+    final double size = getIndicatorSize();
+    if (size == null) {
+      return double.infinity;
+    }
+    return size + offset;
+  }
+
+  @override
+  double getRefreshOffset() {
+    final double refreshSize = getRefreshSize();
+    if (refreshSize != null) {
+      return -refreshSize;
+    }
+    return 0.0;
   }
 }
 

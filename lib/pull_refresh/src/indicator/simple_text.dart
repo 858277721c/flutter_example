@@ -26,7 +26,16 @@ class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
     FPullRefreshState state,
   ) {
     return Container(
-      child: Text(_getStateText(state)),
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: 50,
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Text(_getStateText(state)),
+        ],
+      ),
     );
   }
 }
