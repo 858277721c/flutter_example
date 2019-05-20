@@ -172,6 +172,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
   void _notifyRefreshCallback() {
     assert(_refreshDirection != FPullRefreshDirection.none);
     if (_refreshCallback != null) {
+      print('$runtimeType-----  _notifyRefreshCallback');
       _refreshCallback(_refreshDirection);
     }
   }
@@ -262,12 +263,14 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       upperBound: 1000,
     );
 
-    _animationController.addListener(() {
-      if (controller.state == FPullRefreshState.refresh) {
-        controller._notifyRefreshCallback();
+    _animationController.addStatusListener((status) {
+      print(
+          '$runtimeType----- AnimationStatus: $status state:${controller.state}');
+      if (status == AnimationStatus.completed) {
+        if (controller.state == FPullRefreshState.refresh) {
+          controller._notifyRefreshCallback();
+        }
       }
-
-      print('$runtimeType AnimationValue: ${_animationController.value}');
     });
   }
 
