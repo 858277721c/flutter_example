@@ -10,17 +10,11 @@ abstract class DirectionHelper {
     this.indicator,
   ) : assert(indicator != null);
 
-  Widget newWidget(
-    BuildContext context,
-    FPullRefreshState state,
-  ) {
+  Widget newWidget(BuildIndicatorInfo info) {
     return _IndicatorWrapper(
       key: key,
       builder: (context) {
-        return indicator.build(
-          context,
-          state,
-        );
+        return indicator.build(info);
       },
     );
   }

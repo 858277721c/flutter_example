@@ -41,14 +41,23 @@ enum FPullRefreshDirection {
 }
 
 abstract class FPullRefreshIndicator {
-  Widget build(
-    BuildContext context,
-    FPullRefreshState state,
-  );
+  Widget build(BuildIndicatorInfo info);
 
   double getRefreshSize() {
     return null;
   }
+}
+
+class BuildIndicatorInfo {
+  final BuildContext context;
+  final FPullRefreshState state;
+  final double scrollPercent;
+
+  BuildIndicatorInfo(
+    this.context,
+    this.state,
+    this.scrollPercent,
+  );
 }
 
 const Duration _kMaxDuration = const Duration(milliseconds: 150);
@@ -525,7 +534,20 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   Widget _buildIndicator(BuildContext context) {
-    Widget widget = currentHelper.newWidget(context, controller.state);
+    double scrollPercent = 0.0;
+    final double refreshSize = currentHelper.getRefreshSize();
+    if (refreshSize != null) {
+      scrollPercent = currentOffset.abs() / refreshSize;
+    }
+
+    Widget widget = currentHelper.newWidget(
+      BuildIndicatorInfo(
+        context,
+        controller.state,
+        scrollPercent,
+      ),
+    );
+
     final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
 
     widget = Transform.translate(

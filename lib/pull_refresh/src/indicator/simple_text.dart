@@ -21,10 +21,7 @@ class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-    FPullRefreshState state,
-  ) {
+  Widget build(BuildIndicatorInfo info) {
     return Container(
       constraints: BoxConstraints(
         minWidth: double.infinity,
@@ -33,7 +30,7 @@ class FSimpleTextPullRefreshIndicator extends FPullRefreshIndicator {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          Text(_getStateText(state)),
+          Text(_getStateText(info.state)),
         ],
       ),
     );
