@@ -294,7 +294,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
-  DirectionHelper _topHelper;
+  DirectionHelper _helper;
   bool _isDrag = false;
   final GlobalKey _notificationKey = GlobalKey();
 
@@ -305,12 +305,17 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   DirectionHelper get currentHelper {
     switch (controller._refreshDirection) {
       case FPullRefreshDirection.top:
-        return _topHelper;
+        if (_helper == null) {
+          _helper = TopDirectionHelper(widget.indicatorTop);
+        }
+        break;
       case FPullRefreshDirection.bottom:
         return null;
       default:
         return null;
     }
+
+    return _helper;
   }
 
   double get currentOffset {
@@ -327,8 +332,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   @override
   void initState() {
     super.initState();
-    _topHelper = TopDirectionHelper(widget.indicatorTop);
-
     _animationController = AnimationController(
       value: 0.0,
       vsync: this,
@@ -385,6 +388,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _directionChangeCallback(FPullRefreshDirection direction) {
+    if (direction == FPullRefreshDirection.none) {
+      _helper = null;
+    }
     setState(() {});
   }
 
@@ -518,9 +524,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return false;
   }
 
-  Widget _buildTop(BuildContext context) {
-    Widget widget = _topHelper.newWidget(context, controller.state);
-    final double targetOffset = _topHelper.getIndicatorOffset(currentOffset);
+  Widget _buildIndicator(BuildContext context) {
+    Widget widget = currentHelper.newWidget(context, controller.state);
+    final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
 
     widget = Transform.translate(
       offset: Offset(0.0, targetOffset),
@@ -569,15 +575,12 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
     final List<Widget> list = [];
     list.add(widgetChild);
-
-    if (controller._refreshDirection == FPullRefreshDirection.top) {
-      list.add(AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return _buildTop(context);
-        },
-      ));
-    }
+    list.add(AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return _buildIndicator(context);
+      },
+    ));
 
     return Stack(
       children: list,
