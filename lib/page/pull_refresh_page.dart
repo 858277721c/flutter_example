@@ -15,6 +15,7 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
   @override
   void initState() {
     super.initState();
+    pullRefreshController.overlayMode = false;
     pullRefreshController.setRefreshCallback((direction) {
       Future.delayed(Duration(seconds: 2)).then((value) {
         pullRefreshController.stopRefresh();
