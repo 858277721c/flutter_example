@@ -441,6 +441,17 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     _animationController.value = targetOffset;
   }
 
+  bool _handleGlowNotification(OverscrollIndicatorNotification notification) {
+    if (notification.depth != 0 || !notification.leading) {
+      return false;
+    }
+    if (_isDrag) {
+      notification.disallowGlow();
+      return true;
+    }
+    return false;
+  }
+
   Widget _buildTop(BuildContext context) {
     Widget widget = _topHelper.newWidget(context, controller.state);
     final double targetOffset = _topHelper.getIndicatorOffset(currentOffset);
@@ -487,8 +498,11 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     );
 
     result = NotificationListener<ScrollNotification>(
-      child: result,
       onNotification: _handleNotification,
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: _handleGlowNotification,
+        child: result,
+      ),
     );
 
     return result;
