@@ -390,17 +390,13 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           break;
       }
     } else if (notification is OverscrollNotification) {
-      if (_isDrag) {
-        final double delta = -notification.overscroll / 3;
-        _updateOffset(delta);
-      }
+      final double delta = -notification.overscroll / 3;
+      _updateOffset(delta);
     } else if (notification is ScrollUpdateNotification) {
-      if (_isDrag) {
-        final double delta = -notification.scrollDelta / 2;
-        if (delta > 0 && notification.metrics.extentBefore != 0.0) {
-        } else {
-          _updateOffset(delta);
-        }
+      final double delta = -notification.scrollDelta;
+      if (delta > 0 && notification.metrics.extentBefore != 0.0) {
+      } else {
+        _updateOffset(delta);
       }
     }
 
@@ -408,6 +404,10 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _updateOffset(double delta) {
+    if (!_isDrag) {
+      return;
+    }
+
     double targetOffset = currentOffset + delta;
 
     switch (controller._refreshDirection) {
