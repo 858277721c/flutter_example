@@ -356,9 +356,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   @override
   void dispose() {
+    _animationController.dispose();
     controller.removeStateChangeCallback(_stateChangeCallback);
     controller.removeDirectionChangeCallback(_directionChangeCallback);
-    _animationController.dispose();
     super.dispose();
   }
 
