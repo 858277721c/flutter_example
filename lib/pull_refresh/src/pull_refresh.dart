@@ -363,11 +363,18 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _stateChangeCallback(FPullRefreshState state) {
+    if (state == FPullRefreshState.refreshResult) {
+      _updateIndicator();
+    }
     _scrollByState();
   }
 
   void _directionChangeCallback(FPullRefreshDirection direction) {
     setState(() {});
+  }
+
+  void _updateIndicator() {
+    _animationController.value = _animationController.value;
   }
 
   void _scrollByState() {
