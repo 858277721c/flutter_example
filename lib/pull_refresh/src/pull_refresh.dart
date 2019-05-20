@@ -331,38 +331,34 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     _scrollByState();
   }
 
-  void _updateOffset(double delta) {
-    double targetOffset = currentOffset + delta;
+  void _scrollByState() {
+    final FPullRefreshState state = controller.state;
+    switch (state) {
+      case FPullRefreshState.refresh:
+        final double targetOffset = currentHelper.getRefreshOffset();
 
-    switch (controller._refreshDirection) {
-      case FPullRefreshDirection.top:
-        if (targetOffset < 0) {
-          if (currentOffset == 0) {
-            return;
-          }
-          targetOffset = 0;
-        }
-
+        _animationController.animateTo(
+          targetOffset,
+          duration: currentHelper.getAnimationDuration(
+            _kMinDuration,
+            _kMaxDuration,
+            currentOffset - targetOffset,
+          ),
+        );
         break;
-      case FPullRefreshDirection.bottom:
-        // TODO: Handle this case.
+      case FPullRefreshState.finish:
+        _animationController.animateTo(
+          0,
+          duration: currentHelper.getAnimationDuration(
+            _kMinDuration,
+            _kMaxDuration,
+            currentOffset,
+          ),
+        );
         break;
       default:
         break;
     }
-
-    final double refreshSize = currentHelper.getRefreshSize();
-    if (targetOffset.abs() > refreshSize) {
-      if (controller.state == FPullRefreshState.pullRefresh) {
-        controller._setState(FPullRefreshState.releaseRefresh);
-      }
-    } else {
-      if (controller.state == FPullRefreshState.releaseRefresh) {
-        controller._setState(FPullRefreshState.pullRefresh);
-      }
-    }
-
-    _animationController.value = targetOffset;
   }
 
   bool _canPull(ScrollNotification notification) {
@@ -411,34 +407,38 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return false;
   }
 
-  void _scrollByState() {
-    final FPullRefreshState state = controller.state;
-    switch (state) {
-      case FPullRefreshState.refresh:
-        final double targetOffset = currentHelper.getRefreshOffset();
+  void _updateOffset(double delta) {
+    double targetOffset = currentOffset + delta;
 
-        _animationController.animateTo(
-          targetOffset,
-          duration: currentHelper.getAnimationDuration(
-            _kMinDuration,
-            _kMaxDuration,
-            currentOffset - targetOffset,
-          ),
-        );
+    switch (controller._refreshDirection) {
+      case FPullRefreshDirection.top:
+        if (targetOffset < 0) {
+          if (currentOffset == 0) {
+            return;
+          }
+          targetOffset = 0;
+        }
+
         break;
-      case FPullRefreshState.finish:
-        _animationController.animateTo(
-          0,
-          duration: currentHelper.getAnimationDuration(
-            _kMinDuration,
-            _kMaxDuration,
-            currentOffset,
-          ),
-        );
+      case FPullRefreshDirection.bottom:
+        // TODO: Handle this case.
         break;
       default:
         break;
     }
+
+    final double refreshSize = currentHelper.getRefreshSize();
+    if (targetOffset.abs() > refreshSize) {
+      if (controller.state == FPullRefreshState.pullRefresh) {
+        controller._setState(FPullRefreshState.releaseRefresh);
+      }
+    } else {
+      if (controller.state == FPullRefreshState.releaseRefresh) {
+        controller._setState(FPullRefreshState.pullRefresh);
+      }
+    }
+
+    _animationController.value = targetOffset;
   }
 
   Widget _buildTop(BuildContext context) {
