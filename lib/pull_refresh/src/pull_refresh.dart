@@ -6,10 +6,13 @@ import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 
 import 'direction_helper.dart';
 
-typedef FPullRefreshStateChangeCallback = void Function(
-    FPullRefreshState oldState, FPullRefreshState newState);
-
 typedef FPullRefreshCallback = void Function(FPullRefreshDirection direction);
+
+typedef FPullRefreshStateChangeCallback = void Function(
+    FPullRefreshState state);
+
+typedef FPullRefreshDirectionChangeCallback = void Function(
+    FPullRefreshDirection direction);
 
 enum FPullRefreshState {
   /// 空闲状态
@@ -50,6 +53,7 @@ abstract class FPullRefreshIndicator {
 
 const Duration _kMaxDuration = const Duration(milliseconds: 150);
 const Duration _kMinDuration = const Duration(milliseconds: 50);
+const String _kLogTag = 'FPullRefresh----- ';
 
 //---------- Controller ----------
 
@@ -75,6 +79,13 @@ abstract class FPullRefreshController {
   /// 移除状态变化回调
   void removeStateChangeCallback(FPullRefreshStateChangeCallback callback);
 
+  /// 添加方向变化回调
+  void addDirectionChangeCallback(FPullRefreshDirectionChangeCallback callback);
+
+  /// 移除方向变化回调
+  void removeDirectionChangeCallback(
+      FPullRefreshDirectionChangeCallback callback);
+
   /// 触发刷新
   void startRefresh(FPullRefreshDirection direction);
 
@@ -98,6 +109,8 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
   FPullRefreshCallback _refreshCallback;
   final List<FPullRefreshStateChangeCallback> _listStateChangeCallback = [];
+  final List<FPullRefreshDirectionChangeCallback> _listDirectionChangeCallback =
+      [];
 
   @override
   FPullRefreshState get state => _state;
@@ -132,6 +145,21 @@ class _SimplePullRefreshController implements FPullRefreshController {
   @override
   void removeStateChangeCallback(FPullRefreshStateChangeCallback callback) {
     _listStateChangeCallback.remove(callback);
+  }
+
+  @override
+  void addDirectionChangeCallback(
+      FPullRefreshDirectionChangeCallback callback) {
+    if (callback == null || _listDirectionChangeCallback.contains(callback)) {
+      return;
+    }
+    _listDirectionChangeCallback.add(callback);
+  }
+
+  @override
+  void removeDirectionChangeCallback(
+      FPullRefreshDirectionChangeCallback callback) {
+    _listDirectionChangeCallback.remove(callback);
   }
 
   @override
@@ -171,54 +199,46 @@ class _SimplePullRefreshController implements FPullRefreshController {
     );
   }
 
-  void _notifyStateChangeCallback(
-    FPullRefreshState oldState,
-    FPullRefreshState newState,
-  ) {
-    if (_listStateChangeCallback.isEmpty) {
-      return;
-    }
-
-    final List<FPullRefreshStateChangeCallback> listCopy =
-        List.from(_listStateChangeCallback);
-
-    listCopy.forEach((item) {
-      item(oldState, newState);
-    });
-  }
-
   void _notifyRefreshCallback() {
-    assert(_refreshDirection != FPullRefreshDirection.none);
+    assert(_state == FPullRefreshState.refresh);
+    print(_kLogTag + 'notifyRefreshCallback');
+
     if (_refreshCallback != null) {
-      print('$runtimeType-----  _notifyRefreshCallback');
       _refreshCallback(_refreshDirection);
     }
   }
 
-  void _setDirection(FPullRefreshDirection direction) {
-    assert(direction != null);
-    assert(_state == FPullRefreshState.idle);
+  void _notifyStateChangeCallback(FPullRefreshState state) {
+    if (_listStateChangeCallback.isNotEmpty) {
+      List.from(_listStateChangeCallback).forEach((item) {
+        item(state);
+      });
+    }
+  }
 
-    if (_refreshDirection != direction) {
-      _refreshDirection = direction;
+  void _notifyDirectionChangeCallback(FPullRefreshDirection direction) {
+    if (_listDirectionChangeCallback.isNotEmpty) {
+      final List<FPullRefreshDirectionChangeCallback> listCopy =
+          List.from(_listDirectionChangeCallback);
 
-      print('$runtimeType-----  _setDirection: $direction');
+      listCopy.forEach((item) {
+        item(direction);
+      });
     }
   }
 
   void _setState(FPullRefreshState state) {
     assert(state != null);
+    assert(_refreshDirection != FPullRefreshDirection.none);
 
     final FPullRefreshState old = _state;
     if (old == state) {
       return;
     }
 
-    assert(_refreshDirection != FPullRefreshDirection.none);
-
     _state = state;
 
-    print('$runtimeType----- _setState: $state');
+    print(_kLogTag + 'setState: $state');
 
     if (_stopRefreshTimer != null) {
       _stopRefreshTimer.cancel();
@@ -230,10 +250,23 @@ class _SimplePullRefreshController implements FPullRefreshController {
       });
     }
 
-    _notifyStateChangeCallback(old, state);
+    _notifyStateChangeCallback(state);
 
     if (state == FPullRefreshState.idle) {
       _refreshResult = null;
+      _setDirection(FPullRefreshDirection.none);
+    }
+  }
+
+  void _setDirection(FPullRefreshDirection direction) {
+    assert(direction != null);
+    assert(_state == FPullRefreshState.idle);
+
+    if (_refreshDirection != direction) {
+      _refreshDirection = direction;
+
+      print(_kLogTag + 'setDirection: $direction');
+      _notifyDirectionChangeCallback(direction);
     }
   }
 }
@@ -285,11 +318,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     _topHelper = TopDirectionHelper(widget.indicatorTop);
-
-    controller.addStateChangeCallback(_stateChangeCallback);
 
     _animationController = AnimationController(
       value: 0.0,
@@ -311,27 +349,25 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         }
       }
     });
-  }
 
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
+    controller.addStateChangeCallback(_stateChangeCallback);
+    controller.addDirectionChangeCallback(_directionChangeCallback);
   }
 
   @override
   void dispose() {
     controller.removeStateChangeCallback(_stateChangeCallback);
+    controller.removeDirectionChangeCallback(_directionChangeCallback);
     _animationController.dispose();
     super.dispose();
   }
 
-  void _stateChangeCallback(
-    FPullRefreshState oldState,
-    FPullRefreshState newState,
-  ) {
+  void _stateChangeCallback(FPullRefreshState state) {
     _scrollByState();
+  }
+
+  void _directionChangeCallback(FPullRefreshDirection direction) {
+    setState(() {});
   }
 
   void _scrollByState() {
@@ -490,7 +526,12 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   @override
   Widget build(BuildContext context) {
+    print(_kLogTag + 'build direction: ${controller._refreshDirection}');
+
     final Widget widgetNotification = _wrapNotification(widget.child);
+    if (controller._refreshDirection == FPullRefreshDirection.none) {
+      return widgetNotification;
+    }
 
     final Widget widgetChild = controller.overlayMode
         ? widgetNotification
@@ -502,18 +543,20 @@ class _PullRefreshViewState extends State<_PullRefreshView>
             },
           );
 
-    final Widget widgetTop = AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return _buildTop(context);
-      },
-    );
+    final List<Widget> list = [];
+    list.add(widgetChild);
+
+    if (controller._refreshDirection == FPullRefreshDirection.top) {
+      list.add(AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return _buildTop(context);
+        },
+      ));
+    }
 
     return Stack(
-      children: <Widget>[
-        widgetChild,
-        widgetTop,
-      ],
+      children: list,
     );
   }
 }
