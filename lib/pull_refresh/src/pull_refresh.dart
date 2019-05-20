@@ -252,7 +252,9 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   @override
   void initState() {
     super.initState();
-    controller.addStateChangeCallback((oldState, newState) {});
+    controller.addStateChangeCallback((oldState, newState) {
+      _scrollByState();
+    });
 
     _topHelper = TopDirectionHelper(widget.indicatorTop);
 
@@ -341,7 +343,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         case ScrollDirection.idle:
           if (controller.state == FPullRefreshState.releaseRefresh) {
             controller._setState(FPullRefreshState.refresh);
-            scrollByState();
           }
           break;
       }
@@ -358,28 +359,16 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return false;
   }
 
-  void scrollByState() {
-    switch (controller.state) {
-      case FPullRefreshState.idle:
-        // TODO: Handle this case.
-        break;
-      case FPullRefreshState.pullRefresh:
-        // TODO: Handle this case.
-        break;
-      case FPullRefreshState.releaseRefresh:
-        // TODO: Handle this case.
-        break;
+  void _scrollByState() {
+    final FPullRefreshState state = controller.state;
+    switch (state) {
       case FPullRefreshState.refresh:
         final double targetOffset = currentHelper.getRefreshOffset();
 
         _animationController.animateTo(targetOffset,
             duration: Duration(seconds: 1));
         break;
-      case FPullRefreshState.refreshResult:
-        // TODO: Handle this case.
-        break;
-      case FPullRefreshState.refreshFinish:
-        // TODO: Handle this case.
+      default:
         break;
     }
   }
