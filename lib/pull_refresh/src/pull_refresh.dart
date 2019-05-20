@@ -342,7 +342,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     final FPullRefreshState state = controller.state;
     switch (state) {
       case FPullRefreshState.refresh:
-        final double targetOffset = currentHelper.getRefreshOffset();
+        final double targetOffset = currentHelper.getRefreshWidgetOffset();
 
         _animationController.animateTo(
           targetOffset,
@@ -377,8 +377,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       switch (notification.direction) {
         case ScrollDirection.forward:
           if (_canPull(notification)) {
-            if (notification.metrics.extentBefore == 0.0 &&
-                _topHelper.getIndicatorSize() != null) {
+            if (notification.metrics.extentBefore == 0.0) {
               _isDrag = true;
               controller._setDirection(FPullRefreshDirection.top);
               controller._setState(FPullRefreshState.pullRefresh);
@@ -412,6 +411,10 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   void _updateOffset(double delta) {
     if (!_isDrag) {
+      return;
+    }
+
+    if (!currentHelper.isReady()) {
       return;
     }
 

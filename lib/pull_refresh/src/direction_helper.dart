@@ -10,14 +10,6 @@ abstract class DirectionHelper {
     this.indicator,
   ) : assert(indicator != null);
 
-  Size _getIndicatorRealSize() {
-    final _IndicatorWrapperState state = key.currentState;
-    if (state != null) {
-      return state.size;
-    }
-    return null;
-  }
-
   Widget newWidget(
     BuildContext context,
     FPullRefreshState state,
@@ -31,6 +23,18 @@ abstract class DirectionHelper {
         );
       },
     );
+  }
+
+  Size _getIndicatorRealSize() {
+    final _IndicatorWrapperState state = key.currentState;
+    if (state != null) {
+      return state.size;
+    }
+    return null;
+  }
+
+  bool isReady() {
+    return _getIndicatorRealSize() != null;
   }
 
   /// 指示器的大小，可能为null
@@ -48,8 +52,8 @@ abstract class DirectionHelper {
     return size;
   }
 
-  /// 指示器刷新状态下的位置，可能为null
-  double getRefreshOffset();
+  /// 刷新状态下刷新控件的位置，可能为null
+  double getRefreshWidgetOffset();
 
   Duration getAnimationDuration(
     Duration minDuration,
@@ -101,10 +105,11 @@ abstract class _VerticalHelper extends DirectionHelper {
   @override
   double getIndicatorSize() {
     final Size size = _getIndicatorRealSize();
-    if (size != null) {
-      return size.height;
+    if (size == null) {
+      return null;
     }
-    return null;
+
+    return size.height;
   }
 }
 
@@ -122,12 +127,8 @@ class TopDirectionHelper extends _VerticalHelper {
   }
 
   @override
-  double getRefreshOffset() {
-    final double refreshSize = getRefreshSize();
-    if (refreshSize != null) {
-      return refreshSize;
-    }
-    return null;
+  double getRefreshWidgetOffset() {
+    return getRefreshSize();
   }
 }
 
@@ -144,7 +145,7 @@ class BottomDirectionHelper extends _VerticalHelper {
   }
 
   @override
-  double getRefreshOffset() {
+  double getRefreshWidgetOffset() {
     final double refreshSize = getRefreshSize();
     if (refreshSize != null) {
       return -refreshSize;
