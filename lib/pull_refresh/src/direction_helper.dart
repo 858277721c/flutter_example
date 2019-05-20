@@ -48,6 +48,7 @@ abstract class DirectionHelper {
     return size;
   }
 
+  /// 指示器刷新状态下的位置，可能为null
   double getRefreshOffset();
 
   Duration getAnimationDuration(
@@ -126,7 +127,7 @@ class TopDirectionHelper extends _VerticalHelper {
     if (refreshSize != null) {
       return refreshSize;
     }
-    return 0.0;
+    return null;
   }
 }
 
@@ -148,7 +149,7 @@ class BottomDirectionHelper extends _VerticalHelper {
     if (refreshSize != null) {
       return -refreshSize;
     }
-    return 0.0;
+    return null;
   }
 }
 
