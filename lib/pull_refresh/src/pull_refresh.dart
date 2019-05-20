@@ -464,10 +464,20 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return widget;
   }
 
-  Widget _buildChild() {
+  Widget _wrapChildTransform(Widget widget) {
     return Transform.translate(
       offset: Offset(0.0, currentOffset),
-      child: widget.child,
+      child: widget,
+    );
+  }
+
+  Widget _wrapNotification(Widget widget) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: _handleNotification,
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: _handleGlowNotification,
+        child: widget,
+      ),
     );
   }
 
@@ -480,31 +490,23 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       },
     );
 
-    final Widget widgetChild = controller.overlayMode
-        ? widget.child
-        : AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) {
-              return _buildChild();
-            },
-          );
+    Widget widgetChild = _wrapNotification(widget.child);
+    if (!controller.overlayMode) {
+      widgetChild = AnimatedBuilder(
+        child: widgetChild,
+        animation: _animationController,
+        builder: (context, child) {
+          return _wrapChildTransform(child);
+        },
+      );
+    }
 
     final List<Widget> list = [];
     list.add(widgetChild);
     list.add(widgetTop);
 
-    Widget result = Stack(
+    return Stack(
       children: list,
     );
-
-    result = NotificationListener<ScrollNotification>(
-      onNotification: _handleNotification,
-      child: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: _handleGlowNotification,
-        child: result,
-      ),
-    );
-
-    return result;
   }
 }
