@@ -199,7 +199,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
     _state = state;
 
-    print('$runtimeType----- _setState: $state');
+    print('$runtimeType----- _setState: $old -> $state');
 
     if (_stopRefreshTimer != null) {
       _stopRefreshTimer.cancel();
