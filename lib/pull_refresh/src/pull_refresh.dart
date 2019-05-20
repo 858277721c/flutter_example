@@ -363,9 +363,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _stateChangeCallback(FPullRefreshState state) {
-    if (state == FPullRefreshState.refreshResult) {
-      _updateIndicator();
-    }
+    _updateIndicator();
     _scrollByState();
   }
 
