@@ -7,7 +7,7 @@ import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
 import 'direction_helper.dart';
 
 typedef FPullRefreshStateChangeCallback = void Function(
-    FPullRefreshState state);
+    FPullRefreshState oldState, FPullRefreshState newState);
 
 typedef FPullRefreshCallback = void Function(FPullRefreshDirection direction);
 
@@ -153,7 +153,10 @@ class _SimplePullRefreshController implements FPullRefreshController {
     );
   }
 
-  void _notifyStateChangeCallback(FPullRefreshState state) {
+  void _notifyStateChangeCallback(
+    FPullRefreshState oldState,
+    FPullRefreshState newState,
+  ) {
     if (_listStateChangeCallback.isEmpty) {
       return;
     }
@@ -162,7 +165,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
         List.from(_listStateChangeCallback);
 
     listCopy.forEach((item) {
-      item(state);
+      item(oldState, newState);
     });
   }
 
@@ -208,7 +211,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
       });
     }
 
-    _notifyStateChangeCallback(state);
+    _notifyStateChangeCallback(old, state);
 
     if (state == FPullRefreshState.idle) {
       _refreshResult = null;
@@ -248,6 +251,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   @override
   void initState() {
     super.initState();
+    controller.addStateChangeCallback((oldState, newState) {});
+
     _topHelper = TopDirectionHelper(widget.indicatorTop);
 
     _animationController = AnimationController(
@@ -256,10 +261,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       lowerBound: -1000,
       upperBound: 1000,
     );
-
-    _animationController.addStatusListener((status) {
-      print('$runtimeType AnimationStatus: $status');
-    });
 
     _animationController.addListener(() {
       if (controller.state == FPullRefreshState.refresh) {
