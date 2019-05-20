@@ -218,7 +218,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
     _state = state;
 
-    print('$runtimeType----- _setState: $old -> $state');
+    print('$runtimeType----- _setState: $state');
 
     if (_stopRefreshTimer != null) {
       _stopRefreshTimer.cancel();
@@ -263,6 +263,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   DirectionHelper _topHelper;
   bool _isDrag = false;
+  final GlobalKey _notificationKey = GlobalKey();
 
   _SimplePullRefreshController get controller {
     return widget.controller;
@@ -478,6 +479,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   Widget _wrapNotification(Widget widget) {
     return NotificationListener<ScrollNotification>(
+      key: _notificationKey,
       onNotification: _handleNotification,
       child: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: _handleGlowNotification,
