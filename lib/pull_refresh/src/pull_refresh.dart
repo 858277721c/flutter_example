@@ -594,7 +594,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   bool _handleGlowNotification(OverscrollIndicatorNotification notification) {
-    if (notification.depth != 0 || !notification.leading) {
+    if (notification.depth != 0) {
       return false;
     }
     if (controller._isDrag) {
