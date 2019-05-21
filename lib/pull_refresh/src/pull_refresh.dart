@@ -540,7 +540,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       scrollPercent = currentOffset.abs() / refreshSize;
     }
 
-    Widget widget = currentHelper.newWidget(
+    final Widget widget = currentHelper.newWidget(
       BuildIndicatorInfo(
         context,
         controller.state,
@@ -597,13 +597,19 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           );
 
     final List<Widget> list = [];
-    list.add(widgetChild);
-    list.add(AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return _buildIndicator(context);
-      },
-    ));
+
+    list.add(
+      widgetChild,
+    );
+
+    list.add(
+      AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return _buildIndicator(context);
+        },
+      ),
+    );
 
     return Stack(
       children: list,
