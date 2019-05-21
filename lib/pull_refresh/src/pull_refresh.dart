@@ -100,7 +100,7 @@ abstract class FPullRefreshController {
       FPullRefreshDirectionChangeCallback callback);
 
   /// 触发刷新
-  void startRefresh(FPullRefreshDirection direction);
+  void startRefresh({FPullRefreshDirection direction});
 
   /// 停止刷新
   void stopRefresh({dynamic result});
@@ -181,11 +181,11 @@ class _SimplePullRefreshController implements FPullRefreshController {
   }
 
   @override
-  void startRefresh(FPullRefreshDirection direction) {
-    assert(direction != null);
+  void startRefresh({FPullRefreshDirection direction}) {
+    direction ??= FPullRefreshDirection.start;
     assert(direction != FPullRefreshDirection.none);
     if (_state == FPullRefreshState.idle) {
-      _setDirection(FPullRefreshDirection.start);
+      _setDirection(direction);
       _setState(FPullRefreshState.refresh);
     }
   }
