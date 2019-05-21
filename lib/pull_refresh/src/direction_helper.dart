@@ -49,7 +49,10 @@ abstract class DirectionHelper {
   }
 
   /// 刷新状态下刷新控件的位置，可能为null
-  double getRefreshWidgetOffset();
+  double getRefreshWidgetRefreshOffset();
+
+  /// 计算刷新控件的位置
+  double computeRefreshWidgetOffset(double offset, double delta);
 
   Duration getAnimationDuration(
     Duration minDuration,
@@ -123,8 +126,14 @@ class TopDirectionHelper extends _VerticalHelper {
   }
 
   @override
-  double getRefreshWidgetOffset() {
+  double getRefreshWidgetRefreshOffset() {
     return getRefreshSize();
+  }
+
+  @override
+  double computeRefreshWidgetOffset(double offset, double delta) {
+    final double targetOffset = offset + delta;
+    return targetOffset < 0 ? 0 : targetOffset;
   }
 }
 
@@ -141,12 +150,18 @@ class BottomDirectionHelper extends _VerticalHelper {
   }
 
   @override
-  double getRefreshWidgetOffset() {
+  double getRefreshWidgetRefreshOffset() {
     final double refreshSize = getRefreshSize();
     if (refreshSize != null) {
       return -refreshSize;
     }
     return null;
+  }
+
+  @override
+  double computeRefreshWidgetOffset(double offset, double delta) {
+    final double targetOffset = offset + delta;
+    return targetOffset > 0 ? 0 : targetOffset;
   }
 }
 

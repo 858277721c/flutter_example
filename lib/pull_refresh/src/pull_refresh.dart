@@ -109,9 +109,11 @@ abstract class FPullRefreshController {
 
   dynamic get refreshResult;
 
+  FPullRefreshDirection get refreshDirection;
+
   bool get overlayMode;
 
-  void set overlayMode(bool overlay);
+  void setOverlayMode(bool overlay);
 
   /// 设置刷新回调
   void setRefreshCallback(FPullRefreshCallback callback);
@@ -141,16 +143,16 @@ abstract class FPullRefreshController {
   });
 }
 
-class _SimplePullRefreshController implements FPullRefreshController {
+class _BasePullRefreshController implements FPullRefreshController {
   final Axis _axis;
   final FPullRefreshIndicator _indicatorStart;
   final FPullRefreshIndicator _indicatorEnd;
 
   FPullRefreshState _state = FPullRefreshState.idle;
-  FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
-
-  bool _overlayMode = false;
   dynamic _refreshResult;
+  FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
+  bool _overlayMode = false;
+
   Timer _stopRefreshTimer;
 
   FPullRefreshCallback _refreshCallback;
@@ -160,7 +162,7 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
   DirectionHelper _directionHelper;
 
-  _SimplePullRefreshController({
+  _BasePullRefreshController({
     Axis axis,
     FPullRefreshIndicator indicatorStart,
     FPullRefreshIndicator indicatorEnd,
@@ -177,10 +179,13 @@ class _SimplePullRefreshController implements FPullRefreshController {
   dynamic get refreshResult => _refreshResult;
 
   @override
+  FPullRefreshDirection get refreshDirection => _refreshDirection;
+
+  @override
   bool get overlayMode => _overlayMode;
 
   @override
-  void set overlayMode(bool overlay) {
+  void setOverlayMode(bool overlay) {
     assert(overlay != null);
     assert(_state == FPullRefreshState.idle,
         'overlayMode can only changed in FPullRefreshState.idle state');
@@ -340,6 +345,37 @@ class _SimplePullRefreshController implements FPullRefreshController {
   }
 }
 
+class _SimplePullRefreshController extends _BasePullRefreshController {
+  bool _isDrag = false;
+
+  _SimplePullRefreshController({
+    Axis axis,
+    FPullRefreshIndicator indicatorStart,
+    FPullRefreshIndicator indicatorEnd,
+  }) : super(
+          axis: axis,
+          indicatorStart: indicatorStart,
+          indicatorEnd: indicatorEnd,
+        );
+
+  void _dragStart(FPullRefreshDirection direction) {
+    assert(direction != FPullRefreshDirection.none);
+    _isDrag = true;
+    _setDirection(direction);
+    _setState(FPullRefreshState.pullStart);
+  }
+
+  void _dragFinish() {
+    assert(_isDrag = true);
+    _isDrag = false;
+    if (state == FPullRefreshState.pullReady) {
+      _setState(FPullRefreshState.refresh);
+    } else if (state == FPullRefreshState.pullStart) {
+      _setState(FPullRefreshState.finish);
+    }
+  }
+}
+
 //---------- View ----------
 
 class _PullRefreshView extends StatefulWidget {
@@ -359,8 +395,6 @@ class _PullRefreshView extends StatefulWidget {
 class _PullRefreshViewState extends State<_PullRefreshView>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-
-  bool _isDrag = false;
   final GlobalKey _notificationKey = GlobalKey();
 
   _SimplePullRefreshController get controller {
@@ -445,7 +479,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _updateIndicator() {
-    if (controller._refreshDirection != FPullRefreshDirection.none) {
+    if (controller.refreshDirection != FPullRefreshDirection.none) {
       _animationController.value = _animationController.value;
     }
   }
@@ -454,7 +488,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     final FPullRefreshState state = controller.state;
     switch (state) {
       case FPullRefreshState.refresh:
-        final double targetOffset = currentHelper.getRefreshWidgetOffset();
+        final double targetOffset =
+            currentHelper.getRefreshWidgetRefreshOffset();
 
         _animationController.animateTo(
           targetOffset,
@@ -490,46 +525,37 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         case ScrollDirection.forward:
           if (_canPull(notification)) {
             if (notification.metrics.extentBefore == 0.0) {
-              _isDrag = true;
-              controller._setDirection(FPullRefreshDirection.start);
-              controller._setState(FPullRefreshState.pullStart);
+              controller._dragStart(FPullRefreshDirection.start);
             }
           }
           break;
         case ScrollDirection.reverse:
           if (_canPull(notification)) {
             if (notification.metrics.extentAfter == 0.0) {
-              _isDrag = true;
-              controller._setDirection(FPullRefreshDirection.end);
-              controller._setState(FPullRefreshState.pullStart);
+              controller._dragStart(FPullRefreshDirection.end);
             }
           }
           break;
         case ScrollDirection.idle:
-          _isDrag = false;
-          if (controller.state == FPullRefreshState.pullReady) {
-            controller._setState(FPullRefreshState.refresh);
-          } else if (controller.state == FPullRefreshState.pullStart) {
-            controller._setState(FPullRefreshState.finish);
-          }
+          controller._dragFinish();
           break;
       }
     } else if (notification is OverscrollNotification) {
       final double delta = -notification.overscroll;
-      _updateOffset(delta / 3);
+      _processDrag(delta / 3);
     } else if (notification is ScrollUpdateNotification) {
       final double delta = -notification.scrollDelta;
 
-      final FPullRefreshDirection direction = controller._refreshDirection;
+      final FPullRefreshDirection direction = controller.refreshDirection;
       if (direction == FPullRefreshDirection.start) {
         if (delta > 0 && notification.metrics.extentBefore != 0.0) {
         } else {
-          _updateOffset(delta);
+          _processDrag(delta);
         }
       } else if (direction == FPullRefreshDirection.end) {
         if (delta < 0 && notification.metrics.extentAfter != 0.0) {
         } else {
-          _updateOffset(delta);
+          _processDrag(delta);
         }
       }
     }
@@ -537,8 +563,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return false;
   }
 
-  void _updateOffset(double delta) {
-    if (!_isDrag) {
+  void _processDrag(double delta) {
+    if (!controller._isDrag) {
       return;
     }
 
@@ -546,28 +572,11 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       return;
     }
 
-    double targetOffset = currentOffset + delta;
+    final double targetOffset =
+        currentHelper.computeRefreshWidgetOffset(currentOffset, delta);
 
-    switch (controller._refreshDirection) {
-      case FPullRefreshDirection.start:
-        if (targetOffset < 0) {
-          if (currentOffset == 0) {
-            return;
-          }
-          targetOffset = 0;
-        }
-
-        break;
-      case FPullRefreshDirection.end:
-        if (targetOffset > 0) {
-          if (currentOffset == 0) {
-            return;
-          }
-          targetOffset = 0;
-        }
-        break;
-      default:
-        break;
+    if (targetOffset == 0 && currentOffset == 0) {
+      return;
     }
 
     final double refreshSize = currentHelper.getRefreshSize();
@@ -588,7 +597,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     if (notification.depth != 0 || !notification.leading) {
       return false;
     }
-    if (_isDrag) {
+    if (controller._isDrag) {
       notification.disallowGlow();
       return true;
     }
@@ -607,7 +616,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
         controller._axis,
         context,
         controller.state,
-        controller._refreshDirection,
+        controller.refreshDirection,
         scrollPercent,
       ),
     );
@@ -618,7 +627,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   Widget _wrapIndicatorPosition(Widget widget) {
     Alignment alignment;
 
-    final FPullRefreshDirection direction = controller._refreshDirection;
+    final FPullRefreshDirection direction = controller.refreshDirection;
     switch (direction) {
       case FPullRefreshDirection.start:
         alignment = Alignment.topCenter;
@@ -660,10 +669,10 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
   @override
   Widget build(BuildContext context) {
-    print(_kLogTag + 'build direction: ${controller._refreshDirection}');
+    print(_kLogTag + 'build direction: ${controller.refreshDirection}');
 
     final Widget widgetNotification = _wrapNotification(widget.child);
-    if (controller._refreshDirection == FPullRefreshDirection.none) {
+    if (controller.refreshDirection == FPullRefreshDirection.none) {
       return widgetNotification;
     }
 
