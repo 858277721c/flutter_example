@@ -548,17 +548,18 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       ),
     );
 
-    final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
+    return _wrapIndicatorPosition(widget);
+  }
 
-    widget = Transform.translate(
+  Widget _wrapIndicatorPosition(Widget widget) {
+    final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
+    return Transform.translate(
       offset: Offset(0.0, targetOffset),
       child: widget,
     );
-
-    return widget;
   }
 
-  Widget _wrapChildTransform(Widget widget) {
+  Widget _wrapChildPosition(Widget widget) {
     return Transform.translate(
       offset: Offset(0.0, currentOffset),
       child: widget,
@@ -591,7 +592,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
             child: widgetNotification,
             animation: _animationController,
             builder: (context, child) {
-              return _wrapChildTransform(child);
+              return _wrapChildPosition(child);
             },
           );
 
