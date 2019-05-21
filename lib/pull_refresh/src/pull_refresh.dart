@@ -58,19 +58,24 @@ class BuildIndicatorInfo {
   final FPullRefreshState state;
   final FPullRefreshDirection direction;
 
+  final double offset;
   final double readySize;
   final double refreshSize;
-  final double offset;
 
-  BuildIndicatorInfo(
+  BuildIndicatorInfo({
     this.context,
     this.axis,
     this.state,
     this.direction,
+    this.offset,
     double readySize,
     double refreshSize,
-    this.offset,
-  )   : this.readySize = readySize ?? 0,
+  })  : assert(context != null),
+        assert(axis != null),
+        assert(state != null),
+        assert(direction != null),
+        assert(offset != null),
+        this.readySize = readySize ?? 0,
         this.refreshSize = refreshSize ?? 0;
 
   double readyPercent() {
@@ -593,8 +598,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       return;
     }
 
-    final double pullReadySize = currentHelper.getIndicatorReadySize();
-    if (targetOffset.abs() > pullReadySize) {
+    final double readySize = currentHelper.getIndicatorReadySize();
+    if (targetOffset.abs() > readySize) {
       if (controller.state == FPullRefreshState.pullStart) {
         controller._setState(FPullRefreshState.pullReady);
       }
@@ -621,13 +626,13 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   Widget _buildIndicator(BuildContext context) {
     final Widget widget = currentHelper.newWidget(
       BuildIndicatorInfo(
-        context,
-        controller._axis,
-        controller.state,
-        controller.refreshDirection,
-        currentHelper.getIndicatorReadySize(),
-        currentHelper.getIndicatorRefreshSize(),
-        currentOffset,
+        context: context,
+        axis: controller._axis,
+        state: controller.state,
+        direction: controller.refreshDirection,
+        offset: currentOffset,
+        readySize: currentHelper.getIndicatorReadySize(),
+        refreshSize: currentHelper.getIndicatorRefreshSize(),
       ),
     );
 
