@@ -555,10 +555,27 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   Widget _wrapIndicatorPosition(Widget widget) {
+    Alignment alignment;
+
+    final FPullRefreshDirection direction = controller._refreshDirection;
+    switch (direction) {
+      case FPullRefreshDirection.top:
+        alignment = Alignment.topCenter;
+        break;
+      case FPullRefreshDirection.bottom:
+        alignment = Alignment.bottomCenter;
+        break;
+      default:
+        throw Exception('Illegal direction: $direction');
+    }
+
     final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
-    return Transform.translate(
-      offset: Offset(0.0, targetOffset),
-      child: widget,
+    return Align(
+      alignment: alignment,
+      child: Transform.translate(
+        offset: Offset(0.0, targetOffset),
+        child: widget,
+      ),
     );
   }
 
