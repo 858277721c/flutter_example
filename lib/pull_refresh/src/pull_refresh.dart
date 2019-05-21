@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:my_flutter/pull_refresh/src/indicator/simple_text.dart';
+import 'package:my_flutter/pull_refresh/src/indicator/simple_indicator.dart';
 
 import 'direction_helper.dart';
 
@@ -43,25 +43,39 @@ enum FPullRefreshDirection {
 abstract class FPullRefreshIndicator {
   Widget build(BuildIndicatorInfo info);
 
+  double getReadySize() {
+    return null;
+  }
+
   double getRefreshSize() {
     return null;
   }
 }
 
 class BuildIndicatorInfo {
-  final Axis axis;
   final BuildContext context;
+  final Axis axis;
   final FPullRefreshState state;
   final FPullRefreshDirection direction;
-  final double scrollPercent;
+
+  final double readySize;
+  final double refreshSize;
+  final double offset;
 
   BuildIndicatorInfo(
-    this.axis,
     this.context,
+    this.axis,
     this.state,
     this.direction,
-    this.scrollPercent,
-  );
+    double readySize,
+    double refreshSize,
+    this.offset,
+  )   : this.readySize = readySize ?? 0,
+        this.refreshSize = refreshSize ?? 0;
+
+  double readyPercent() {
+    return offset.abs() / readySize;
+  }
 }
 
 const Duration _kMaxDuration = const Duration(milliseconds: 150);
@@ -72,8 +86,8 @@ class FPullRefreshConfig {
   static final FPullRefreshConfig singleton = FPullRefreshConfig._();
 
   FPullRefreshConfig._() {
-    indicatorStart = FSimpleTextPullRefreshIndicator();
-    indicatorEnd = FSimpleTextPullRefreshIndicator();
+    indicatorStart = FSimpleCircularRefreshIndicator();
+    indicatorEnd = FSimpleCircularRefreshIndicator();
   }
 
   FPullRefreshIndicator _indicatorStart;
@@ -579,8 +593,8 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       return;
     }
 
-    final double refreshSize = currentHelper.getRefreshSize();
-    if (targetOffset.abs() > refreshSize) {
+    final double pullReadySize = currentHelper.getIndicatorReadySize();
+    if (targetOffset.abs() > pullReadySize) {
       if (controller.state == FPullRefreshState.pullStart) {
         controller._setState(FPullRefreshState.pullReady);
       }
@@ -605,19 +619,15 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   Widget _buildIndicator(BuildContext context) {
-    double scrollPercent = 0.0;
-    final double refreshSize = currentHelper.getRefreshSize();
-    if (refreshSize != null) {
-      scrollPercent = currentOffset.abs() / refreshSize;
-    }
-
     final Widget widget = currentHelper.newWidget(
       BuildIndicatorInfo(
-        controller._axis,
         context,
+        controller._axis,
         controller.state,
         controller.refreshDirection,
-        scrollPercent,
+        currentHelper.getIndicatorReadySize(),
+        currentHelper.getIndicatorRefreshSize(),
+        currentOffset,
       ),
     );
 

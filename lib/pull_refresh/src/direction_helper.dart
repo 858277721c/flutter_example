@@ -40,7 +40,16 @@ abstract class DirectionHelper {
   double getIndicatorOffset(double offset);
 
   /// 指示器可以触发刷新的大小，可能为null
-  double getRefreshSize() {
+  double getIndicatorReadySize() {
+    double size = indicator.getReadySize();
+    if (size == null) {
+      size = getIndicatorSize();
+    }
+    return size;
+  }
+
+  /// 指示器处于刷新中的大小，可能为null
+  double getIndicatorRefreshSize() {
     double size = indicator.getRefreshSize();
     if (size == null) {
       size = getIndicatorSize();
@@ -127,7 +136,7 @@ class TopDirectionHelper extends _VerticalHelper {
 
   @override
   double getRefreshWidgetRefreshOffset() {
-    return getRefreshSize();
+    return getIndicatorRefreshSize();
   }
 
   @override
@@ -151,7 +160,7 @@ class BottomDirectionHelper extends _VerticalHelper {
 
   @override
   double getRefreshWidgetRefreshOffset() {
-    final double refreshSize = getRefreshSize();
+    final double refreshSize = getIndicatorRefreshSize();
     if (refreshSize != null) {
       return -refreshSize;
     }
