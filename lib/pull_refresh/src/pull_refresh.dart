@@ -68,10 +68,40 @@ const Duration _kMaxDuration = const Duration(milliseconds: 150);
 const Duration _kMinDuration = const Duration(milliseconds: 50);
 const String _kLogTag = 'FPullRefresh----- ';
 
+class FPullRefreshConfig {
+  static final FPullRefreshConfig singleton = FPullRefreshConfig._();
+
+  FPullRefreshConfig._() {
+    indicatorStart = FSimpleTextPullRefreshIndicator();
+    indicatorEnd = FSimpleTextPullRefreshIndicator();
+  }
+
+  FPullRefreshIndicator _indicatorStart;
+  FPullRefreshIndicator _indicatorEnd;
+
+  FPullRefreshIndicator get indicatorStart => _indicatorStart;
+
+  set indicatorStart(FPullRefreshIndicator value) {
+    assert(value != null);
+    _indicatorStart = value;
+  }
+
+  FPullRefreshIndicator get indicatorEnd => _indicatorEnd;
+
+  set indicatorEnd(FPullRefreshIndicator value) {
+    assert(value != null);
+    _indicatorEnd = value;
+  }
+}
+
 //---------- Controller ----------
 
 abstract class FPullRefreshController {
-  factory FPullRefreshController.create({Axis axis}) {
+  factory FPullRefreshController.create({
+    Axis axis,
+    FPullRefreshIndicator indicatorStart,
+    FPullRefreshIndicator indicatorEnd,
+  }) {
     return _SimplePullRefreshController(axis: axis);
   }
 
@@ -108,12 +138,13 @@ abstract class FPullRefreshController {
   /// 创建一个刷新Widget
   Widget newRefreshWidget({
     @required Widget child,
-    FPullRefreshIndicator indicatorTop,
   });
 }
 
 class _SimplePullRefreshController implements FPullRefreshController {
   final Axis _axis;
+  final FPullRefreshIndicator _indicatorStart;
+  final FPullRefreshIndicator _indicatorEnd;
 
   FPullRefreshState _state = FPullRefreshState.idle;
   FPullRefreshDirection _refreshDirection = FPullRefreshDirection.none;
@@ -127,8 +158,17 @@ class _SimplePullRefreshController implements FPullRefreshController {
   final List<FPullRefreshDirectionChangeCallback> _listDirectionChangeCallback =
       [];
 
-  _SimplePullRefreshController({Axis axis})
-      : this._axis = axis ?? Axis.vertical;
+  DirectionHelper _directionHelper;
+
+  _SimplePullRefreshController({
+    Axis axis,
+    FPullRefreshIndicator indicatorStart,
+    FPullRefreshIndicator indicatorEnd,
+  })  : this._axis = axis ?? Axis.vertical,
+        this._indicatorStart =
+            indicatorStart ?? FPullRefreshConfig.singleton.indicatorStart,
+        this._indicatorEnd =
+            indicatorEnd ?? FPullRefreshConfig.singleton.indicatorEnd;
 
   @override
   FPullRefreshState get state => _state;
@@ -208,12 +248,10 @@ class _SimplePullRefreshController implements FPullRefreshController {
   @override
   Widget newRefreshWidget({
     @required Widget child,
-    FPullRefreshIndicator indicatorTop,
   }) {
     return _PullRefreshView(
       controller: this,
       child: child,
-      indicatorTop: indicatorTop,
     );
   }
 
@@ -284,6 +322,19 @@ class _SimplePullRefreshController implements FPullRefreshController {
       _refreshDirection = direction;
 
       print(_kLogTag + 'setDirection: $direction');
+
+      switch (direction) {
+        case FPullRefreshDirection.start:
+          _directionHelper = TopDirectionHelper(_indicatorStart);
+          break;
+        case FPullRefreshDirection.end:
+          _directionHelper = BottomDirectionHelper(_indicatorEnd);
+          break;
+        case FPullRefreshDirection.none:
+          _directionHelper = null;
+          break;
+      }
+
       _notifyDirectionChangeCallback(direction);
     }
   }
@@ -293,20 +344,13 @@ class _SimplePullRefreshController implements FPullRefreshController {
 
 class _PullRefreshView extends StatefulWidget {
   final FPullRefreshController controller;
-
   final Widget child;
-  final FPullRefreshIndicator indicatorTop;
-  final FPullRefreshIndicator indicatorBottom;
 
   _PullRefreshView({
     @required this.controller,
     @required this.child,
-    FPullRefreshIndicator indicatorTop,
-    FPullRefreshIndicator indicatorBottom,
   })  : assert(controller != null),
-        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator(),
-        this.indicatorBottom =
-            indicatorBottom ?? FSimpleTextPullRefreshIndicator();
+        assert(child != null);
 
   @override
   _PullRefreshViewState createState() => _PullRefreshViewState();
@@ -316,7 +360,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
-  DirectionHelper _helper;
   bool _isDrag = false;
   final GlobalKey _notificationKey = GlobalKey();
 
@@ -324,28 +367,12 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     return widget.controller;
   }
 
-  DirectionHelper get currentHelper {
-    final FPullRefreshDirection direction = controller._refreshDirection;
-    switch (direction) {
-      case FPullRefreshDirection.start:
-        if (_helper == null) {
-          _helper = TopDirectionHelper(widget.indicatorTop);
-        }
-        break;
-      case FPullRefreshDirection.end:
-        if (_helper == null) {
-          _helper = BottomDirectionHelper(widget.indicatorBottom);
-        }
-        break;
-      default:
-        throw Exception('Illegal direction: $direction');
-    }
-
-    return _helper;
-  }
-
   double get currentOffset {
     return _animationController.value;
+  }
+
+  DirectionHelper get currentHelper {
+    return controller._directionHelper;
   }
 
   @override
@@ -414,9 +441,6 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   void _directionChangeCallback(FPullRefreshDirection direction) {
-    if (direction == FPullRefreshDirection.none) {
-      _helper = null;
-    }
     setState(() {});
   }
 
