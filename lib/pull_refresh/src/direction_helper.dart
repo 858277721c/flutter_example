@@ -14,7 +14,9 @@ abstract class DirectionHelper {
     return _IndicatorWrapper(
       key: key,
       builder: (context) {
-        return indicator.build(info);
+        final Widget widget = indicator.build(info);
+        assert(widget != null);
+        return widget;
       },
     );
   }
