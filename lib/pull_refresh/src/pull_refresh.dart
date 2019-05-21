@@ -51,11 +51,13 @@ abstract class FPullRefreshIndicator {
 class BuildIndicatorInfo {
   final BuildContext context;
   final FPullRefreshState state;
+  final FPullRefreshDirection direction;
   final double scrollPercent;
 
   BuildIndicatorInfo(
     this.context,
     this.state,
+    this.direction,
     this.scrollPercent,
   );
 }
@@ -259,12 +261,12 @@ class _SimplePullRefreshController implements FPullRefreshController {
       });
     }
 
+    _notifyStateChangeCallback(state);
+
     if (state == FPullRefreshState.idle) {
       _refreshResult = null;
       _setDirection(FPullRefreshDirection.none);
     }
-
-    _notifyStateChangeCallback(state);
   }
 
   void _setDirection(FPullRefreshDirection direction) {
@@ -544,6 +546,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       BuildIndicatorInfo(
         context,
         controller.state,
+        controller._refreshDirection,
         scrollPercent,
       ),
     );
