@@ -10,7 +10,8 @@ class PullRefreshPage extends StatefulWidget {
 class _PullRefreshPageState extends State<PullRefreshPage> {
   final List<String> list = List.filled(20, "1", growable: true);
 
-  final FPullRefreshController pullRefreshController = FPullRefreshController();
+  final FPullRefreshController pullRefreshController =
+      FPullRefreshController.create();
 
   @override
   void initState() {
