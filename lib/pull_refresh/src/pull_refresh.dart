@@ -289,13 +289,17 @@ class _PullRefreshView extends StatefulWidget {
 
   final Widget child;
   final FPullRefreshIndicator indicatorTop;
+  final FPullRefreshIndicator indicatorBottom;
 
   _PullRefreshView({
     @required this.controller,
     @required this.child,
     FPullRefreshIndicator indicatorTop,
+    FPullRefreshIndicator indicatorBottom,
   })  : assert(controller != null),
-        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator();
+        this.indicatorTop = indicatorTop ?? FSimpleTextPullRefreshIndicator(),
+        this.indicatorBottom =
+            indicatorBottom ?? FSimpleTextPullRefreshIndicator();
 
   @override
   _PullRefreshViewState createState() => _PullRefreshViewState();
@@ -314,16 +318,20 @@ class _PullRefreshViewState extends State<_PullRefreshView>
   }
 
   DirectionHelper get currentHelper {
-    switch (controller._refreshDirection) {
+    final FPullRefreshDirection direction = controller._refreshDirection;
+    switch (direction) {
       case FPullRefreshDirection.top:
         if (_helper == null) {
           _helper = TopDirectionHelper(widget.indicatorTop);
         }
         break;
       case FPullRefreshDirection.bottom:
-        return null;
+        if (_helper == null) {
+          _helper = BottomDirectionHelper(widget.indicatorBottom);
+        }
+        break;
       default:
-        return null;
+        throw Exception('Illegal direction: $direction');
     }
 
     return _helper;
@@ -458,6 +466,13 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           }
           break;
         case ScrollDirection.reverse:
+          if (_canPull(notification)) {
+            if (notification.metrics.extentAfter == 0.0) {
+              _isDrag = true;
+              controller._setDirection(FPullRefreshDirection.bottom);
+              controller._setState(FPullRefreshState.pullStart);
+            }
+          }
           break;
         case ScrollDirection.idle:
           _isDrag = false;
@@ -469,13 +484,22 @@ class _PullRefreshViewState extends State<_PullRefreshView>
           break;
       }
     } else if (notification is OverscrollNotification) {
-      final double delta = -notification.overscroll / 3;
-      _updateOffset(delta);
+      final double delta = -notification.overscroll;
+      _updateOffset(delta / 3);
     } else if (notification is ScrollUpdateNotification) {
       final double delta = -notification.scrollDelta;
-      if (delta > 0 && notification.metrics.extentBefore != 0.0) {
-      } else {
-        _updateOffset(delta);
+
+      final FPullRefreshDirection direction = controller._refreshDirection;
+      if (direction == FPullRefreshDirection.top) {
+        if (delta > 0 && notification.metrics.extentBefore != 0.0) {
+        } else {
+          _updateOffset(delta);
+        }
+      } else if (direction == FPullRefreshDirection.bottom) {
+        if (delta < 0 && notification.metrics.extentAfter != 0.0) {
+        } else {
+          _updateOffset(delta);
+        }
       }
     }
 
@@ -504,7 +528,12 @@ class _PullRefreshViewState extends State<_PullRefreshView>
 
         break;
       case FPullRefreshDirection.bottom:
-        // TODO: Handle this case.
+        if (targetOffset > 0) {
+          if (currentOffset == 0) {
+            return;
+          }
+          targetOffset = 0;
+        }
         break;
       default:
         break;
