@@ -23,7 +23,7 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
             width: 100,
             height: 100,
             child: CustomPaint(
-              painter: _MyPainter(
+              painter: _FCircularProgressIndicatorPainter(
                 color: Colors.red,
                 backgroundColor: Colors.black26,
                 startValue: 0.0,
@@ -38,7 +38,7 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
   }
 }
 
-class _MyPainter extends CustomPainter {
+class _FCircularProgressIndicatorPainter extends CustomPainter {
   static final double angleAll = math.pi * 2;
 
   final Color color;
@@ -52,7 +52,7 @@ class _MyPainter extends CustomPainter {
   double _arcStart;
   double _arcSweep;
 
-  _MyPainter({
+  _FCircularProgressIndicatorPainter({
     Color color,
     this.backgroundColor,
     this.strokeWidth = 2,
@@ -93,8 +93,12 @@ class _MyPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_MyPainter oldDelegate) {
+  bool shouldRepaint(_FCircularProgressIndicatorPainter oldDelegate) {
     return color != oldDelegate.color ||
-        backgroundColor != oldDelegate.backgroundColor;
+        backgroundColor != oldDelegate.backgroundColor ||
+        strokeWidth != oldDelegate.strokeWidth ||
+        startValue != oldDelegate.startValue ||
+        sweepValue != oldDelegate.sweepValue ||
+        rotationValue != oldDelegate.rotationValue;
   }
 }
