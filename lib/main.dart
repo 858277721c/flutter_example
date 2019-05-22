@@ -14,6 +14,7 @@ import 'package:my_flutter/page/text_field_page.dart';
 import 'package:my_flutter/page/title_bar_page.dart';
 import 'package:my_flutter/page/pull_refresh_page.dart';
 import 'package:my_flutter/page/listview_page.dart';
+import 'package:my_flutter/page/custom_painter.dart';
 
 void main() {
   FRes.getInstance().init(
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
     (NewPage).toString(): (_) => NewPage(),
     (PullRefreshPage).toString(): (_) => PullRefreshPage(),
     (ListViewPage).toString(): (_) => ListViewPage(),
+    (CustomPainterPage).toString(): (_) => CustomPainterPage(),
   };
 
   // This widget is the root of your application.
