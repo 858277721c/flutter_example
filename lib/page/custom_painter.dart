@@ -23,7 +23,13 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
             width: 100,
             height: 100,
             child: CustomPaint(
-              painter: _MyPainter(valueColor: Colors.red),
+              painter: _MyPainter(
+                color: Colors.red,
+                backgroundColor: Colors.black26,
+                startValue: 0.0,
+                sweepValue: 0.5,
+                rotationValue: 0.0,
+              ),
             ),
           ),
         ),
@@ -33,40 +39,68 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
 }
 
 class _MyPainter extends CustomPainter {
-  static final double allAngle = math.pi * 2;
+  static final double angleAll = math.pi * 2;
+  static final double angleQuarter = angleAll / 4;
 
-  final Color valueColor;
+  static final double angleRight = 0;
+  static final double angleBottom = angleRight + angleQuarter;
+  static final double angleLeft = angleBottom + angleQuarter;
+  static final double angleTop = angleLeft + angleQuarter;
+
+  final Color color;
   final Color backgroundColor;
   final double strokeWidth;
 
-  final double value;
+  final double startValue;
+  final double sweepValue;
+  final double rotationValue;
+
+  double _arcStart;
+  double _arcSweep;
 
   _MyPainter({
-    this.valueColor,
-    Color backgroundColor,
+    Color color,
+    this.backgroundColor,
     this.strokeWidth = 2,
-    this.value,
-  })  : assert(valueColor != null),
-        this.backgroundColor = backgroundColor ?? Colors.transparent;
+    double startValue,
+    double sweepValue,
+    double rotationValue,
+  })  : this.color = color ?? Colors.transparent,
+        this.startValue = startValue == null ? 0.0 : startValue.clamp(0.0, 1.0),
+        this.sweepValue = sweepValue == null ? 0.0 : sweepValue.clamp(0.0, 1.0),
+        this.rotationValue =
+            rotationValue == null ? 0.0 : rotationValue.clamp(0.0, 1.0) {
+    _arcStart = angleAll * this.startValue + angleAll * this.rotationValue;
+    _arcSweep = angleAll * this.sweepValue;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint();
-    paint.color = valueColor;
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = strokeWidth;
-
     final Offset center = Offset(size.width / 2, size.height / 2);
     final double radius = math.min(center.dx, center.dy) - strokeWidth / 2;
-    if (radius > 0) {
-      final Rect rect = Rect.fromCircle(center: center, radius: radius);
-      canvas.drawArc(rect, allAngle * 3 / 4, allAngle, false, paint);
+    if (radius <= 0) {
+      return;
     }
+
+    final Rect rect = Rect.fromCircle(center: center, radius: radius);
+
+    final Paint paint = Paint();
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = strokeWidth;
+    paint.strokeCap = StrokeCap.square;
+
+    if (backgroundColor != null) {
+      paint.color = backgroundColor;
+      canvas.drawArc(rect, 0, angleAll, false, paint);
+    }
+
+    paint.color = color;
+    canvas.drawArc(rect, _arcStart, _arcSweep, false, paint);
   }
 
   @override
   bool shouldRepaint(_MyPainter oldDelegate) {
-    return valueColor != oldDelegate.valueColor ||
+    return color != oldDelegate.color ||
         backgroundColor != oldDelegate.backgroundColor;
   }
 }
