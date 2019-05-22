@@ -40,12 +40,6 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
 
 class _MyPainter extends CustomPainter {
   static final double angleAll = math.pi * 2;
-  static final double angleQuarter = angleAll / 4;
-
-  static final double angleRight = 0;
-  static final double angleBottom = angleRight + angleQuarter;
-  static final double angleLeft = angleBottom + angleQuarter;
-  static final double angleTop = angleLeft + angleQuarter;
 
   final Color color;
   final Color backgroundColor;
