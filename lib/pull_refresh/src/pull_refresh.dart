@@ -79,7 +79,8 @@ class BuildIndicatorInfo {
         this.refreshSize = refreshSize ?? 0;
 
   double readyPercent() {
-    return offset.abs() / readySize;
+    final double percent = offset.abs() / readySize;
+    return percent.clamp(0.0, 1.0);
   }
 }
 
