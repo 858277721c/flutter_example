@@ -55,15 +55,16 @@ class _FCircularProgressIndicatorPainter extends CustomPainter {
   _FCircularProgressIndicatorPainter({
     Color color,
     this.backgroundColor,
-    this.strokeWidth = 2,
+    double strokeWidth,
     double startValue,
     double sweepValue,
     double rotationValue,
   })  : this.color = color ?? Colors.transparent,
+        this.strokeWidth = strokeWidth ?? 2.0,
         this.startValue = startValue == null ? 0.0 : startValue.clamp(0.0, 1.0),
         this.sweepValue = sweepValue == null ? 0.0 : sweepValue.clamp(0.0, 1.0),
         this.rotationValue =
-            rotationValue == null ? 0.0 : rotationValue.clamp(0.0, 1.0) {
+        rotationValue == null ? 0.0 : rotationValue.clamp(0.0, 1.0) {
     _arcStart = angleAll * this.startValue + angleAll * this.rotationValue;
     _arcSweep = angleAll * this.sweepValue;
   }
