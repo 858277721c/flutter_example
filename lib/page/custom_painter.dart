@@ -8,9 +8,51 @@ class CustomPainterPage extends StatefulWidget {
   _CustomPainterPageState createState() => _CustomPainterPageState();
 }
 
-class _CustomPainterPageState extends State<CustomPainterPage> {
+class _CustomPainterPageState extends State<CustomPainterPage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    );
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+
+    _controller.repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double value = _controller.value;
+
+    double sweepValue = _kFirstPartTween.evaluate(_controller);
+    double startValue = _kSecondPartTween.evaluate(_controller);
+
+    if (value <= 0.5) {
+      final double firstValue = _kFirstPartTween.transform(value);
+
+      sweepValue = _kProgressValueTween.transform(firstValue);
+    } else {
+      final double secondValue = _kSecondPartTween.transform(value);
+
+      sweepValue = _kProgressValueReverseTween.transform(secondValue);
+      startValue = _kProgressValueTween.transform(secondValue);
+    }
+
+    print('values----- $sweepValue $startValue');
+
     return FSafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -26,9 +68,9 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
               painter: _FCircularProgressIndicatorPainter(
                 color: Colors.red,
                 backgroundColor: Colors.black26,
-                startValue: 0.0,
-                sweepValue: 0.5,
-                rotationValue: 0.0,
+                startValue: startValue,
+                sweepValue: sweepValue,
+                rotationValue: 0,
               ),
             ),
           ),
@@ -37,6 +79,20 @@ class _CustomPainterPageState extends State<CustomPainterPage> {
     );
   }
 }
+
+final Animatable<double> _kFirstPartTween = CurveTween(
+  curve: const Interval(0.0, 0.5, curve: Curves.fastOutSlowIn),
+);
+
+final Animatable<double> _kSecondPartTween = CurveTween(
+  curve: const Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
+);
+
+final Animatable<double> _kProgressValueTween = Tween(begin: 0, end: 0.75);
+final Animatable<double> _kProgressValueReverseTween =
+    ReverseTween(_kProgressValueTween);
+
+final Animatable<double> _kRotationValueTween = Tween(begin: 0, end: 0.5);
 
 class _FCircularProgressIndicatorPainter extends CustomPainter {
   static final double angleAll = math.pi * 2;
@@ -64,7 +120,7 @@ class _FCircularProgressIndicatorPainter extends CustomPainter {
         this.startValue = startValue == null ? 0.0 : startValue.clamp(0.0, 1.0),
         this.sweepValue = sweepValue == null ? 0.0 : sweepValue.clamp(0.0, 1.0),
         this.rotationValue =
-        rotationValue == null ? 0.0 : rotationValue.clamp(0.0, 1.0) {
+            rotationValue == null ? 0.0 : rotationValue.clamp(0.0, 1.0) {
     _arcStart = angleAll * this.startValue + angleAll * this.rotationValue;
     _arcSweep = angleAll * this.sweepValue;
   }
