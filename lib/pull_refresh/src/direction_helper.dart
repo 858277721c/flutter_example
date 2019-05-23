@@ -5,10 +5,13 @@ import 'pull_refresh.dart';
 abstract class DirectionHelper {
   final GlobalKey<_IndicatorWrapperState> key = GlobalKey();
   final FPullRefreshIndicator indicator;
+  final Axis axis;
 
-  DirectionHelper(
+  DirectionHelper({
     this.indicator,
-  ) : assert(indicator != null);
+    this.axis,
+  })  : assert(indicator != null),
+        assert(axis != null);
 
   Widget newWidget(BuildIndicatorInfo info) {
     return _IndicatorWrapper(
@@ -34,10 +37,14 @@ abstract class DirectionHelper {
   }
 
   /// 指示器的大小，可能为null
-  double getIndicatorSize();
+  double getIndicatorSize() {
+    final Size size = _getIndicatorRealSize();
+    if (size == null) {
+      return null;
+    }
 
-  /// 指示器的位置，不为null
-  double getIndicatorOffset(double offset);
+    return axis == Axis.vertical ? size.height : size.width;
+  }
 
   /// 指示器可以触发刷新的大小，可能为null
   double getIndicatorReadySize() {
@@ -56,6 +63,9 @@ abstract class DirectionHelper {
     }
     return size;
   }
+
+  /// 指示器的位置，不为null
+  double getIndicatorOffset(double offset);
 
   /// 刷新状态下刷新控件的位置，可能为null
   double getRefreshWidgetRefreshOffset();
@@ -107,22 +117,14 @@ abstract class DirectionHelper {
   }
 }
 
-abstract class _VerticalHelper extends DirectionHelper {
-  _VerticalHelper(FPullRefreshIndicator indicator) : super(indicator);
-
-  @override
-  double getIndicatorSize() {
-    final Size size = _getIndicatorRealSize();
-    if (size == null) {
-      return null;
-    }
-
-    return size.height;
-  }
-}
-
-class TopDirectionHelper extends _VerticalHelper {
-  TopDirectionHelper(FPullRefreshIndicator indicator) : super(indicator);
+class StartDirectionHelper extends DirectionHelper {
+  StartDirectionHelper({
+    FPullRefreshIndicator indicator,
+    Axis axis,
+  }) : super(
+          indicator: indicator,
+          axis: axis,
+        );
 
   @override
   double getIndicatorOffset(double offset) {
@@ -146,8 +148,14 @@ class TopDirectionHelper extends _VerticalHelper {
   }
 }
 
-class BottomDirectionHelper extends _VerticalHelper {
-  BottomDirectionHelper(FPullRefreshIndicator indicator) : super(indicator);
+class EndDirectionHelper extends DirectionHelper {
+  EndDirectionHelper({
+    FPullRefreshIndicator indicator,
+    Axis axis,
+  }) : super(
+          indicator: indicator,
+          axis: axis,
+        );
 
   @override
   double getIndicatorOffset(double offset) {

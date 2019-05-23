@@ -8,48 +8,90 @@ class PullRefreshPage extends StatefulWidget {
 }
 
 class _PullRefreshPageState extends State<PullRefreshPage> {
-  final List<String> list = List.filled(20, "1", growable: true);
+  final List<String> list = List.filled(50, "1", growable: true);
 
-  final FPullRefreshController pullRefreshController =
+  final FPullRefreshController verticalRefreshController =
       FPullRefreshController.create();
+
+  final FPullRefreshController horizontalRefreshController =
+      FPullRefreshController.create(axis: Axis.horizontal);
 
   @override
   void initState() {
     super.initState();
-    pullRefreshController.setOverlayMode(false);
-    pullRefreshController.setRefreshCallback((direction) {
+    verticalRefreshController.setRefreshCallback((direction) {
       Future.delayed(Duration(seconds: 2)).then((value) {
-        pullRefreshController.stopRefresh();
+        verticalRefreshController.stopRefresh();
+      });
+    });
+
+    horizontalRefreshController.setRefreshCallback((direction) {
+      Future.delayed(Duration(seconds: 2)).then((value) {
+        horizontalRefreshController.stopRefresh();
       });
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget body = ListView.builder(
+  Widget buildTop() {
+    Widget widget = ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          leading: Text('leading'),
-          title: Text('title'),
-          subtitle: Text('subtitle'),
-          trailing: Text(index.toString()),
-          selected: index % 2 == 0,
+        return Container(
+          child: Column(
+            children: <Widget>[
+              Text(index.toString()),
+              Container(
+                color: Colors.black,
+                height: 1,
+              )
+            ],
+          ),
         );
       },
     );
 
-    body = pullRefreshController.newRefreshWidget(child: body);
+    return verticalRefreshController.newRefreshWidget(child: widget);
+  }
 
-    body = Container(child: body);
+  Widget buildBottom() {
+    Widget widget = ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+        return Container(
+          child: Row(
+            children: <Widget>[
+              Text(index.toString()),
+              Container(
+                color: Colors.black,
+                width: 1,
+              )
+            ],
+          ),
+        );
+      },
+    );
 
+    return horizontalRefreshController.newRefreshWidget(child: widget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: FSimpleTitleBar(
         middle: Text(
           (PullRefreshPage).toString(),
         ),
       ),
-      body: body,
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(child: buildTop()),
+            SizedBox(height: 50),
+            Expanded(child: buildBottom()),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -350,10 +350,16 @@ class _BasePullRefreshController implements FPullRefreshController {
 
       switch (direction) {
         case FPullRefreshDirection.start:
-          _directionHelper = TopDirectionHelper(_indicatorStart);
+          _directionHelper = StartDirectionHelper(
+            indicator: _indicatorStart,
+            axis: _axis,
+          );
           break;
         case FPullRefreshDirection.end:
-          _directionHelper = BottomDirectionHelper(_indicatorEnd);
+          _directionHelper = EndDirectionHelper(
+            indicator: _indicatorEnd,
+            axis: _axis,
+          );
           break;
         case FPullRefreshDirection.none:
           _directionHelper = null;
@@ -646,28 +652,38 @@ class _PullRefreshViewState extends State<_PullRefreshView>
     final FPullRefreshDirection direction = controller.refreshDirection;
     switch (direction) {
       case FPullRefreshDirection.start:
-        alignment = Alignment.topCenter;
+        alignment = controller._axis == Axis.vertical
+            ? Alignment.topCenter
+            : Alignment.centerLeft;
         break;
       case FPullRefreshDirection.end:
-        alignment = Alignment.bottomCenter;
+        alignment = controller._axis == Axis.vertical
+            ? Alignment.bottomCenter
+            : Alignment.centerRight;
         break;
       default:
         throw Exception('Illegal direction: $direction');
     }
 
     final double targetOffset = currentHelper.getIndicatorOffset(currentOffset);
+    final double dx = controller._axis == Axis.vertical ? 0.0 : targetOffset;
+    final double dy = controller._axis == Axis.vertical ? targetOffset : 0.0;
+
     return Align(
       alignment: alignment,
       child: Transform.translate(
-        offset: Offset(0.0, targetOffset),
+        offset: Offset(dx, dy),
         child: widget,
       ),
     );
   }
 
   Widget _wrapChildPosition(Widget widget) {
+    final double dx = controller._axis == Axis.vertical ? 0.0 : currentOffset;
+    final double dy = controller._axis == Axis.vertical ? currentOffset : 0.0;
+
     return Transform.translate(
-      offset: Offset(0.0, currentOffset),
+      offset: Offset(dx, dy),
       child: widget,
     );
   }
