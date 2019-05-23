@@ -19,12 +19,16 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
   @override
   void initState() {
     super.initState();
+    // 设置刷新回调
     verticalRefreshController.setRefreshCallback((direction) {
       Future.delayed(Duration(seconds: 2)).then((value) {
         verticalRefreshController.stopRefresh();
       });
     });
+    // 开始刷新
+    verticalRefreshController.startRefresh();
 
+    // 设置刷新回调
     horizontalRefreshController.setRefreshCallback((direction) {
       Future.delayed(Duration(seconds: 2)).then((value) {
         horizontalRefreshController.stopRefresh();
@@ -32,6 +36,7 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
     });
   }
 
+  /// 竖直方向刷新demo
   Widget buildTop() {
     Widget widget = ListView.builder(
       itemCount: list.length,
@@ -53,6 +58,7 @@ class _PullRefreshPageState extends State<PullRefreshPage> {
     return verticalRefreshController.newRefreshWidget(child: widget);
   }
 
+  /// 水平方向刷新demo
   Widget buildBottom() {
     Widget widget = ListView.builder(
       scrollDirection: Axis.horizontal,

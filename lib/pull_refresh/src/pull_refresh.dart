@@ -466,7 +466,25 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       }
     });
 
+    WidgetsBinding.instance.addPostFrameCallback(_onFrameCallback);
     _registerController(controller);
+  }
+
+  void _onFrameCallback(Duration timeStamp) {
+    final FPullRefreshState state = controller.state;
+    if (state != FPullRefreshState.idle) {
+      final DirectionHelper helper = currentHelper;
+      if (helper == null || !helper.isReady()) {
+        WidgetsBinding.instance.addPostFrameCallback(_onFrameCallback);
+        return;
+      }
+    }
+
+    if (state == FPullRefreshState.refresh) {
+      _scrollByState();
+    } else {
+      controller._setState(FPullRefreshState.idle);
+    }
   }
 
   void _registerController(FPullRefreshController controller) {
