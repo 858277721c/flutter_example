@@ -568,7 +568,7 @@ class _PullRefreshViewState extends State<_PullRefreshView>
       }
     } else if (notification is OverscrollNotification) {
       final double delta = -notification.overscroll;
-      _processDrag(delta / 3);
+      _processDrag(delta / 2);
     } else if (notification is ScrollUpdateNotification) {
       final double delta = -notification.scrollDelta;
 
