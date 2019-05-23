@@ -32,6 +32,11 @@ dependencies:
       url: git://github.com/zj565061763/flib_core
       ref: 2ed356a5642e7e013afa64d5328419cf2c22e538
 
+  flib_pull_refresh:
+    git:
+      url: git://github.com/zj565061763/flib_pull_refresh
+      ref: 6cb5ad23400492de7c915fe51d379bd9ce2fdb9f
+
   flib_builder:
     git:
       url: git://github.com/zj565061763/flib_builder

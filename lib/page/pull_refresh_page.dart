@@ -1,6 +1,6 @@
 import 'package:flib_core/flib_core.dart';
+import 'package:flib_pull_refresh/flib_pull_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter/pull_refresh/flib_pull_refresh.dart';
 
 class PullRefreshPage extends StatefulWidget {
   @override
