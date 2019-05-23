@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter/pull_refresh/src/pull_refresh.dart';
 
@@ -26,6 +28,33 @@ class FSimpleCircularRefreshIndicator extends FPullRefreshIndicator {
         break;
     }
 
+    Widget widgetProgress = CircularProgressIndicator(
+      backgroundColor: Colors.transparent,
+      strokeWidth: 2,
+      value: value,
+    );
+
+    double angle = 0;
+
+    if (info.axis == Axis.vertical) {
+      if (info.direction == FPullRefreshDirection.end) {
+        angle = math.pi;
+      }
+    } else {
+      if (info.direction == FPullRefreshDirection.start) {
+        angle = math.pi * 1.5;
+      } else if (info.direction == FPullRefreshDirection.end) {
+        angle = math.pi * (0.5);
+      }
+    }
+
+    if (angle != 0) {
+      widgetProgress = Transform.rotate(
+        angle: angle,
+        child: widgetProgress,
+      );
+    }
+
     return Container(
       width: info.axis == Axis.horizontal ? 40 : null,
       height: info.axis == Axis.vertical ? 40 : null,
@@ -33,11 +62,7 @@ class FSimpleCircularRefreshIndicator extends FPullRefreshIndicator {
       child: SizedBox(
         width: 25,
         height: 25,
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.transparent,
-          strokeWidth: 2,
-          value: value,
-        ),
+        child: widgetProgress,
       ),
     );
   }
