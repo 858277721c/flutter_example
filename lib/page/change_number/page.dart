@@ -8,18 +8,21 @@ class ChangeNumberPage extends StatefulWidget {
   _ChangeNumberPageState createState() => _ChangeNumberPageState();
 }
 
-class _ChangeNumberPageState
-    extends FRouteState<ChangeNumberPage, ChangeNumberBusiness> {
+class _ChangeNumberPageState extends FState<ChangeNumberPage> {
+  ChangeNumberBusiness _business;
   bool addTestView = false;
 
-  @override
-  ChangeNumberBusiness createBusiness() {
-    return ChangeNumberBusiness(this);
+  ChangeNumberBusiness get business {
+    if (_business == null) {
+      _business = new ChangeNumberBusiness(this);
+    }
+    return _business;
   }
 
   @override
   void initState() {
     super.initState();
+
     business.addTestView.addObserver((value) {
       addTestView = value;
       reBuild();
